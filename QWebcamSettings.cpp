@@ -67,7 +67,7 @@ static bool is_v4l_dev(const char *name)
 QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
     : KQuickAddons::ConfigModule(parent, args)
 {
-    KAboutData *aboutData = new KAboutData(QStringLiteral("kcm_webcam"),
+    KAboutData *aboutData = new KAboutData(QStringLiteral("kcm_webcam_settings"),
         i18nc("@title", "Webcam"),
         QStringLiteral("0.1"),
         QStringLiteral(""),
@@ -165,17 +165,9 @@ void QWebcamSettings::populateDeviceList(VideoDeviceList devlist) {
 		close(fd);
 		if (err)
 			continue;
-		if (cards[bus_info].empty())
-			cards[bus_info] += card + " (" + bus_info + "):\n";
-		cards[bus_info] += "\t" + file;
-		if (!(links[file].empty()))
-			cards[bus_info] += " <- " + links[file];
-		cards[bus_info] += "\n";
-	}
-	for (const auto &card : cards) {
-		printf("%s\n", card.second.c_str());
 	}
 	devlist.printVideoDeviceInfo();
+	m_devname_list = getDeviceList();
 }
 
 QStringList QWebcamSettings::getDeviceList(){

@@ -33,4 +33,5 @@ public:
 
 private:
     VideoDeviceList m_device_list;
+    QStringList m_devname_list;
 };
