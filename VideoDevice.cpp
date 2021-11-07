@@ -84,3 +84,16 @@ void VideoDeviceList::printVideoDeviceInfo() {
 QStringList VideoDeviceList::getDeviceNameList(){
 	return m_devname_list;
 }
+
+VideoDevice VideoDeviceList::getDeviceFromIndex(int index) {
+    int i = 0;
+    VideoDevice device;
+    for (VideoDevice & dev : m_device_list)
+    {
+        if (i == index) {
+            device = dev;
+            break;
+        }
+    }
+    return device;
+}

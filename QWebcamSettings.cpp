@@ -78,7 +78,9 @@ QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
                         i18nc("@info:credit", "Antoine Gatineau"),
                         QStringLiteral("antoine.gatineau@infra-monkey.com"));
 	m_device_list = VideoDeviceList();
+	m_devname_list = QStringList();
     populateDeviceList(m_device_list);
+	m_device_index = 0;
     setAboutData(aboutData);
     setButtons(Apply | Default);
 }
@@ -166,12 +168,32 @@ void QWebcamSettings::populateDeviceList(VideoDeviceList devlist) {
 		if (err)
 			continue;
 	}
-	devlist.printVideoDeviceInfo();
-	m_devname_list = getDeviceList();
+	m_device_list = devlist;
+	m_device_list.printVideoDeviceInfo();
+	m_devname_list = m_device_list.getDeviceNameList();
 }
 
 QStringList QWebcamSettings::getDeviceList(){
-	return m_device_list.getDeviceNameList();
+	printf("Invoked getDeviceList\n");
+	QStringList devname_list = m_device_list.getDeviceNameList();
+	for (QString & devname : devname_list)
+    {
+        printf("%s\n",devname.toStdString().c_str());
+    }
+	return m_devname_list;
+}
+
+
+int QWebcamSettings::getDeviceIndex() {
+	return m_device_index;
+}
+void QWebcamSettings::setDeviceIndex(int devindex) {
+	printf("Device index is changed to %i\n",devindex);
+	m_device_index = devindex;
+}
+void deviceIndexChanged(int devindex) {
+	printf("Device index is changed to %i\n",devindex);
+
 }
 
 

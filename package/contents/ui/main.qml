@@ -17,18 +17,17 @@ SimpleKCM {
     Kirigami.Theme.colorSet: Kirigami.Theme.Window
     Kirigami.FormLayout {
         id: mainItem
-        Kirigami.FormData.label: "Webcam List :"
-
         Controls.ComboBox {
             id: deviceList
+            editable: false
+            Kirigami.FormData.label: "Webcam List :"
             model: kcm.getDeviceList()
-            currentIndex: kcm.getCurrentDeviceIndex()
-            onActivated: kcm.enableDeviceIndex(currentIndex)
-        }
-        
-        Controls.Label {
-            id: webcamListLabel
-            text: "Webcam List"
+            currentIndex: kcm.deviceIndex
+            onActivated: {
+                kcm.setDeviceIndex(currentIndex)
+                currentIndex=index
+            }
+            onCurrentIndexChanged: kcm.deviceIndex
         }
     }
 }
