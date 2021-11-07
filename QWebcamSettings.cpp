@@ -14,54 +14,17 @@
 
 K_PLUGIN_CLASS_WITH_JSON(QWebcamSettings, "metadata.json")
 
-static const char *prefixes[] = {
-	"video",
-	"radio",
-	"vbi",
-	"swradio",
-	"v4l-subdev",
-	"v4l-touch",
-	"media",
-	nullptr
-};
 
-static int calc_node_val(const char *s)
-{
-	int n = 0;
-
-	s = strrchr(s, '/') + 1;
-
-	for (unsigned i = 0; prefixes[i]; i++) {
-		unsigned l = strlen(prefixes[i]);
-
-		if (!memcmp(s, prefixes[i], l)) {
-			n = i << 8;
-			n += atol(s + l);
-			return n;
-		}
-	}
-	return 0;
-}
-
-static bool sort_on_device_name(const std::string &s1, const std::string &s2)
-{
-	int n1 = calc_node_val(s1.c_str());
-	int n2 = calc_node_val(s2.c_str());
-
-	return n1 < n2;
-}
-
-static bool is_v4l_dev(const char *name)
-{
-	for (unsigned i = 0; prefixes[i]; i++) {
-		unsigned l = strlen(prefixes[i]);
-
-		if (!memcmp(name, prefixes[i], l)) {
-			if (isdigit(name[l]))
-				return true;
-		}
-	}
-	return false;
+std::string exec_cmd(const std::string& command) {
+    system((command + " > temp.txt").c_str());
+ 
+    std::ifstream ifs("temp.txt");
+    std::string ret{ std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>() };
+    ifs.close(); // must close the inout stream so the file can be cleaned up
+    if (std::remove("temp.txt") != 0) {
+        perror("Error deleting temporary file");
+    }
+    return ret;
 }
 
 QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
@@ -86,88 +49,24 @@ QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
 }
 
 void QWebcamSettings::populateDeviceList(VideoDeviceList devlist) {
-    DIR *dp;
-	struct dirent *ep;
-	dev_vec files;
-	dev_map links;
-	dev_map cards;
-	struct v4l2_capability vcap;
+	std::string devices = exec_cmd("v4l2-ctl --list-devices");
+	std::istringstream f(devices);
+    std::string line;    
+	QString name;
+	QString bus_info;
+    while (std::getline(f, line)) {
+		QString qline = QString::fromStdString(line).trimmed();
+		//printf("%s\n",qline.toStdString().c_str());
+		if (!qline.startsWith(QString::fromStdString("/"))){
+			name = qline.left(qline.indexOf(QString::fromStdString("("))).trimmed();
 
-	dp = opendir("/dev");
-	if (dp == nullptr) {
-		perror ("Couldn't open the directory");
-		return;
-	}
-	while ((ep = readdir(dp)))
-		if (is_v4l_dev(ep->d_name))
-			files.push_back(std::string("/dev/") + ep->d_name);
-	closedir(dp);
-
-	/* Find device nodes which are links to other device nodes */
-	for (auto iter = files.begin();
-			iter != files.end(); ) {
-		char link[64+1];
-		int link_len;
-		std::string target;
-
-		link_len = readlink(iter->c_str(), link, 64);
-		if (link_len < 0) {	/* Not a link or error */
-			iter++;
-			continue;
-		}
-		link[link_len] = '\0';
-
-		/* Only remove from files list if target itself is in list */
-		if (link[0] != '/')	/* Relative link */
-			target = std::string("/dev/");
-		target += link;
-		if (find(files.begin(), files.end(), target) == files.end()) {
-			iter++;
-			continue;
-		}
-
-		/* Move the device node from files to links */
-		if (links[target].empty())
-			links[target] = *iter;
-		else
-			links[target] += ", " + *iter;
-		iter = files.erase(iter);
-	}
-
-	std::sort(files.begin(), files.end(), sort_on_device_name);
-
-	for (const auto &file : files) {
-		int fd = open(file.c_str(), O_RDWR);
-		std::string bus_info;
-		std::string card;
-
-		if (fd < 0)
-			continue;
-		int err = ioctl(fd, VIDIOC_QUERYCAP, &vcap);
-		if (err) {
-			struct media_device_info mdi;
-
-			err = ioctl(fd, MEDIA_IOC_DEVICE_INFO, &mdi);
-			if (!err) {
-				if (mdi.bus_info[0])
-					bus_info = mdi.bus_info;
-				else
-					bus_info = std::string("platform:") + mdi.driver;
-				if (mdi.model[0])
-					card = mdi.model;
-				else
-					card = mdi.driver;
-			}
+			QString tmp = qline.left(qline.indexOf(QString::fromStdString(")")));
+			bus_info = tmp.right(tmp.size() - tmp.indexOf(QString::fromStdString("(")) - 1);
 		} else {
-			bus_info = reinterpret_cast<const char *>(vcap.bus_info);
-			card = reinterpret_cast<const char *>(vcap.card);
+			QString file = qline.trimmed();
+			devlist.addVideoDevice(name,bus_info,file);
 		}
-		devlist.addVideoDevice(QString::fromStdString(card),QString::fromStdString(bus_info),QString::fromStdString(file));
-        
-		close(fd);
-		if (err)
-			continue;
-	}
+    }
 	m_device_list = devlist;
 	m_device_list.printVideoDeviceInfo();
 	m_devname_list = m_device_list.getDeviceNameList();

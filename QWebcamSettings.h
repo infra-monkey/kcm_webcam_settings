@@ -7,18 +7,19 @@
 
 #include "VideoDevice.h"
 #include <KQuickAddons/ConfigModule>
-#include <libv4l2.h>
-#include <linux/videodev2.h>
+//#include <libv4l2.h>
+//#include <linux/videodev2.h>
 #include <dirent.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <linux/media.h>
 #include <string>
+#include <QString>
 #include <QStringList>
-
-using dev_vec = std::vector<std::string>;
-using dev_map = std::map<std::string, std::string>;
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 class QWebcamSettings : public KQuickAddons::ConfigModule
 {
@@ -36,6 +37,7 @@ public:
     Q_SIGNAL void deviceIndexChanged(int);
 
 private:
+    //cv4l_fd *m_fd;
     VideoDeviceList m_device_list;
     VideoDevice m_current_device;
     QStringList m_devname_list;
