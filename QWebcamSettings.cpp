@@ -4,28 +4,20 @@
  */
 
 #include "QWebcamSettings.h"
+#include "helpers.h"
 #include <KPluginFactory>
 #include <KLocalizedString>
 #include <KAboutData>
-#include <iostream>
 #include <KSharedConfig>
 #include <KConfigGroup>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <sys/ioctl.h>
 
 
 K_PLUGIN_CLASS_WITH_JSON(QWebcamSettings, "metadata.json")
-
-
-std::string exec_cmd(const std::string& command) {
-    system((command + " > temp.txt").c_str());
- 
-    std::ifstream ifs("temp.txt");
-    std::string ret{ std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>() };
-    ifs.close(); // must close the inout stream so the file can be cleaned up
-    if (std::remove("temp.txt") != 0) {
-        perror("Error deleting temporary file");
-    }
-    return ret;
-}
 
 QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
     : KQuickAddons::ConfigModule(parent, args)
@@ -56,7 +48,6 @@ void QWebcamSettings::populateDeviceList(VideoDeviceList devlist) {
 	QString bus_info;
     while (std::getline(f, line)) {
 		QString qline = QString::fromStdString(line).trimmed();
-		//printf("%s\n",qline.toStdString().c_str());
 		if (!qline.startsWith(QString::fromStdString("/"))){
 			name = qline.left(qline.indexOf(QString::fromStdString("("))).trimmed();
 
@@ -70,6 +61,7 @@ void QWebcamSettings::populateDeviceList(VideoDeviceList devlist) {
 	m_device_list = devlist;
 	m_device_list.printVideoDeviceInfo();
 	m_devname_list = m_device_list.getDeviceNameList();
+	setDeviceIndex(0);
 }
 
 QStringList QWebcamSettings::getDeviceList(){
@@ -82,19 +74,30 @@ QStringList QWebcamSettings::getDeviceList(){
 	return m_devname_list;
 }
 
-
-int QWebcamSettings::getDeviceIndex() {
-	return m_device_index;
-}
 void QWebcamSettings::setDeviceIndex(int devindex) {
 	printf("Device index is changed to %i\n",devindex);
 	m_device_index = devindex;
-}
-void deviceIndexChanged(int devindex) {
-	printf("Device index is changed to %i\n",devindex);
+	m_current_device = m_device_list.getDeviceFromIndex(devindex);
+	m_absolute_zoom = m_current_device.getAbsoluteZoom();
+	m_absolute_zoom_min = m_current_device.getAbsoluteZoomMin();
+	m_absolute_zoom_max = m_current_device.getAbsoluteZoomMax();
+	m_absolute_zoom_step = m_current_device.getAbsoluteZoomStep();
+	printf("value = %f\n",m_absolute_zoom);
+	printf("min = %f\n",m_absolute_zoom_min);
+	printf("max = %f\n",m_absolute_zoom_max);
+	printf("step = %f\n",m_absolute_zoom_step);
+	Q_EMIT absoluteZoomChanged();
 
 }
 
+void QWebcamSettings::setAbsoluteZoom(double zoom) {
+	printf("Absolute zoom index is changed to %f\n",zoom);
+	m_absolute_zoom = zoom;
+	m_current_device.setAbsoluteZoom(zoom);
+}
 
+
+// void deviceIndexChanged(){}
+// void absoluteZoomChanged(){}
 
 #include "QWebcamSettings.moc"

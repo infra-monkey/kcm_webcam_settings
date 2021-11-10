@@ -32,6 +32,9 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 set(QWebcamSettings_SRCS
     QWebcamSettings.cpp
     VideoDevice.cpp
+    VideoDeviceList.cpp
+    VideoDeviceCtrl.cpp
+    helpers.cpp
 )
 
 add_library(kcm_webcam_settings MODULE ${QWebcamSettings_SRCS})

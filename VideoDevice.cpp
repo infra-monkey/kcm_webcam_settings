@@ -1,20 +1,12 @@
 #include "VideoDevice.h"
+#include "helpers.h"
+#include <QString>
+#include <QStringList>
 
-VideoDevice::VideoDevice() {}
+VideoDevice::VideoDevice() {
+    printf("Video Device Creator called\n");
+}
 VideoDevice::~VideoDevice() {}
-void VideoDevice::setVideoDeviceName(QString devname) {
-    m_device_name = QString(devname);
-}
-QString VideoDevice::getVideoDeviceName() {
-    return m_device_name;
-}
-
-void VideoDevice::setVideoDeviceBusInfo(QString businfo) {
-    m_device_bus_info = QString(businfo);
-}
-QString VideoDevice::getVideoDeviceBusInfo() {
-    return m_device_bus_info;
-}
 
 void VideoDevice::setVideoDevicePath(QString path) {
     bool path_exists = false;
@@ -28,11 +20,40 @@ void VideoDevice::setVideoDevicePath(QString path) {
         QString devpath = QString(path);
         m_device_paths.append(devpath);
     }
+    if (m_device_paths.size() == 1) {
+        m_device_path = m_device_paths.at(0);
+    }
+}
+void VideoDevice::setAbsoluteZoom(double value) {
+    m_ctrl_zoom_absolute.setValue(value);
+}
+double VideoDevice::getAbsoluteZoom() {
+    m_zoom_absolute = m_ctrl_zoom_absolute.getValue();
+    return m_zoom_absolute;
+}
+double VideoDevice::getAbsoluteZoomMin() {
+    m_zoom_absolute_min = m_ctrl_zoom_absolute.getValueMin();
+    return m_zoom_absolute_min;
+}
+double VideoDevice::getAbsoluteZoomMax() {
+    m_zoom_absolute_max = m_ctrl_zoom_absolute.getValueMax();
+    return m_zoom_absolute_max;
+}
+double VideoDevice::getAbsoluteZoomStep() {
+    m_zoom_absolute_step = m_ctrl_zoom_absolute.getValueStep();
+    return m_zoom_absolute_step;
 }
 
-QStringList VideoDevice::getVideoDevicePath() {
-    return m_device_paths;
+
+void VideoDevice::initializeCtrls() {
+    printf("Create controls for %s\n",m_device_path.toStdString().c_str());
+    m_ctrl_brightness = VideoDeviceCtrl(m_device_path.toStdString(),"brightness");
+    m_ctrl_contrast = VideoDeviceCtrl(m_device_path.toStdString(),"contrast");
+    m_ctrl_sharpness = VideoDeviceCtrl(m_device_path.toStdString(),"sharpness");
+    m_ctrl_saturation = VideoDeviceCtrl(m_device_path.toStdString(),"saturation");
+    m_ctrl_zoom_absolute = VideoDeviceCtrl(m_device_path.toStdString(),"zoom_absolute");
 }
+
 
 void VideoDevice::printVideoDeviceInfo() {
     printf("Name : %s\n", m_device_name.toStdString().c_str());
@@ -44,56 +65,4 @@ void VideoDevice::printVideoDeviceInfo() {
     }
 }
 
-VideoDeviceList::VideoDeviceList() {
-}
-VideoDeviceList::~VideoDeviceList() {}
-void VideoDeviceList::addVideoDevice(QString devname,QString businfo,QString devpath) {
-    bool device_exists = false;
-    for (VideoDevice & dev : m_device_list)
-    {
-        if (dev.getVideoDeviceBusInfo().toStdString() == businfo.toStdString()) {
-            dev.setVideoDeviceBusInfo(businfo);
-            dev.setVideoDeviceName(devname);
-            dev.setVideoDevicePath(devpath);
-            device_exists = true;
-            break;
-        }
-    }
 
-    if (!device_exists) {
-        VideoDevice device = VideoDevice();
-        device.setVideoDeviceBusInfo(businfo);
-        device.setVideoDeviceName(devname);
-        device.setVideoDevicePath(devpath);
-        m_device_list.push_back(device);
-        m_devname_list.append(devname);
-    }
-}
-
-void VideoDeviceList::removeVideoDevice(QString businfo) {
-    
-}
-
-void VideoDeviceList::printVideoDeviceInfo() {
-    for (VideoDevice & dev : m_device_list)
-    {
-        dev.printVideoDeviceInfo();
-    }
-}
-
-QStringList VideoDeviceList::getDeviceNameList(){
-	return m_devname_list;
-}
-
-VideoDevice VideoDeviceList::getDeviceFromIndex(int index) {
-    int i = 0;
-    VideoDevice device;
-    for (VideoDevice & dev : m_device_list)
-    {
-        if (i == index) {
-            device = dev;
-            break;
-        }
-    }
-    return device;
-}
