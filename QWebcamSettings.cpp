@@ -105,11 +105,11 @@ void QWebcamSettings::setDeviceIndex(int devindex) {
 	m_sharpness_max = m_current_device.getSharpnessMax();
 	m_sharpness_step = m_current_device.getSharpnessStep();
 	m_sharpness_visible = m_current_device.getSharpnessVisible();
-	m_contrast = m_current_device.getSaturation();
-	m_contrast_min = m_current_device.getSaturationMin();
-	m_contrast_max = m_current_device.getSaturationMax();
-	m_contrast_step = m_current_device.getSaturationStep();
-	m_contrast_visible = m_current_device.getSaturationVisible();
+	m_saturation = m_current_device.getSaturation();
+	m_saturation_min = m_current_device.getSaturationMin();
+	m_saturation_max = m_current_device.getSaturationMax();
+	m_saturation_step = m_current_device.getSaturationStep();
+	m_saturation_visible = m_current_device.getSaturationVisible();
 	Q_EMIT deviceIndexChanged();
 	Q_EMIT formatIndexChanged();
 	Q_EMIT resolutionIndexChanged();

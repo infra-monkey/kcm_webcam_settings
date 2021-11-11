@@ -83,11 +83,11 @@ public:
     qreal getSharpnessMax() const {return m_sharpness_max;};
     qreal getSharpnessStep() const {return m_sharpness_step;};
     bool getSharpnessVisible() const {return m_sharpness_visible;};
-    qreal getSaturation() const {return m_contrast;};
-    qreal getSaturationMin() const {return m_contrast_min;};
-    qreal getSaturationMax() const {return m_contrast_max;};
-    qreal getSaturationStep() const {return m_contrast_step;};
-    bool getSaturationVisible() const {return m_contrast_visible;};
+    qreal getSaturation() const {return m_saturation;};
+    qreal getSaturationMin() const {return m_saturation_min;};
+    qreal getSaturationMax() const {return m_saturation_max;};
+    qreal getSaturationStep() const {return m_saturation_step;};
+    bool getSaturationVisible() const {return m_saturation_visible;};
     qreal getAbsoluteZoom() const {return m_absolute_zoom;};
     qreal getAbsoluteZoomMin() const {return m_absolute_zoom_min;};
     qreal getAbsoluteZoomMax() const {return m_absolute_zoom_max;};
