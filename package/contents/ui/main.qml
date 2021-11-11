@@ -22,7 +22,7 @@ KCM.SimpleKCM {
         Controls.ComboBox {
             id: deviceList
             editable: false
-            Kirigami.FormData.label: "Webcam List:"
+            Kirigami.FormData.label: "Device list:"
             model: kcm.device_list
             currentIndex: kcm.deviceIndex
             onActivated: {
@@ -30,6 +30,30 @@ KCM.SimpleKCM {
                 currentIndex=index
             }
             onCurrentIndexChanged: kcm.deviceIndex
+        }
+        Controls.ComboBox {
+            id: formatList
+            editable: false
+            Kirigami.FormData.label: "Format list:"
+            model: kcm.format_list
+            currentIndex: kcm.formatIndex
+            onActivated: {
+                kcm.setFormatIndex(currentIndex)
+                currentIndex=index
+            }
+            onCurrentIndexChanged: kcm.formatIndex
+        }
+        Controls.ComboBox {
+            id: resolutionList
+            editable: false
+            Kirigami.FormData.label: "Resolution list:"
+            model: kcm.resolution_list
+            currentIndex: kcm.resolutionIndex
+            onActivated: {
+                kcm.setResolutionIndex(currentIndex)
+                currentIndex=index
+            }
+            onCurrentIndexChanged: kcm.resolutionIndex
         }
         RowLayout {
             id: brightnessCtrl

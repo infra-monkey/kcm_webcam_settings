@@ -4,7 +4,6 @@
 #include <QStringList>
 
 VideoDevice::VideoDevice() {
-    printf("Video Device Creator called\n");
 }
 VideoDevice::~VideoDevice() {}
 
@@ -154,6 +153,49 @@ void VideoDevice::initializeCtrls() {
     m_ctrl_saturation = VideoDeviceCtrl(m_device_path.toStdString(),"saturation");
     m_ctrl_zoom_absolute = VideoDeviceCtrl(m_device_path.toStdString(),"zoom_absolute");
 }
+
+void VideoDevice::initializeFormats() {
+    std::string cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-formats | grep \"\\[\"");
+    QStringList output = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
+    for (QString & line : output){
+        if (line.length() == 0){break;}
+        printf("Line = %s\n",line.toStdString().c_str());
+        QString fmt = QString::fromStdString(get_str_between_two_str(line.toStdString().c_str()," \'","\' ")).simplified();
+        printf("Format = %s\n",fmt.toStdString().c_str());
+        VideoDeviceCapFormat new_fmt = VideoDeviceCapFormat(fmt);
+        m_device_formats.push_back(new_fmt);
+        m_format_list.append(fmt);
+    }
+}
+
+void VideoDevice::initializeResolutions() {
+    for (VideoDeviceCapFormat & fmtobj : m_device_formats){
+        std::string cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-framesizes " + fmtobj.getFormatName().toStdString() + " | grep Size");
+        QStringList output = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
+        for (QString & line : output){
+            if (line.length() == 0){break;}
+            printf("Line = %s\n",line.simplified().trimmed().toStdString().c_str());
+            QString fmt = QString::fromStdString(get_str_right_of_substr(line.simplified().trimmed().toStdString(),"Discrete ")).simplified();
+            printf("Format = %s\n",fmt.toStdString().c_str());
+            fmtobj.addResolution(fmt);
+        }
+    }
+}
+
+QStringList VideoDevice::getResolutionList(){
+    int i=0;
+    QStringList list;
+    for (VideoDeviceCapFormat & fmt : m_device_formats){
+        printf("Checking resolutions for format index %i\n",i);
+        if (i == m_current_format_index){
+            list = fmt.getResList();
+            break;
+        }
+        i++;
+    }
+    return list;
+}
+
 
 
 void VideoDevice::printVideoDeviceInfo() {

@@ -4,6 +4,7 @@
 #include <QString>
 #include <QStringList>
 #include "VideoDeviceCtrl.h"
+#include "VideoDeviceCapFormat.h"
 
 class VideoDevice {
 public:
@@ -17,6 +18,14 @@ public:
     QStringList getVideoDevicePaths(){return m_device_paths;};
     QString getVideoDevicePath(){return m_device_path;};
     void initializeCtrls();
+    void initializeFormats();
+    void initializeResolutions();
+    QStringList getFormatList(){return m_format_list;};
+    QStringList getResolutionList();
+    void setFormatIndex(int fmtindex){m_current_format_index = fmtindex;};
+    int getFormatIndex(){return m_current_format_index;};
+    void setResolutionIndex(int resindex){m_current_resolution_index = resindex;};
+    int getResolutionIndex(){return m_current_resolution_index;};
     void printVideoDeviceInfo();
     void setAbsoluteZoom(double);
     void setBrightness(double);
@@ -53,6 +62,10 @@ private:
     QString m_device_name;
     QString m_device_bus_info;
     QStringList m_device_paths;
+    std::list<VideoDeviceCapFormat> m_device_formats;
+    QStringList m_format_list;
+    int m_current_format_index = 0;
+    int m_current_resolution_index = 0;
     QString m_device_path;
     VideoDeviceCtrl m_ctrl_brightness;
     VideoDeviceCtrl m_ctrl_contrast;

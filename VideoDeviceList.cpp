@@ -17,8 +17,6 @@ void VideoDeviceList::addVideoDevice(QString devpath) {
     for (VideoDevice & dev : m_device_list)
     {
         if (dev.getVideoDeviceBusInfo().toStdString() == businfo.toStdString()) {
-        //     dev.setVideoDeviceBusInfo(businfo);
-        //     dev.setVideoDeviceName(devname);
             dev.setVideoDevicePath(devpath);
             device_exists = true;
             break;
@@ -30,6 +28,8 @@ void VideoDeviceList::addVideoDevice(QString devpath) {
         device.setVideoDeviceBusInfo(businfo);
         device.setVideoDeviceName(devname);
         device.setVideoDevicePath(devpath);
+        device.initializeFormats();
+        device.initializeResolutions();
         device.initializeCtrls();
         m_device_list.push_back(device);
         m_devname_list.append(devname);

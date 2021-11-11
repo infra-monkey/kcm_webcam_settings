@@ -22,6 +22,12 @@ class QWebcamSettings : public KQuickAddons::ConfigModule
     Q_PROPERTY(QStringList device_list READ getDeviceList NOTIFY deviceIndexChanged)
     Q_PROPERTY(int deviceIndex READ getDeviceIndex WRITE setDeviceIndex NOTIFY deviceIndexChanged)
 
+    Q_PROPERTY(QStringList format_list READ getFormatList NOTIFY formatIndexChanged)
+    Q_PROPERTY(int formatIndex READ getFormatIndex WRITE setFormatIndex NOTIFY formatIndexChanged)
+
+    Q_PROPERTY(QStringList resolution_list READ getResolutionList NOTIFY resolutionIndexChanged)
+    Q_PROPERTY(int resolutionIndex READ getResolutionIndex WRITE setResolutionIndex NOTIFY resolutionIndexChanged)
+
     Q_PROPERTY(qreal brightness READ getBrightness WRITE setBrightness NOTIFY brightnessChanged)
     Q_PROPERTY(qreal brightness_min READ getBrightnessMin NOTIFY deviceIndexChanged)
     Q_PROPERTY(qreal brightness_max READ getBrightnessMax NOTIFY deviceIndexChanged)
@@ -56,8 +62,12 @@ public:
     QWebcamSettings(QObject *parent, const QVariantList &args);
     virtual ~QWebcamSettings() override = default;
     QStringList getDeviceList();
+    QStringList getFormatList();
+    QStringList getResolutionList();
     void populateDeviceList(VideoDeviceList);
     int getDeviceIndex(){return m_device_index;};
+    int getFormatIndex(){return m_current_device.getFormatIndex();};
+    int getResolutionIndex(){return m_current_device.getResolutionIndex();};
     qreal getBrightness() const {return m_brightness;};
     qreal getBrightnessMin() const {return m_brightness_min;};
     qreal getBrightnessMax() const {return m_brightness_max;};
@@ -84,6 +94,8 @@ public:
     qreal getAbsoluteZoomStep() const {return m_absolute_zoom_step;};
     bool getAbsoluteZoomVisible() const {return m_absolute_zoom_visible;};
     Q_INVOKABLE void setDeviceIndex(int);
+    Q_INVOKABLE void setFormatIndex(int);
+    Q_INVOKABLE void setResolutionIndex(int);
     Q_INVOKABLE void setAbsoluteZoom(double);
     Q_INVOKABLE void setBrightness(double);
     Q_INVOKABLE void setContrast(double);
@@ -92,6 +104,8 @@ public:
     Q_INVOKABLE void resetCrtlToDefault(QString);
 Q_SIGNALS:
     void deviceIndexChanged();
+    void formatIndexChanged();
+    void resolutionIndexChanged();
     void absoluteZoomChanged();
     void brightnessChanged();
     void contrastChanged();
@@ -101,7 +115,11 @@ private:
     VideoDeviceList m_device_list;
     VideoDevice m_current_device;
     QStringList m_devname_list;
+    QStringList m_current_format_list;
+    QStringList m_current_resolution_list;
     int m_device_index;
+    int m_format_index;
+    int m_resolution_index;
     double m_absolute_zoom;
     double m_absolute_zoom_min;
     double m_absolute_zoom_max;

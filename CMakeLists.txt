@@ -34,6 +34,7 @@ set(QWebcamSettings_SRCS
     VideoDevice.cpp
     VideoDeviceList.cpp
     VideoDeviceCtrl.cpp
+    VideoDeviceCapFormat.cpp
     helpers.cpp
 )
 
