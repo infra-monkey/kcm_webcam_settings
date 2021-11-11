@@ -15,11 +15,15 @@ VideoDeviceCtrl::~VideoDeviceCtrl() {
 }
 
 double VideoDeviceCtrl::getValue() {
-    std::string cmd = std::string("v4l2-ctl -d " + m_device_path + " --get-ctrl " + m_ctrl_name);
-    // printf("cmd = %s\n",cmd.c_str());
-    m_value = static_cast<double>(stoi(get_str_right_of_substr(exec_cmd(cmd),std::string(":"))));
-    // printf("value %f\n",m_value);
-    return m_value;
+    if (m_is_defined){
+        std::string cmd = std::string("v4l2-ctl -d " + m_device_path + " --get-ctrl " + m_ctrl_name);
+        // printf("cmd = %s\n",cmd.c_str());
+        m_value = static_cast<double>(stoi(get_str_right_of_substr(exec_cmd(cmd),std::string(":"))));
+        // printf("value %f\n",m_value);
+        return m_value;
+    } else {
+        return static_cast<double>(0);
+    }
 }
 
 void VideoDeviceCtrl::getCtrlSettings() {

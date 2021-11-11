@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12 as Controls
+import QtQuick 2.15
+import QtQuick.Controls 2.15 as Controls
 import QtMultimedia 5.8
+import QtQuick.Layouts 1.15
 
 import org.kde.kirigami 2.10 as Kirigami
 import org.kde.kcm 1.2 as KCM
@@ -21,7 +22,7 @@ KCM.SimpleKCM {
         Controls.ComboBox {
             id: deviceList
             editable: false
-            Kirigami.FormData.label: "Webcam List :"
+            Kirigami.FormData.label: "Webcam List:"
             model: kcm.device_list
             currentIndex: kcm.deviceIndex
             onActivated: {
@@ -30,14 +31,150 @@ KCM.SimpleKCM {
             }
             onCurrentIndexChanged: kcm.deviceIndex
         }
-        Controls.Slider {
-            id: absoluteZoomSlide
-            from: kcm.absolute_zoom_min
-            to: kcm.absolute_zoom_max
-            stepSize: kcm.absolute_zoom_step
-            value: kcm.absolute_zoom
-            onValueChanged: kcm.absolute_zoom = value
-            live: true
+        RowLayout {
+            id: brightnessCtrl
+            visible: kcm.brightness_visible
+            Layout.fillWidth: true
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 16
+            Kirigami.FormData.label: i18n("Brightness:")
+            Controls.Slider {
+                id: brightnessSlide
+                from: kcm.brightness_min
+                to: kcm.brightness_max
+                stepSize: kcm.brightness_step
+                value: kcm.brightness
+                onValueChanged: kcm.brightness = value
+                live: true
+            }
+            Controls.SpinBox {
+                id: brightnessSpinbox
+                from: kcm.brightness_min
+                to: kcm.brightness_max
+                stepSize: kcm.brightness_step
+                value: kcm.brightness
+                onValueChanged: kcm.brightness = value
+            }
+            Controls.Button {
+                id: brightnessResetCtrl
+                text: i18n("Reset To Default")
+                onClicked: kcm.resetCrtlToDefault("brightness")
+            }
+        }
+        RowLayout {
+            id: contrastCtrl
+            visible: kcm.contrast_visible
+            Layout.fillWidth: true
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 16
+            Kirigami.FormData.label: i18n("Contrast:")
+            Controls.Slider {
+                id: contrastSlide
+                from: kcm.contrast_min
+                to: kcm.contrast_max
+                stepSize: kcm.contrast_step
+                value: kcm.contrast
+                onValueChanged: kcm.contrast = value
+                live: true
+            }
+            Controls.SpinBox {
+                id: contrastSpinbox
+                from: kcm.contrast_min
+                to: kcm.contrast_max
+                stepSize: kcm.contrast_step
+                value: kcm.contrast
+                onValueChanged: kcm.contrast = value
+            }
+            Controls.Button {
+                id: contrastResetCtrl
+                text: i18n("Reset To Default")
+                onClicked: kcm.resetCrtlToDefault("contrast")
+            }
+        }
+        RowLayout {
+            id: sharpnessCtrl
+            visible: kcm.sharpness_visible
+            Layout.fillWidth: true
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 16
+            Kirigami.FormData.label: i18n("Sharpness:")
+            Controls.Slider {
+                id: sharpnessSlide
+                from: kcm.sharpness_min
+                to: kcm.sharpness_max
+                stepSize: kcm.sharpness_step
+                value: kcm.sharpness
+                onValueChanged: kcm.sharpness = value
+                live: true
+            }
+            Controls.SpinBox {
+                id: sharpnessSpinbox
+                from: kcm.sharpness_min
+                to: kcm.sharpness_max
+                stepSize: kcm.sharpness_step
+                value: kcm.sharpness
+                onValueChanged: kcm.sharpness = value
+            }
+            Controls.Button {
+                id: sharpnessResetCtrl
+                text: i18n("Reset To Default")
+                onClicked: kcm.resetCrtlToDefault("sharpness")
+            }
+        }
+        RowLayout {
+            id: saturationCtrl
+            visible: kcm.saturation_visible
+            Layout.fillWidth: true
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 16
+            Kirigami.FormData.label: i18n("Saturation:")
+            Controls.Slider {
+                id: saturationSlide
+                from: kcm.saturation_min
+                to: kcm.saturation_max
+                stepSize: kcm.saturation_step
+                value: kcm.saturation
+                onValueChanged: kcm.saturation = value
+                live: true
+            }
+            Controls.SpinBox {
+                id: saturationSpinbox
+                from: kcm.saturation_min
+                to: kcm.saturation_max
+                stepSize: kcm.saturation_step
+                value: kcm.saturation
+                onValueChanged: kcm.saturation = value
+            }
+            Controls.Button {
+                id: saturationResetCtrl
+                text: i18n("Reset To Default")
+                onClicked: kcm.resetCrtlToDefault("saturation")
+            }
+        }
+        RowLayout {
+            id: zoomCtrl
+            visible: kcm.absolute_zoom_visible
+            Layout.fillWidth: true
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 16
+            Kirigami.FormData.label: i18n("Absolute Zoom:")
+            Controls.Slider {
+                id: absoluteZoomSlide
+                from: kcm.absolute_zoom_min
+                to: kcm.absolute_zoom_max
+                stepSize: kcm.absolute_zoom_step
+                value: kcm.absolute_zoom
+                onValueChanged: kcm.absolute_zoom = value
+                live: true
+            }
+            Controls.SpinBox {
+                id: absoluteZoomSpinbox
+                from: kcm.absolute_zoom_min
+                to: kcm.absolute_zoom_max
+                stepSize: kcm.absolute_zoom_step
+                value: kcm.absolute_zoom
+                onValueChanged: kcm.absolute_zoom = value
+            }
+            Controls.Button {
+                id: absoluteZoomResetCtrl
+                text: i18n("Reset To Default")
+                onClicked: kcm.resetCrtlToDefault("zoom_absolute")
+            }
         }
     }
 }

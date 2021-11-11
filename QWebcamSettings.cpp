@@ -48,14 +48,9 @@ void QWebcamSettings::populateDeviceList(VideoDeviceList devlist) {
 	QString bus_info;
     while (std::getline(f, line)) {
 		QString qline = QString::fromStdString(line).trimmed();
-		if (!qline.startsWith(QString::fromStdString("/"))){
-			name = qline.left(qline.indexOf(QString::fromStdString("("))).trimmed();
-
-			QString tmp = qline.left(qline.indexOf(QString::fromStdString(")")));
-			bus_info = tmp.right(tmp.size() - tmp.indexOf(QString::fromStdString("(")) - 1);
-		} else {
+		if (qline.startsWith(QString::fromStdString("/"))){
 			QString file = qline.trimmed();
-			devlist.addVideoDevice(name,bus_info,file);
+			devlist.addVideoDevice(file);
 		}
     }
 	m_device_list = devlist;
@@ -82,11 +77,34 @@ void QWebcamSettings::setDeviceIndex(int devindex) {
 	m_absolute_zoom_min = m_current_device.getAbsoluteZoomMin();
 	m_absolute_zoom_max = m_current_device.getAbsoluteZoomMax();
 	m_absolute_zoom_step = m_current_device.getAbsoluteZoomStep();
-	printf("value = %f\n",m_absolute_zoom);
-	printf("min = %f\n",m_absolute_zoom_min);
-	printf("max = %f\n",m_absolute_zoom_max);
-	printf("step = %f\n",m_absolute_zoom_step);
+	m_absolute_zoom_visible = m_current_device.getAbsoluteZoomVisible();
+	m_brightness = m_current_device.getBrightness();
+	m_brightness_min = m_current_device.getBrightnessMin();
+	m_brightness_max = m_current_device.getBrightnessMax();
+	m_brightness_step = m_current_device.getBrightnessStep();
+	m_brightness_visible = m_current_device.getBrightnessVisible();
+	m_contrast = m_current_device.getContrast();
+	m_contrast_min = m_current_device.getContrastMin();
+	m_contrast_max = m_current_device.getContrastMax();
+	m_contrast_step = m_current_device.getContrastStep();
+	m_contrast_visible = m_current_device.getContrastVisible();
+	m_sharpness = m_current_device.getSharpness();
+	m_sharpness_min = m_current_device.getSharpnessMin();
+	m_sharpness_max = m_current_device.getSharpnessMax();
+	m_sharpness_step = m_current_device.getSharpnessStep();
+	m_sharpness_visible = m_current_device.getSharpnessVisible();
+	m_contrast = m_current_device.getSaturation();
+	m_contrast_min = m_current_device.getSaturationMin();
+	m_contrast_max = m_current_device.getSaturationMax();
+	m_contrast_step = m_current_device.getSaturationStep();
+	m_contrast_visible = m_current_device.getSaturationVisible();
+	Q_EMIT deviceIndexChanged();
 	Q_EMIT absoluteZoomChanged();
+	Q_EMIT brightnessChanged();
+	Q_EMIT contrastChanged();
+	Q_EMIT contrastChanged();
+	Q_EMIT sharpnessChanged();
+
 
 }
 
@@ -94,10 +112,68 @@ void QWebcamSettings::setAbsoluteZoom(double zoom) {
 	printf("Absolute zoom index is changed to %f\n",zoom);
 	m_absolute_zoom = zoom;
 	m_current_device.setAbsoluteZoom(zoom);
+	Q_EMIT absoluteZoomChanged();
 }
 
+void QWebcamSettings::setBrightness(double brightness) {
+	printf("Brightness index is changed to %f\n",brightness);
+	m_brightness = brightness;
+	m_current_device.setBrightness(brightness);
+	Q_EMIT brightnessChanged();
+}
 
-// void deviceIndexChanged(){}
-// void absoluteZoomChanged(){}
+void QWebcamSettings::setContrast(double contrast) {
+	printf("Contrast index is changed to %f\n",contrast);
+	m_contrast = contrast;
+	m_current_device.setContrast(contrast);
+	Q_EMIT contrastChanged();
+}
+
+void QWebcamSettings::setSharpness(double sharpness) {
+	printf("Sharpness index is changed to %f\n",sharpness);
+	m_sharpness = sharpness;
+	m_current_device.setSharpness(sharpness);
+	Q_EMIT sharpnessChanged();
+}
+
+void QWebcamSettings::setSaturation(double saturation) {
+	printf("Saturation index is changed to %f\n",saturation);
+	m_saturation = saturation;
+	m_current_device.setSaturation(saturation);
+	Q_EMIT saturationChanged();
+}
+
+void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
+	printf("Reset control %s to value %f\n",ctrl_name.toStdString().c_str(),m_current_device.getCtrlDefaultValue(ctrl_name));
+	double default_value = m_current_device.getCtrlDefaultValue(ctrl_name);
+	m_absolute_zoom = m_current_device.getCtrlDefaultValue(ctrl_name);
+
+	if (ctrl_name.toStdString() == "brightness") {
+		m_brightness = default_value;
+		m_current_device.setBrightness(m_brightness);
+		Q_EMIT brightnessChanged();
+    }
+    if (ctrl_name.toStdString() == "contrast") {
+		m_contrast = default_value;
+		m_current_device.setContrast(m_contrast);
+		Q_EMIT contrastChanged();
+    }
+    if (ctrl_name.toStdString() == "sharpness") {
+		m_sharpness = default_value;
+		m_current_device.setSharpness(m_sharpness);
+		Q_EMIT sharpnessChanged();
+    }
+    if (ctrl_name.toStdString() == "saturation") {
+		m_saturation = default_value;
+		m_current_device.setSaturation(m_saturation);
+		Q_EMIT saturationChanged();
+    }
+    if (ctrl_name.toStdString() == "zoom_absolute") {
+		m_absolute_zoom = default_value;
+		m_current_device.setBrightness(m_absolute_zoom);
+		Q_EMIT absoluteZoomChanged();
+    }
+}
+
 
 #include "QWebcamSettings.moc"

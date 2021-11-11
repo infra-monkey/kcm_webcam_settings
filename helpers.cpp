@@ -25,7 +25,7 @@ std::string get_str_between_two_str(const std::string &s,
 }
 
 std::string get_str_right_of_substr(const std::string &s,const std::string &delim) {
-    unsigned delim_pos = s.find(delim);
+    unsigned delim_pos = s.find_first_of(delim);
     unsigned end_pos_of_delim = delim_pos + delim.length();
     
     return s.substr(end_pos_of_delim,

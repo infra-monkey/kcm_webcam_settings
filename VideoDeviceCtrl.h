@@ -12,9 +12,11 @@ public:
     VideoDeviceCtrl(std::string,std::string);
     virtual ~VideoDeviceCtrl();
     double getValue();
-    double getValueMin() {return m_value_min;};
-    double getValueMax() {return m_value_max;};
-    double getValueStep() {return m_value_step;};
+    double getValueMin() {if (m_is_defined){return m_value_min;}else{return static_cast<double>(0);}};
+    double getValueMax() {if (m_is_defined){return m_value_max;}else{return static_cast<double>(0);}};
+    double getValueStep() {if (m_is_defined){return m_value_step;}else{return static_cast<double>(0);}};
+    double getValueDefault() {if (m_is_defined){return m_value_default;}else{return static_cast<double>(0);}};
+    bool getEnabled() {return m_is_defined;};
     void getCtrlSettings();
     void setValue(double);
     void resetValueToDefault() {setValue(m_value_default);};
