@@ -155,7 +155,11 @@ void VideoDevice::initializeCtrls() {
 }
 
 void VideoDevice::initializeFormats() {
-    std::string cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-formats | grep \"\\[\"");
+    std::string cmd;
+    int i = 0;
+    cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video | grep \"Pixel Format\"");
+    std::string current_fmt = get_str_between_two_str(exec_cmd(cmd)," \'","\' ");
+    cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-formats | grep \"\\[\"");
     QStringList output = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
     for (QString & line : output){
         if (line.length() == 0){break;}
@@ -165,20 +169,39 @@ void VideoDevice::initializeFormats() {
         VideoDeviceCapFormat new_fmt = VideoDeviceCapFormat(fmt);
         m_device_formats.push_back(new_fmt);
         m_format_list.append(fmt);
+        if (fmt.toStdString() == current_fmt){
+            m_current_fmt = new_fmt;
+            m_current_format_index = i;
+        }
+        i++;
     }
 }
 
 void VideoDevice::initializeResolutions() {
+    std::string cmd;
+    int i=0;
+    int j=0;
+    cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video | grep \"Width/Height\"");
+    m_current_resolution = QString::fromStdString(get_str_right_of_substr(exec_cmd(cmd),":")).replace(QString::fromStdString("/"), QString::fromStdString("x")).simplified();
+    printf("current format index = %i | current resolution = %s\n",m_current_format_index,m_current_resolution.toStdString().c_str());
     for (VideoDeviceCapFormat & fmtobj : m_device_formats){
-        std::string cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-framesizes " + fmtobj.getFormatName().toStdString() + " | grep Size");
+        if (m_current_format_index == j){i=0;}
+        cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-framesizes " + fmtobj.getFormatName().toStdString() + " | grep Size");
         QStringList output = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
         for (QString & line : output){
             if (line.length() == 0){break;}
             printf("Line = %s\n",line.simplified().trimmed().toStdString().c_str());
             QString fmt = QString::fromStdString(get_str_right_of_substr(line.simplified().trimmed().toStdString(),"Discrete ")).simplified();
             printf("Format = %s\n",fmt.toStdString().c_str());
+            printf("current resolution = %s\n",m_current_resolution.toStdString().c_str());
             fmtobj.addResolution(fmt);
+            if (m_current_format_index == j && m_current_resolution.toStdString() == fmt.toStdString()){
+                m_current_resolution_index = i;
+                printf("current resolution index = %i\n",m_current_resolution_index);
+            }
+            i++;
         }
+        j++;
     }
 }
 

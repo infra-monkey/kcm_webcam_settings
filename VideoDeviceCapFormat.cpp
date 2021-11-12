@@ -11,7 +11,8 @@ VideoDeviceCapFormat::~VideoDeviceCapFormat() {
 }
 
 void VideoDeviceCapFormat::addResolution(QString res){
-    printf("Adding resolution %s\n",res.toStdString().c_str());
-    m_resolution_list.append(res);
+    if (!m_resolution_list.contains(res)){
+        m_resolution_list.append(res);
+    }
 }
 

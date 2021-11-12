@@ -63,6 +63,8 @@ private:
     QString m_device_bus_info;
     QStringList m_device_paths;
     std::list<VideoDeviceCapFormat> m_device_formats;
+    VideoDeviceCapFormat m_current_fmt;
+    QString m_current_resolution;
     QStringList m_format_list;
     int m_current_format_index = 0;
     int m_current_resolution_index = 0;
