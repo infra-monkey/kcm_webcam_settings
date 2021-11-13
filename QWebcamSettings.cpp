@@ -41,6 +41,7 @@ QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
 }
 
 void QWebcamSettings::populateDeviceList(VideoDeviceList devlist) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::populateDeviceList Starting to populate the video devices";
 	std::string devices = exec_cmd("v4l2-ctl --list-devices");
 	std::istringstream f(devices);
     std::string line;    
@@ -54,13 +55,11 @@ void QWebcamSettings::populateDeviceList(VideoDeviceList devlist) {
 		}
     }
 	m_device_list = devlist;
-	m_device_list.printVideoDeviceInfo();
 	m_devname_list = m_device_list.getDeviceNameList();
 	setDeviceIndex(0);
 }
 
 QStringList QWebcamSettings::getDeviceList(){
-	printf("Invoked getDeviceList\n");
 	QStringList devname_list = m_device_list.getDeviceNameList();
 	for (QString & devname : devname_list)
     {
@@ -70,21 +69,19 @@ QStringList QWebcamSettings::getDeviceList(){
 }
 
 QStringList QWebcamSettings::getFormatList(){
-	printf("Invoked getFormatList\n");
 	m_current_format_list = m_current_device.getFormatList();
 	return m_current_format_list;
 }
 
 QStringList QWebcamSettings::getResolutionList(){
-	printf("Invoked getResolutionList\n");
 	m_current_resolution_list = m_current_device.getResolutionList();
 	return m_current_resolution_list;
 }
 
 void QWebcamSettings::setDeviceIndex(int devindex) {
-	printf("Device index is changed to %i\n",devindex);
 	m_device_index = devindex;
 	m_current_device = m_device_list.getDeviceFromIndex(devindex);
+	qCInfo(webcam_settings_kcm) << "Selected device " << m_current_device.getVideoDeviceName();
 	m_absolute_zoom = m_current_device.getAbsoluteZoom();
 	m_absolute_zoom_min = m_current_device.getAbsoluteZoomMin();
 	m_absolute_zoom_max = m_current_device.getAbsoluteZoomMax();
@@ -123,55 +120,48 @@ void QWebcamSettings::setDeviceIndex(int devindex) {
 }
 
 void QWebcamSettings::setFormatIndex(int fmtindex) {
-	printf("Format index is changed to %i\n",fmtindex);
 	m_current_device.setFormatIndex(fmtindex);
 	Q_EMIT formatIndexChanged();
 	Q_EMIT resolutionIndexChanged();
 }
 
 void QWebcamSettings::setResolutionIndex(int resindex) {
-	printf("Resolution index is changed to %i\n",resindex);
 	m_current_device.setResolutionIndex(resindex);
 	Q_EMIT resolutionIndexChanged();
 }
 
 void QWebcamSettings::setAbsoluteZoom(double zoom) {
-	printf("Absolute zoom index is changed to %f\n",zoom);
 	m_absolute_zoom = zoom;
 	m_current_device.setAbsoluteZoom(zoom);
 	Q_EMIT absoluteZoomChanged();
 }
 
 void QWebcamSettings::setBrightness(double brightness) {
-	printf("Brightness index is changed to %f\n",brightness);
 	m_brightness = brightness;
 	m_current_device.setBrightness(brightness);
 	Q_EMIT brightnessChanged();
 }
 
 void QWebcamSettings::setContrast(double contrast) {
-	printf("Contrast index is changed to %f\n",contrast);
 	m_contrast = contrast;
 	m_current_device.setContrast(contrast);
 	Q_EMIT contrastChanged();
 }
 
 void QWebcamSettings::setSharpness(double sharpness) {
-	printf("Sharpness index is changed to %f\n",sharpness);
 	m_sharpness = sharpness;
 	m_current_device.setSharpness(sharpness);
 	Q_EMIT sharpnessChanged();
 }
 
 void QWebcamSettings::setSaturation(double saturation) {
-	printf("Saturation index is changed to %f\n",saturation);
 	m_saturation = saturation;
 	m_current_device.setSaturation(saturation);
 	Q_EMIT saturationChanged();
 }
 
 void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
-	printf("Reset control %s to value %f\n",ctrl_name.toStdString().c_str(),m_current_device.getCtrlDefaultValue(ctrl_name));
+	//printf("Reset control %s to value %f\n",ctrl_name.toStdString().c_str(),m_current_device.getCtrlDefaultValue(ctrl_name));
 	double default_value = m_current_device.getCtrlDefaultValue(ctrl_name);
 	m_absolute_zoom = m_current_device.getCtrlDefaultValue(ctrl_name);
 

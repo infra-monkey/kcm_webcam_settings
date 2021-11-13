@@ -10,9 +10,9 @@ class VideoDevice {
 public:
     VideoDevice();
     virtual ~VideoDevice();
-    void setVideoDeviceName(QString devname){m_device_name = QString(devname);};
+    void setVideoDeviceName(QString);
     QString getVideoDeviceName(){return m_device_name;};
-    void setVideoDeviceBusInfo(QString businfo){m_device_bus_info = QString(businfo);};
+    void setVideoDeviceBusInfo(QString);
     QString getVideoDeviceBusInfo(){return m_device_bus_info;};
     void setVideoDevicePath(QString);
     QStringList getVideoDevicePaths(){return m_device_paths;};
@@ -26,7 +26,6 @@ public:
     int getFormatIndex(){return m_current_format_index;};
     void setResolutionIndex(int resindex){m_current_resolution_index = resindex;};
     int getResolutionIndex(){return m_current_resolution_index;};
-    void printVideoDeviceInfo();
     void setAbsoluteZoom(double);
     void setBrightness(double);
     double getBrightness();

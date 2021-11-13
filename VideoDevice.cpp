@@ -8,6 +8,7 @@ VideoDevice::VideoDevice() {
 VideoDevice::~VideoDevice() {}
 
 void VideoDevice::setVideoDevicePath(QString path) {
+    
     bool path_exists = false;
     for (QString & devpath : m_device_paths)
     {
@@ -18,12 +19,22 @@ void VideoDevice::setVideoDevicePath(QString path) {
     if (!path_exists){
         QString devpath = QString(path);
         m_device_paths.append(devpath);
+        qCDebug(webcam_settings_kcm) << "Add path " << path << "to video device.";
     }
     if (m_device_paths.size() == 1) {
         m_device_path = m_device_paths.at(0);
     }
 }
 
+void VideoDevice::setVideoDeviceName(QString devname){
+    qCDebug(webcam_settings_kcm) << "Set name " << devname << " for video device with path " << m_device_path;
+    m_device_name = QString(devname);
+}
+
+void VideoDevice::setVideoDeviceBusInfo(QString businfo){
+    qCDebug(webcam_settings_kcm) << "Set bus name " << businfo << " for video device with path " << m_device_path;
+    m_device_bus_info = QString(businfo);
+}
 void VideoDevice::setBrightness(double value) {
     m_ctrl_brightness.setValue(value);
 }
@@ -146,7 +157,7 @@ bool VideoDevice::getAbsoluteZoomVisible() {
 
 
 void VideoDevice::initializeCtrls() {
-    printf("Create controls for %s\n",m_device_path.toStdString().c_str());
+    qCDebug(webcam_settings_kcm) << "Initializing controls for video device with path " << m_device_path;
     m_ctrl_brightness = VideoDeviceCtrl(m_device_path.toStdString(),"brightness");
     m_ctrl_contrast = VideoDeviceCtrl(m_device_path.toStdString(),"contrast");
     m_ctrl_sharpness = VideoDeviceCtrl(m_device_path.toStdString(),"sharpness");
@@ -155,6 +166,7 @@ void VideoDevice::initializeCtrls() {
 }
 
 void VideoDevice::initializeFormats() {
+    qCDebug(webcam_settings_kcm) << "Initializing pixel formats for video device with path " << m_device_path;
     std::string cmd;
     int i = 0;
     cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video | grep \"Pixel Format\"");
@@ -163,10 +175,9 @@ void VideoDevice::initializeFormats() {
     QStringList output = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
     for (QString & line : output){
         if (line.length() == 0){break;}
-        printf("Line = %s\n",line.toStdString().c_str());
         QString fmt = QString::fromStdString(get_str_between_two_str(line.toStdString().c_str()," \'","\' ")).simplified();
-        printf("Format = %s\n",fmt.toStdString().c_str());
-        VideoDeviceCapFormat new_fmt = VideoDeviceCapFormat(fmt);
+        qCDebug(webcam_settings_kcm) << m_device_path << "Created format : " << fmt;
+        VideoDeviceCapFormat new_fmt = VideoDeviceCapFormat(fmt,m_device_path);
         m_device_formats.push_back(new_fmt);
         m_format_list.append(fmt);
         if (fmt.toStdString() == current_fmt){
@@ -178,29 +189,27 @@ void VideoDevice::initializeFormats() {
 }
 
 void VideoDevice::initializeResolutions() {
+    qCDebug(webcam_settings_kcm) << "Initializing resolutions for video device with path " << m_device_path;
     std::string cmd;
     int i=0;
     int j=0;
     cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video | grep \"Width/Height\"");
     m_current_resolution = QString::fromStdString(get_str_right_of_substr(exec_cmd(cmd),":")).replace(QString::fromStdString("/"), QString::fromStdString("x")).simplified();
-    printf("current format index = %i | current resolution = %s\n",m_current_format_index,m_current_resolution.toStdString().c_str());
     for (VideoDeviceCapFormat & fmtobj : m_device_formats){
         if (m_current_format_index == j){i=0;}
         cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-framesizes " + fmtobj.getFormatName().toStdString() + " | grep Size");
         QStringList output = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
         for (QString & line : output){
             if (line.length() == 0){break;}
-            printf("Line = %s\n",line.simplified().trimmed().toStdString().c_str());
-            QString fmt = QString::fromStdString(get_str_right_of_substr(line.simplified().trimmed().toStdString(),"Discrete ")).simplified();
-            printf("Format = %s\n",fmt.toStdString().c_str());
-            printf("current resolution = %s\n",m_current_resolution.toStdString().c_str());
-            fmtobj.addResolution(fmt);
-            if (m_current_format_index == j && m_current_resolution.toStdString() == fmt.toStdString()){
+            QString res = QString::fromStdString(get_str_right_of_substr(line.simplified().trimmed().toStdString(),"Discrete ")).simplified();
+            fmtobj.addResolution(res);
+            qCDebug(webcam_settings_kcm) << m_device_path << "with format : " << fmtobj.getFormatName() << " add resolution " << res;
+            if (m_current_format_index == j && m_current_resolution.toStdString() == res.toStdString()){
                 m_current_resolution_index = i;
-                printf("current resolution index = %i\n",m_current_resolution_index);
             }
             i++;
         }
+        qCDebug(webcam_settings_kcm) << m_device_path << "with format : " << fmtobj.getFormatName() << " currently uses resolution " << m_current_resolution;
         j++;
     }
 }
@@ -209,7 +218,6 @@ QStringList VideoDevice::getResolutionList(){
     int i=0;
     QStringList list;
     for (VideoDeviceCapFormat & fmt : m_device_formats){
-        printf("Checking resolutions for format index %i\n",i);
         if (i == m_current_format_index){
             list = fmt.getResList();
             break;
@@ -219,17 +227,6 @@ QStringList VideoDevice::getResolutionList(){
     return list;
 }
 
-
-
-void VideoDevice::printVideoDeviceInfo() {
-    printf("Name : %s\n", m_device_name.toStdString().c_str());
-    printf("Bus info : %s\n", m_device_bus_info.toStdString().c_str());
-    printf("Paths :\n");
-    for (QString & devpath : m_device_paths)
-    {
-        printf("\t%s\n",devpath.toStdString().c_str());
-    }
-}
 
 double VideoDevice::getCtrlDefaultValue(QString ctrl_name) {
     double default_value;

@@ -6,6 +6,9 @@
 #include <sstream>
 #include <string>
 #include <sys/ioctl.h>
+#include <QLoggingCategory>
+
+Q_DECLARE_LOGGING_CATEGORY(webcam_settings_kcm)
 
 
 std::string exec_cmd(const std::string&);

@@ -67,7 +67,7 @@ KCM.SimpleKCM {
                 to: kcm.brightness_max
                 stepSize: kcm.brightness_step
                 value: kcm.brightness
-                onValueChanged: kcm.brightness = value
+                onMoved: kcm.brightness = value
                 live: true
             }
             Controls.SpinBox {
@@ -76,7 +76,7 @@ KCM.SimpleKCM {
                 to: kcm.brightness_max
                 stepSize: kcm.brightness_step
                 value: kcm.brightness
-                onValueChanged: kcm.brightness = value
+                onValueModified: kcm.brightness = value
             }
             Controls.Button {
                 id: brightnessResetCtrl
@@ -96,7 +96,7 @@ KCM.SimpleKCM {
                 to: kcm.contrast_max
                 stepSize: kcm.contrast_step
                 value: kcm.contrast
-                onValueChanged: kcm.contrast = value
+                onMoved: kcm.contrast = value
                 live: true
             }
             Controls.SpinBox {
@@ -105,7 +105,7 @@ KCM.SimpleKCM {
                 to: kcm.contrast_max
                 stepSize: kcm.contrast_step
                 value: kcm.contrast
-                onValueChanged: kcm.contrast = value
+                onValueModified: kcm.contrast = value
             }
             Controls.Button {
                 id: contrastResetCtrl
@@ -125,7 +125,7 @@ KCM.SimpleKCM {
                 to: kcm.sharpness_max
                 stepSize: kcm.sharpness_step
                 value: kcm.sharpness
-                onValueChanged: kcm.sharpness = value
+                onMoved: kcm.sharpness = value
                 live: true
             }
             Controls.SpinBox {
@@ -134,7 +134,7 @@ KCM.SimpleKCM {
                 to: kcm.sharpness_max
                 stepSize: kcm.sharpness_step
                 value: kcm.sharpness
-                onValueChanged: kcm.sharpness = value
+                onValueModified: kcm.sharpness = value
             }
             Controls.Button {
                 id: sharpnessResetCtrl
@@ -154,7 +154,7 @@ KCM.SimpleKCM {
                 to: kcm.saturation_max
                 stepSize: kcm.saturation_step
                 value: kcm.saturation
-                onValueChanged: kcm.saturation = value
+                onMoved: kcm.saturation = value
                 live: true
             }
             Controls.SpinBox {
@@ -163,7 +163,7 @@ KCM.SimpleKCM {
                 to: kcm.saturation_max
                 stepSize: kcm.saturation_step
                 value: kcm.saturation
-                onValueChanged: kcm.saturation = value
+                onValueModified: kcm.saturation = value
             }
             Controls.Button {
                 id: saturationResetCtrl
@@ -183,7 +183,7 @@ KCM.SimpleKCM {
                 to: kcm.absolute_zoom_max
                 stepSize: kcm.absolute_zoom_step
                 value: kcm.absolute_zoom
-                onValueChanged: kcm.absolute_zoom = value
+                onMoved: kcm.absolute_zoom = value
                 live: true
             }
             Controls.SpinBox {
@@ -192,7 +192,7 @@ KCM.SimpleKCM {
                 to: kcm.absolute_zoom_max
                 stepSize: kcm.absolute_zoom_step
                 value: kcm.absolute_zoom
-                onValueChanged: kcm.absolute_zoom = value
+                onValueModified: kcm.absolute_zoom = value
             }
             Controls.Button {
                 id: absoluteZoomResetCtrl

@@ -15,7 +15,6 @@
 #include <QString>
 #include <QStringList>
 
-
 class QWebcamSettings : public KQuickAddons::ConfigModule
 {
     Q_OBJECT

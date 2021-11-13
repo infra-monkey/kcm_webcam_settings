@@ -1,5 +1,7 @@
 #include "helpers.h"
 
+Q_LOGGING_CATEGORY(webcam_settings_kcm, "webcam_settings_kcm")
+
 std::string exec_cmd(const std::string& command) {
     system((command + " > temp.txt").c_str());
  
@@ -27,17 +29,11 @@ std::string get_str_between_two_str(const std::string &s,
 std::string get_str_right_of_substr(const std::string &s,const std::string &delim) {
     unsigned delim_pos = s.find(delim);
     unsigned end_pos_of_delim = delim_pos + delim.length();
-
-    return s.substr(end_pos_of_delim,
-            s.length() - end_pos_of_delim);
+    return s.substr(end_pos_of_delim, s.length() - end_pos_of_delim);
 }
 std::string get_str_left_of_substr(const std::string &s,const std::string &delim) {
     unsigned delim_pos = s.find(delim);
-    unsigned end_pos_of_delim = delim_pos + delim.length();
-
-    //unsigned last_delim_pos = s.find_first_of(stop_delim, end_pos_of_first_delim);
     
-    return s.substr(end_pos_of_delim,
-            s.length() - end_pos_of_delim);
+    return s.substr(0,delim_pos);
 }
 

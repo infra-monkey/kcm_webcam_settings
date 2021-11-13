@@ -10,8 +10,7 @@ void VideoDeviceList::addVideoDevice(QString devpath) {
     QString devname;
 
     std::string cmd1 = std::string("v4l2-ctl -d " + devpath.toStdString() + " --info | grep Model");
-    devname = QString::fromStdString(get_str_right_of_substr(exec_cmd(cmd1),std::string(":"))).simplified();
-    printf(" dev name : -%s-\n",devname.toStdString().c_str());
+    devname = QString::fromStdString(get_str_left_of_substr(get_str_right_of_substr(exec_cmd(cmd1),std::string(":")),std::string(":"))).simplified();
     std::string cmd2 = std::string("v4l2-ctl -d " + devpath.toStdString() + " --info | grep \"Bus info\" | sort -u");
     businfo = QString::fromStdString(get_str_right_of_substr(exec_cmd(cmd2),std::string(":"))).simplified();
     for (VideoDevice & dev : m_device_list)
@@ -25,21 +24,14 @@ void VideoDeviceList::addVideoDevice(QString devpath) {
 
     if (!device_exists && devpath.contains(QString::fromStdString("/dev/video"))){
         VideoDevice device = VideoDevice();
+        device.setVideoDevicePath(devpath);
         device.setVideoDeviceBusInfo(businfo);
         device.setVideoDeviceName(devname);
-        device.setVideoDevicePath(devpath);
         device.initializeFormats();
         device.initializeResolutions();
         device.initializeCtrls();
         m_device_list.push_back(device);
         m_devname_list.append(devname);
-    }
-}
-
-void VideoDeviceList::printVideoDeviceInfo() {
-    for (VideoDevice & dev : m_device_list)
-    {
-        dev.printVideoDeviceInfo();
     }
 }
 
@@ -53,6 +45,5 @@ VideoDevice VideoDeviceList::getDeviceFromIndex(int index) {
         }
         i++;
     }
-    printf("Return device %s\n",m_device.getVideoDeviceName().toStdString().c_str());
     return m_device;
-}   
+}
