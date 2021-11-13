@@ -2,6 +2,7 @@ code:
 manage capture format and resolution
 add save/restore/reset-to-default features
 apply on plasma session start
+use /sys/class/video4linux/video0/device/ to gather info
 
 UI:
 allow to preview the camera in the page
