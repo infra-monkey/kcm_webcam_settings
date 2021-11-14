@@ -27,14 +27,25 @@ void VideoDevice::setVideoDevicePath(QString path) {
 }
 
 void VideoDevice::setVideoDeviceName(QString devname){
-    qCDebug(webcam_settings_kcm) << "Set name " << devname << " for video device with path " << m_device_path;
+    qCDebug(webcam_settings_kcm) << "Set device name " << devname << " for video device with path " << m_device_path;
     m_device_name = QString(devname);
 }
 
-void VideoDevice::setVideoDeviceBusInfo(QString businfo){
-    qCDebug(webcam_settings_kcm) << "Set bus name " << businfo << " for video device with path " << m_device_path;
-    m_device_bus_info = QString(businfo);
+void VideoDevice::setVideoDeviceSerialId(QString devserial){
+    qCDebug(webcam_settings_kcm) << "Set serial id " << devserial << " for video device with path " << m_device_path;
+    m_device_serial_id = QString(devserial);
 }
+
+void VideoDevice::setVideoDeviceVendorId(QString devvendorid){
+    qCDebug(webcam_settings_kcm) << "Set vendor id " << devvendorid << " for video device with path " << m_device_path;
+    m_device_vendor_id = QString(devvendorid);
+}
+
+void VideoDevice::setVideoDeviceModelId(QString devmodelid){
+    qCDebug(webcam_settings_kcm) << "Set model id " << devmodelid << " for video device with path " << m_device_path;
+    m_device_model_id = QString(devmodelid);
+}
+
 void VideoDevice::setBrightness(double value) {
     m_ctrl_brightness.setValue(value);
 }
@@ -188,31 +199,6 @@ void VideoDevice::initializeFormats() {
     }
 }
 
-void VideoDevice::initializeResolutions() {
-    qCDebug(webcam_settings_kcm) << "Initializing resolutions for video device with path " << m_device_path;
-    std::string cmd;
-    int i=0;
-    int j=0;
-    cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video | grep \"Width/Height\"");
-    m_current_resolution = QString::fromStdString(get_str_right_of_substr(exec_cmd(cmd),":")).replace(QString::fromStdString("/"), QString::fromStdString("x")).simplified();
-    for (VideoDeviceCapFormat & fmtobj : m_device_formats){
-        if (m_current_format_index == j){i=0;}
-        cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-framesizes " + fmtobj.getFormatName().toStdString() + " | grep Size");
-        QStringList output = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
-        for (QString & line : output){
-            if (line.length() == 0){break;}
-            QString res = QString::fromStdString(get_str_right_of_substr(line.simplified().trimmed().toStdString(),"Discrete ")).simplified();
-            fmtobj.addResolution(res);
-            qCDebug(webcam_settings_kcm) << m_device_path << "with format : " << fmtobj.getFormatName() << " add resolution " << res;
-            if (m_current_format_index == j && m_current_resolution.toStdString() == res.toStdString()){
-                m_current_resolution_index = i;
-            }
-            i++;
-        }
-        qCDebug(webcam_settings_kcm) << m_device_path << "with format : " << fmtobj.getFormatName() << " currently uses resolution " << m_current_resolution;
-        j++;
-    }
-}
 
 QStringList VideoDevice::getResolutionList(){
     int i=0;
@@ -225,6 +211,18 @@ QStringList VideoDevice::getResolutionList(){
         i++;
     }
     return list;
+}
+
+void VideoDevice::setFormatIndex(int fmtindex){
+    int i = 0;
+    for (VideoDeviceCapFormat & fmt : m_device_formats){
+        if (i == fmtindex){
+            m_current_fmt = fmt;
+        }
+        i++;
+    }
+    m_current_format_index = fmtindex;
+    qCDebug(webcam_settings_kcm) << m_device_path << "Changed format to " << m_current_fmt.getFormatName();
 }
 
 

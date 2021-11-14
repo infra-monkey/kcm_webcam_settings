@@ -14,8 +14,12 @@ public:
     virtual ~VideoDeviceCapFormat();
     QString getFormatName(){return m_format_name;};
     QStringList getResList(){return m_resolution_list;};
-    void addResolution(QString);
+    void setResolutionIndex(int);
+    int getResolutionIndex(){return m_current_resolution_index;};
+    void initializeResolutions();
+    void addResolution(QString,bool);
 private:
+    int m_current_resolution_index = 0;
     QString m_format_name;
     QString m_device_path;
     QStringList m_resolution_list;
