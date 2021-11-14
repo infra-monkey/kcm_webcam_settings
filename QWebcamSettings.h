@@ -101,6 +101,7 @@ public:
     Q_INVOKABLE void setSaturation(double);
     Q_INVOKABLE void setSharpness(double);
     Q_INVOKABLE void resetCrtlToDefault(QString);
+    Q_INVOKABLE void applyResolution();
 Q_SIGNALS:
     void deviceIndexChanged();
     void formatIndexChanged();

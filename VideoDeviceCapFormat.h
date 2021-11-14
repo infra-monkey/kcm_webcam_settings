@@ -18,6 +18,7 @@ public:
     int getResolutionIndex(){return m_current_resolution_index;};
     void initializeResolutions();
     void addResolution(QString,bool);
+    void applyResolution();
 private:
     int m_current_resolution_index = 0;
     QString m_format_name;

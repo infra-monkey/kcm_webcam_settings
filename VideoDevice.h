@@ -60,6 +60,7 @@ public:
     double getAbsoluteZoomStep();
     bool getAbsoluteZoomVisible();
     double getCtrlDefaultValue(QString);
+    void applyResolution();
 private:
     QString m_device_name;
     QString m_device_vendor_id;

@@ -187,5 +187,8 @@ void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
     }
 }
 
+void QWebcamSettings::applyResolution(){
+	m_current_device.applyResolution();
+}
 
 #include "QWebcamSettings.moc"

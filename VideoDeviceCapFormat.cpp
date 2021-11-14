@@ -71,3 +71,10 @@ void VideoDeviceCapFormat::setResolutionIndex(int resindex){
     qCDebug(webcam_settings_kcm) << m_device_path << "with format : " << getFormatName() << " change resolution to " << m_current_resolution.getLabel();
 
 }
+
+void VideoDeviceCapFormat::applyResolution(){
+    std::string cmd;
+    cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --set-fmt-video width=" + std::to_string(m_current_resolution.getWidth()) + ",height=" + std::to_string(m_current_resolution.getHeight()) + ",pixelformat=" + getFormatName().toStdString());
+    exec_cmd(cmd);
+    qCDebug(webcam_settings_kcm) << "applyResolution : " << QString::fromStdString(cmd);
+}

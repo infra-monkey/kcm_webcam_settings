@@ -246,3 +246,7 @@ double VideoDevice::getCtrlDefaultValue(QString ctrl_name) {
     return default_value;
 }
 
+void VideoDevice::applyResolution(){
+	m_current_fmt.applyResolution();
+}
+

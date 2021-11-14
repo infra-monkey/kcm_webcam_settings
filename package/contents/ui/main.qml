@@ -31,29 +31,36 @@ KCM.SimpleKCM {
             }
             onCurrentIndexChanged: kcm.deviceIndex
         }
-        Controls.ComboBox {
-            id: formatList
-            editable: false
-            Kirigami.FormData.label: "Format list:"
-            model: kcm.format_list
-            currentIndex: kcm.formatIndex
-            onActivated: {
-                kcm.setFormatIndex(currentIndex)
-                currentIndex=index
+        RowLayout {
+            Controls.ComboBox {
+                id: formatList
+                editable: false
+                Kirigami.FormData.label: "Format list:"
+                model: kcm.format_list
+                currentIndex: kcm.formatIndex
+                onActivated: {
+                    kcm.setFormatIndex(currentIndex)
+                    currentIndex=index
+                }
+                onCurrentIndexChanged: kcm.formatIndex
             }
-            onCurrentIndexChanged: kcm.formatIndex
-        }
-        Controls.ComboBox {
-            id: resolutionList
-            editable: false
-            Kirigami.FormData.label: "Resolution list:"
-            model: kcm.resolution_list
-            currentIndex: kcm.resolutionIndex
-            onActivated: {
-                kcm.setResolutionIndex(currentIndex)
-                currentIndex=index
+            Controls.ComboBox {
+                id: resolutionList
+                editable: false
+                Kirigami.FormData.label: "Resolution list:"
+                model: kcm.resolution_list
+                currentIndex: kcm.resolutionIndex
+                onActivated: {
+                    kcm.setResolutionIndex(currentIndex)
+                    currentIndex=index
+                }
+                onCurrentIndexChanged: kcm.resolutionIndex
             }
-            onCurrentIndexChanged: kcm.resolutionIndex
+            Controls.Button {
+                id: resolutionApply
+                text: i18n("Apply")
+                onClicked: kcm.applyResolution()
+            }
         }
         RowLayout {
             id: brightnessCtrl
