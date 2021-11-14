@@ -60,11 +60,7 @@ void QWebcamSettings::populateDeviceList(VideoDeviceList devlist) {
 }
 
 QStringList QWebcamSettings::getDeviceList(){
-	QStringList devname_list = m_device_list.getDeviceNameList();
-	for (QString & devname : devname_list)
-    {
-        printf("%s\n",devname.toStdString().c_str());
-    }
+	QStringList devname_list = m_device_list.getDeviceNameList();µ
 	return m_devname_list;
 }
 
@@ -161,7 +157,6 @@ void QWebcamSettings::setSaturation(double saturation) {
 }
 
 void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
-	//printf("Reset control %s to value %f\n",ctrl_name.toStdString().c_str(),m_current_device.getCtrlDefaultValue(ctrl_name));
 	double default_value = m_current_device.getCtrlDefaultValue(ctrl_name);
 	m_absolute_zoom = m_current_device.getCtrlDefaultValue(ctrl_name);
 

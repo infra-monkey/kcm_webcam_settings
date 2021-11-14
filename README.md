@@ -10,7 +10,7 @@ kf5-plasma-devel
 
 # Enable debug logging
 
-export QT_LOGGING_RULES="webcam_settings_kcm.debug=true"
+export QT_LOGGING_RULES="kcm.webcam_settings.debug=true"
 before running kcmshell5
 
 # Test Build

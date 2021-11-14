@@ -12,14 +12,17 @@ public:
     virtual ~VideoDevice();
     void setVideoDeviceName(QString);
     QString getVideoDeviceName(){return m_device_name;};
-    void setVideoDeviceBusInfo(QString);
-    QString getVideoDeviceBusInfo(){return m_device_bus_info;};
+    void setVideoDeviceSerialId(QString);
+    QString getVideoDeviceSerialId(){return m_device_serial_id;};
+    void setVideoDeviceVendorId(QString);
+    QString getVideoDeviceVendorId(){return m_device_vendor_id;};
+    void setVideoDeviceModelId(QString);
+    QString getVideoDeviceModelId(){return m_device_model_id;};
     void setVideoDevicePath(QString);
     QStringList getVideoDevicePaths(){return m_device_paths;};
     QString getVideoDevicePath(){return m_device_path;};
     void initializeCtrls();
     void initializeFormats();
-    void initializeResolutions();
     QStringList getFormatList(){return m_format_list;};
     QStringList getResolutionList();
     void setFormatIndex(int fmtindex){m_current_format_index = fmtindex;};
@@ -59,7 +62,9 @@ public:
     double getCtrlDefaultValue(QString);
 private:
     QString m_device_name;
-    QString m_device_bus_info;
+    QString m_device_vendor_id;
+    QString m_device_model_id;
+    QString m_device_serial_id;
     QStringList m_device_paths;
     std::list<VideoDeviceCapFormat> m_device_formats;
     VideoDeviceCapFormat m_current_fmt;

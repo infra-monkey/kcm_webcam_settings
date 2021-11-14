@@ -1,6 +1,6 @@
 #include "helpers.h"
 
-Q_LOGGING_CATEGORY(webcam_settings_kcm, "webcam_settings_kcm")
+Q_LOGGING_CATEGORY(webcam_settings_kcm, "kcm.webcam_settings")
 
 std::string exec_cmd(const std::string& command) {
     system((command + " > temp.txt").c_str());
