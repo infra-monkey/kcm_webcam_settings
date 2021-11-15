@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.16)
 
 project(webcamkcm)
 
@@ -11,6 +11,9 @@ set(KF5_MIN_VERSION "5.87.0")
 
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+
+
+
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
@@ -32,6 +35,11 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 set(QWebcamSettings_SRCS
     QWebcamSettings.cpp
     VideoDevice.cpp
+    VideoDeviceList.cpp
+    VideoDeviceCtrl.cpp
+    VideoDeviceCapFormat.cpp
+    VideoDeviceResolution.cpp
+    helpers.cpp
 )
 
 add_library(kcm_webcam_settings MODULE ${QWebcamSettings_SRCS})
@@ -44,7 +52,6 @@ target_link_libraries(kcm_webcam_settings
     KF5::PlasmaQuick
     KF5::QuickAddons
 )
-
 target_compile_options (kcm_webcam_settings PUBLIC -fexceptions)
 target_link_libraries(kcm_webcam_settings -lv4l2)
 kcoreaddons_desktop_to_json(kcm_webcam_settings "package/metadata.desktop")

@@ -1,0 +1,6 @@
+code:
+add save/restore/reset-to-default features
+apply on plasma session start
+
+UI:
+allow to preview the camera in the page
