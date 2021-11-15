@@ -182,7 +182,7 @@ void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
     }
     if (ctrl_name.toStdString() == "zoom_absolute") {
 		m_absolute_zoom = default_value;
-		m_current_device.setBrightness(m_absolute_zoom);
+		m_current_device.setAbsoluteZoom(m_absolute_zoom);
 		Q_EMIT absoluteZoomChanged();
     }
 }

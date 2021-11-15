@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.16)
 
 project(webcamkcm)
 
@@ -52,7 +52,6 @@ target_link_libraries(kcm_webcam_settings
     KF5::PlasmaQuick
     KF5::QuickAddons
 )
-
 target_compile_options (kcm_webcam_settings PUBLIC -fexceptions)
 target_link_libraries(kcm_webcam_settings -lv4l2)
 kcoreaddons_desktop_to_json(kcm_webcam_settings "package/metadata.desktop")

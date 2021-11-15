@@ -17,7 +17,20 @@ before running kcmshell5
 
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=~/.local/kde
+cmake ../src -DCMAKE_INSTALL_PREFIX=~/.local/kde
 make -j8 install
 source prefix.sh
 kcmshell5 kcm_webcam_settings
+
+# Install from source
+
+git clone https://github.com/infra-monkey/kcm_webcam_settings.git
+cd kcm_webcam_settings
+cmake ../src
+sudo make -j8 install
+
+# Known issues
+
+The unique identifier of the device is probably not that unique depending on the model. In the case of twa devices with the same uid, only the first one would be configured.
+
+The resolution and pixel format is defined through v4l2 but the applications don't seem to use it. The result might not be what is configured here.
