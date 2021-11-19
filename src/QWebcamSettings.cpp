@@ -15,6 +15,9 @@
 #include <sstream>
 #include <string>
 #include <sys/ioctl.h>
+#include <QCamera>
+#include <QCameraInfo>
+#include <QList>
 
 
 K_PLUGIN_CLASS_WITH_JSON(QWebcamSettings, "metadata.json")
@@ -32,29 +35,22 @@ QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
     aboutData->addAuthor(i18nc("@info:credit", "Antoine Gatineau"),
                         i18nc("@info:credit", "Antoine Gatineau"),
                         QStringLiteral("antoine.gatineau@infra-monkey.com"));
+
 	m_device_list = VideoDeviceList();
 	m_devname_list = QStringList();
-    populateDeviceList(m_device_list);
+    populateDeviceList();
 	m_device_index = 0;
     setAboutData(aboutData);
     setButtons(Apply | Default);
 }
 
-void QWebcamSettings::populateDeviceList(VideoDeviceList devlist) {
+void QWebcamSettings::populateDeviceList() {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::populateDeviceList Starting to populate the video devices";
-	std::string devices = exec_cmd("v4l2-ctl --list-devices");
-	std::istringstream f(devices);
-    std::string line;    
-	QString name;
-	QString bus_info;
-    while (std::getline(f, line)) {
-		QString qline = QString::fromStdString(line).trimmed();
-		if (qline.startsWith(QString::fromStdString("/"))){
-			QString file = qline.trimmed();
-			devlist.addVideoDevice(file);
-		}
-    }
-	m_device_list = devlist;
+	const QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
+	for (const QCameraInfo &cameraInfo : cameras) {
+		qCDebug(webcam_settings_kcm) << "Detected QCamera : " << cameraInfo.description() << cameraInfo.deviceName();
+		m_device_list.addVideoDevice(cameraInfo.deviceName(),cameraInfo.description());
+	}
 	m_devname_list = m_device_list.getDeviceNameList();
 	setDeviceIndex(0);
 }

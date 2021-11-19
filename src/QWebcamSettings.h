@@ -63,7 +63,7 @@ public:
     QStringList getDeviceList();
     QStringList getFormatList();
     QStringList getResolutionList();
-    void populateDeviceList(VideoDeviceList);
+    void populateDeviceList();
     int getDeviceIndex(){return m_device_index;};
     int getFormatIndex(){return m_current_device.getFormatIndex();};
     int getResolutionIndex(){return m_current_device.getResolutionIndex();};

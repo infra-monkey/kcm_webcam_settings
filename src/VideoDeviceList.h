@@ -10,7 +10,7 @@ class VideoDeviceList {
 public:
     VideoDeviceList();
     virtual ~VideoDeviceList();
-    void addVideoDevice(QString);
+    void addVideoDevice(QString,QString);
     QStringList getDeviceNameList() {return m_devname_list;};
     VideoDevice getDeviceFromIndex(int);
 private:

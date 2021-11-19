@@ -54,6 +54,7 @@ target_link_libraries(kcm_webcam_settings
     KF5::I18n
     KF5::PlasmaQuick
     KF5::QuickAddons
+    Qt5::Multimedia
 )
 target_compile_options (kcm_webcam_settings PUBLIC -fexceptions)
 target_link_libraries(kcm_webcam_settings -lv4l2)
