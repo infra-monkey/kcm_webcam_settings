@@ -46,8 +46,8 @@ void VideoDevice::setVideoDeviceModelId(QString devmodelid){
     m_device_model_id = QString(devmodelid);
 }
 
-void VideoDevice::setBrightness(double value) {
-    m_ctrl_brightness.setValue(value);
+bool VideoDevice::setBrightness(double value) {
+    return m_ctrl_brightness.setValue(value);
 }
 double VideoDevice::getBrightness() {
     m_brightness = m_ctrl_brightness.getValue();
@@ -70,8 +70,8 @@ bool VideoDevice::getBrightnessVisible() {
     return m_brightness_visible;
 }
 
-void VideoDevice::setContrast(double value) {
-    m_ctrl_contrast.setValue(value);
+bool VideoDevice::setContrast(double value) {
+    return m_ctrl_contrast.setValue(value);
 }
 double VideoDevice::getContrast() {
     m_contrast = m_ctrl_contrast.getValue();
@@ -94,8 +94,8 @@ bool VideoDevice::getContrastVisible() {
     return m_contrast_visible;
 }
 
-void VideoDevice::setSaturation(double value) {
-    m_ctrl_saturation.setValue(value);
+bool VideoDevice::setSaturation(double value) {
+    return m_ctrl_saturation.setValue(value);
 }
 double VideoDevice::getSaturation() {
     m_saturation = m_ctrl_saturation.getValue();
@@ -118,8 +118,8 @@ bool VideoDevice::getSaturationVisible() {
     return m_saturation_visible;
 }
 
-void VideoDevice::setSharpness(double value) {
-    m_ctrl_sharpness.setValue(value);
+bool VideoDevice::setSharpness(double value) {
+    return m_ctrl_sharpness.setValue(value);
 }
 double VideoDevice::getSharpness() {
     m_sharpness = m_ctrl_sharpness.getValue();
@@ -142,8 +142,8 @@ bool VideoDevice::getSharpnessVisible() {
     return m_sharpness_visible;
 }
 
-void VideoDevice::setAbsoluteZoom(double value) {
-    m_ctrl_zoom_absolute.setValue(value);
+bool VideoDevice::setAbsoluteZoom(double value) {
+    return m_ctrl_zoom_absolute.setValue(value);
 }
 double VideoDevice::getAbsoluteZoom() {
     m_zoom_absolute = m_ctrl_zoom_absolute.getValue();
@@ -250,3 +250,12 @@ void VideoDevice::applyResolution(){
 	m_current_fmt.applyResolution();
 }
 
+bool VideoDevice::resetToDefault(){
+    bool ret = false;
+	if (m_ctrl_brightness.resetValueToDefault()){ ret = true;}
+    if (m_ctrl_contrast.resetValueToDefault()){ ret = true;}
+    if (m_ctrl_sharpness.resetValueToDefault()){ ret = true;}
+    if (m_ctrl_saturation.resetValueToDefault()){ ret = true;}
+    if (m_ctrl_zoom_absolute.resetValueToDefault()){ ret = true;}
+    return ret;
+}

@@ -41,12 +41,14 @@ void VideoDeviceCtrl::getCtrlSettings() {
     m_value_step = static_cast<double>(stoi(get_str_between_two_str(line,std::string("step="),std::string(" "))));
 }
 
-void VideoDeviceCtrl::setValue(double ctrl_value) {
+bool VideoDeviceCtrl::setValue(double ctrl_value) {
     if (ctrl_value != m_value){
         qCDebug(webcam_settings_kcm) << "Control " << QString::fromStdString(m_ctrl_name) << " value changed to " << QString::number(ctrl_value);
         m_value = ctrl_value;
         applyValue();
+        return true;
     }
+    return false;
 }
 void VideoDeviceCtrl::applyValue() {
     int value = (int)round(m_value);
