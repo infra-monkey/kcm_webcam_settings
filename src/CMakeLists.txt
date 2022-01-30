@@ -12,9 +12,6 @@ set(KF5_MIN_VERSION "5.87.0")
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
-
-
-
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
@@ -30,6 +27,7 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
     Declarative
     Config
     PlasmaQuick
+    Auth
 )
 
 set(QWebcamSettings_SRCS
@@ -41,6 +39,11 @@ set(QWebcamSettings_SRCS
     VideoDeviceResolution.cpp
     helpers.cpp
 )
+
+add_executable(udevhelper UdevHelper.cpp UdevHelper.h)
+target_link_libraries(udevhelper KF5::Auth)
+install(TARGETS udevhelper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
+kauth_install_helper_files(udevhelper kcm_webcam_settings.udevhelper root)
 
 add_library(kcm_webcam_settings MODULE ${QWebcamSettings_SRCS})
 
