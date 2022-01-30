@@ -31,6 +31,7 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
     Declarative
     Config
     PlasmaQuick
+    Auth
 )
 
 add_subdirectory(src)

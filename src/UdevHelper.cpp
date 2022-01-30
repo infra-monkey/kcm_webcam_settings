@@ -1,7 +1,7 @@
 #include "UdevHelper.h"
 
 
-ActionReply UdevHelper::writeudevrulefile(const QVariantMap &args)
+ActionReply UdevHelper::applyudevrules(const QVariantMap &args)
 {
     ActionReply reply;
     QString filename = args["filename"].toString();
@@ -18,12 +18,6 @@ ActionReply UdevHelper::writeudevrulefile(const QVariantMap &args)
     return reply;
 }
 
-ActionReply UdevHelper::reloadudevrules(const QVariantMap &args)
-{
-    ActionReply reply;
-    
-    return reply;
-}
 
 KAUTH_HELPER_MAIN("kcm.webcam_settings.udevhelper", UdevHelper)
 

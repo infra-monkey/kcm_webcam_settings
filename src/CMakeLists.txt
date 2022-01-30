@@ -19,6 +19,7 @@ include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
     Quick
     Svg
+    Multimedia
 )
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
@@ -39,6 +40,8 @@ set(QWebcamSettings_SRCS
     VideoDeviceResolution.cpp
     helpers.cpp
 )
+
+kauth_install_actions(kcm_webcam_settings.udevhelper udevhelper.actions)
 
 add_executable(udevhelper UdevHelper.cpp UdevHelper.h)
 target_link_libraries(udevhelper KF5::Auth)

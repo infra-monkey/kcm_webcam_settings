@@ -13,8 +13,7 @@ class UdevHelper : public QObject
 {
     Q_OBJECT
 public Q_SLOTS:
-    ActionReply writeudevrulefile(const QVariantMap &args);
-    ActionReply reloadudevrules(const QVariantMap &args);
+    ActionReply applyudevrules(const QVariantMap &args);
 };
 
 #endif
