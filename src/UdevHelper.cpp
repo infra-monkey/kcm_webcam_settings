@@ -19,6 +19,6 @@ ActionReply UdevHelper::applyudevrules(const QVariantMap &args)
 }
 
 
-KAUTH_HELPER_MAIN("kcm.webcam_settings.udevhelper", UdevHelper)
+KAUTH_HELPER_MAIN("kcm.webcam.settings.udevhelper", UdevHelper)
 
 #include "UdevHelper.moc"

@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.16)
 project(webcamkcm)
 
 set(QT_MIN_VERSION "5.15.2")
-set(KF5_MIN_VERSION "5.87.0")
+set(KF5_MIN_VERSION "5.90.0")
 
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
@@ -41,12 +41,11 @@ set(QWebcamSettings_SRCS
     helpers.cpp
 )
 
-kauth_install_actions(kcm_webcam_settings.udevhelper udevhelper.actions)
-
+kauth_install_actions(kcm.webcam.settings.udevhelper udevhelper.actions)
 add_executable(udevhelper UdevHelper.cpp UdevHelper.h)
 target_link_libraries(udevhelper KF5::Auth)
 install(TARGETS udevhelper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
-kauth_install_helper_files(udevhelper kcm_webcam_settings.udevhelper root)
+kauth_install_helper_files(udevhelper kcm.webcam.settings.udevhelper root)
 
 add_library(kcm_webcam_settings MODULE ${QWebcamSettings_SRCS})
 

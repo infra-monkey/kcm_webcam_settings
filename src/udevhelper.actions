@@ -1,15 +1,10 @@
 [Domain]
 Name=Webcam Settings
-Name[en_GB]=Webcam Settings
-Name[fr]=Configuration Webcam
 Icon=webcam
 URL=https://github.com/sddm/sddm
 
-[kcm_webcam_settings.udevhelper.applyudevrules]
-Name=Webcam Settings
-Name[en_GB]=Webcam Settings
-Name[fr]=Configuration Webcam
+[kcm.webcam.settings.udevhelper.applyudevrules]
+Name=Webcam Settings Udev Rules
 Description=Write udev rule file for webcam settings and reload udev rules
-Description[en_GB]=Write udev rule file for webcam settings and reload udev rules
-Description[fr]=Ecrit le fichier de règles udev pour la configuration webcam et rafraichit les règles
-Policy=auth_admin
+Policy=auth_self
+Persistence=session
