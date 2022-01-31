@@ -30,7 +30,11 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
     PlasmaQuick
     Auth
 )
-
+remove_definitions(
+    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_CAST_TO_ASCII
+    -DQT_NO_CAST_FROM_BYTEARRAY
+)
 set(QWebcamSettings_SRCS
     QWebcamSettings.cpp
     VideoDevice.cpp
@@ -40,6 +44,8 @@ set(QWebcamSettings_SRCS
     VideoDeviceResolution.cpp
     helpers.cpp
 )
+
+SET(KCM_CONFIG_FILE_NAME "kcm_webcam_settingsrc" CACHE STRING "the config file name for kcm_webcam_settings")
 
 kauth_install_actions(kcm.webcam.settings.udevhelper udevhelper.actions)
 add_executable(udevhelper UdevHelper.cpp UdevHelper.h)
@@ -56,6 +62,7 @@ target_link_libraries(kcm_webcam_settings
     KF5::I18n
     KF5::PlasmaQuick
     KF5::QuickAddons
+    KF5::Auth
     Qt5::Multimedia
 )
 target_compile_options (kcm_webcam_settings PUBLIC -fexceptions)

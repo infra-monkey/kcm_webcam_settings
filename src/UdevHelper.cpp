@@ -6,15 +6,14 @@ ActionReply UdevHelper::applyudevrules(const QVariantMap &args)
     ActionReply reply;
     QString filename = args["filename"].toString();
     QFile file(filename);
-    if (!file.open(QIODevice::ReadWrite)) {
+    if (!file.open(QIODevice::WriteOnly)) {
         reply = ActionReply::HelperErrorReply();
         reply.setErrorDescription(file.errorString());
         return reply;
     }
     QTextStream stream(&file);
-    QString contents;
-    stream >> contents;
-    reply.addData("contents", contents);
+    stream << args["contents"].toString() << Qt::endl;
+    reply.addData("contents", args["contents"].toString());
     return reply;
 }
 

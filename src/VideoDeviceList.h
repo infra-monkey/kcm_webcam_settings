@@ -13,6 +13,7 @@ public:
     void addVideoDevice(QString,QString);
     QStringList getDeviceNameList() {return m_devname_list;};
     VideoDevice getDeviceFromIndex(int);
+    QString getUdevRules();
 private:
     std::list<VideoDevice> m_device_list;
     QStringList m_devname_list;

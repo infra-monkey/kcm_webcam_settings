@@ -1,8 +1,6 @@
 #ifndef HELPERS_H
 #define HELPERS_H
 
-#undef QT_NO_CAST_FROM_ASCII
-
 #include <iostream>
 #include <fstream>
 #include <sstream>

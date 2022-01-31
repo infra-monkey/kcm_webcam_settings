@@ -18,7 +18,9 @@
 #include <QCamera>
 #include <QCameraInfo>
 #include <QList>
+#include <KAuth>
 
+using namespace KAuth;
 
 K_PLUGIN_CLASS_WITH_JSON(QWebcamSettings, "metadata.json")
 
@@ -45,6 +47,22 @@ QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
 
 void QWebcamSettings::save() {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::save save current settings";
+	//build udev rule file
+	QVariantMap args;
+	QString udevrules = m_device_list.getUdevRules();
+    args["filename"] = QLatin1String("/etc/udev/rules.d/99-persistent-webcam.rules");
+	args["contents"] = udevrules;
+    Action saveAction("kcm.webcam.settings.udevhelper.applyudevrules");
+    saveAction.setHelperId("kcm.webcam.settings.udevhelper");
+    saveAction.setArguments(args);
+    ExecuteJob *job = saveAction.execute();
+    if (!job->exec()) {
+        qCDebug(webcam_settings_kcm) << "KAuth returned an error code:" << job->error();
+		qCDebug(webcam_settings_kcm) << job->errorString();
+    } else {
+		qCDebug(webcam_settings_kcm) << job->data()["contents"].toString();
+    }
+
 }
 
 void QWebcamSettings::load() {

@@ -1,10 +1,10 @@
 [Domain]
 Name=Webcam Settings
 Icon=webcam
-URL=https://github.com/sddm/sddm
+URL=https://github.com/infra-monkey/kcm_webcam_settings
 
 [kcm.webcam.settings.udevhelper.applyudevrules]
 Name=Webcam Settings Udev Rules
 Description=Write udev rule file for webcam settings and reload udev rules
-Policy=auth_self
+Policy=yes
 Persistence=session

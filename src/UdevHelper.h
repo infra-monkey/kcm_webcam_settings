@@ -1,6 +1,5 @@
 #ifndef UDEVHELPER_H
 #define UDEVHELPER_H
-#undef QT_NO_CAST_FROM_ASCII
 
 #include <KAuth>
 #include <QString>

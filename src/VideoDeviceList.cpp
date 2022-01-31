@@ -56,3 +56,8 @@ VideoDevice VideoDeviceList::getDeviceFromIndex(int index) {
     }
     return m_device;
 }
+
+QString VideoDeviceList::getUdevRules(){
+    QString udevrule = QString::fromStdString("this is a test");
+    return udevrule;
+}
