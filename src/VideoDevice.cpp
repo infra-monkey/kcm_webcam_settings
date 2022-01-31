@@ -213,16 +213,31 @@ QStringList VideoDevice::getResolutionList(){
     return list;
 }
 
+void VideoDevice::setResolutionIndex(int resindex){
+    m_current_fmt.setResolutionIndex(resindex);
+    int i = 0;
+    for (VideoDeviceResolution & res : m_current_fmt.getResolutionObjectList()){
+        if (i == resindex){
+            m_current_resolution_width = res.getWidth();
+            m_current_resolution_height = res.getHeight();
+            qCDebug(webcam_settings_kcm) << m_device_path << "Changed resolution to " << QString::number(m_current_resolution_width) << "x" << QString::number(m_current_resolution_height);
+        }
+        i++;
+    }
+    
+}
+
 void VideoDevice::setFormatIndex(int fmtindex){
     int i = 0;
     for (VideoDeviceCapFormat & fmt : m_device_formats){
         if (i == fmtindex){
             m_current_fmt = fmt;
+            m_current_resolution_format = m_current_fmt.getFormatName();
+            qCDebug(webcam_settings_kcm) << m_device_path << "Changed format to " << m_current_fmt.getFormatName();
         }
         i++;
     }
     m_current_format_index = fmtindex;
-    qCDebug(webcam_settings_kcm) << m_device_path << "Changed format to " << m_current_fmt.getFormatName();
 }
 
 

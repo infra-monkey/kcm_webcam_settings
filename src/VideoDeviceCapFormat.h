@@ -14,11 +14,13 @@ public:
     virtual ~VideoDeviceCapFormat();
     QString getFormatName(){return m_format_name;};
     QStringList getResList(){return m_resolution_list;};
+    std::list<VideoDeviceResolution>  getResolutionObjectList(){return m_resolutions;};
     void setResolutionIndex(int);
     int getResolutionIndex(){return m_current_resolution_index;};
     void initializeResolutions();
     void addResolution(QString,bool);
     void applyResolution();
+    VideoDeviceResolution getCurrentResolution(){return m_current_resolution;};
 private:
     int m_current_resolution_index = 0;
     QString m_format_name;

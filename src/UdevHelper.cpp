@@ -4,6 +4,7 @@
 ActionReply UdevHelper::applyudevrules(const QVariantMap &args)
 {
     ActionReply reply;
+    std::string cmd;
     QString filename = args["filename"].toString();
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {
@@ -12,8 +13,12 @@ ActionReply UdevHelper::applyudevrules(const QVariantMap &args)
         return reply;
     }
     QTextStream stream(&file);
-    stream << args["contents"].toString() << Qt::endl;
-    reply.addData("contents", args["contents"].toString());
+    for (const QString &rule : args["contents"].toStringList()) {
+        stream << rule << Qt::endl;
+    }
+    cmd = std::string("udevadm control --reload-rules");
+    exec_cmd(cmd);
+    //reply.addData("contents", args["contents"].toStringList());
     return reply;
 }
 

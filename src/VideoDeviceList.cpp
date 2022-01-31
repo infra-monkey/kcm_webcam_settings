@@ -57,7 +57,30 @@ VideoDevice VideoDeviceList::getDeviceFromIndex(int index) {
     return m_device;
 }
 
-QString VideoDeviceList::getUdevRules(){
-    QString udevrule = QString::fromStdString("this is a test");
+QStringList VideoDeviceList::getUdevRules(){
+    QStringList udevrule;
+    for (VideoDevice & dev : m_device_list)
+    {
+        dev.printRes();
+        QString rule = "SUBSYSTEMS==\"usb\", ATTRS{idVendor}==\"" + dev.getVideoDeviceVendorId() + "\", ATTRS{idProduct}==\"" + dev.getVideoDeviceModelId() + "\", PROGRAM=\"/usr/bin/v4l2-ctl --set-ctrl ";
+        if (dev.getAbsoluteZoomVisible()) {
+            rule.append("zoom_absolute=" + QString::number(dev.getAbsoluteZoom()));
+         }
+        if (dev.getBrightnessVisible()) {
+            rule.append(",brightness=" + QString::number(dev.getBrightness()));
+         }
+        if (dev.getContrastVisible()) {
+            rule.append(",contrast=" + QString::number(dev.getContrast()));
+        }
+        if (dev.getSaturationVisible()) {
+            rule.append(",saturation=" + QString::number(dev.getSaturation()));
+        }
+        if (dev.getSharpnessVisible()) {
+            rule.append(",sharpness=" + QString::number(dev.getSharpness()));
+        }
+        rule.append(" --set-fmt-video width=" + QString::number(dev.getCurrentFormatWidth()) + ",height=" + QString::number(dev.getCurrentFormatHeight()) + ",pixelformat=" + dev.getCurrentFormatName() + ",field=none --device /dev/%k\"");
+        qCDebug(webcam_settings_kcm) << "Udev rul : " << rule;
+        udevrule << rule;
+    }
     return udevrule;
 }

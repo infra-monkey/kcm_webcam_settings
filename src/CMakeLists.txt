@@ -48,7 +48,7 @@ set(QWebcamSettings_SRCS
 SET(KCM_CONFIG_FILE_NAME "kcm_webcam_settingsrc" CACHE STRING "the config file name for kcm_webcam_settings")
 
 kauth_install_actions(kcm.webcam.settings.udevhelper udevhelper.actions)
-add_executable(udevhelper UdevHelper.cpp UdevHelper.h)
+add_executable(udevhelper UdevHelper.cpp UdevHelper.h helpers.cpp helpers.h)
 target_link_libraries(udevhelper KF5::Auth)
 install(TARGETS udevhelper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
 kauth_install_helper_files(udevhelper kcm.webcam.settings.udevhelper root)

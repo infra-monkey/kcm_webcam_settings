@@ -49,7 +49,7 @@ void QWebcamSettings::save() {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::save save current settings";
 	//build udev rule file
 	QVariantMap args;
-	QString udevrules = m_device_list.getUdevRules();
+	QStringList udevrules = m_device_list.getUdevRules();
     args["filename"] = QLatin1String("/etc/udev/rules.d/99-persistent-webcam.rules");
 	args["contents"] = udevrules;
     Action saveAction("kcm.webcam.settings.udevhelper.applyudevrules");

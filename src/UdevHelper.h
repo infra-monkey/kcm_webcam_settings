@@ -5,6 +5,7 @@
 #include <QString>
 #include <QFile>
 #include <QTextStream>
+#include "helpers.h"
 
 using namespace KAuth;
 
