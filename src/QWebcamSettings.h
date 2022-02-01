@@ -117,11 +117,6 @@ Q_SIGNALS:
     void saturationChanged();
     void sharpnessChanged();
 
-// public Q_SLOTS:
-//     void load() Q_DECL_OVERRIDE;
-//     void save() Q_DECL_OVERRIDE;
-//     void defaults() Q_DECL_OVERRIDE;
-
 private:
     VideoDeviceList m_device_list;
     VideoDevice m_current_device;

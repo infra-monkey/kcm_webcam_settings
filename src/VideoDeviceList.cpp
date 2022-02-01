@@ -59,27 +59,35 @@ VideoDevice VideoDeviceList::getDeviceFromIndex(int index) {
 
 QStringList VideoDeviceList::getUdevRules(){
     QStringList udevrule;
+    bool first_control;
     for (VideoDevice & dev : m_device_list)
     {
+        first_control = true;
         dev.printRes();
+        qCDebug(webcam_settings_kcm) << "Res index : " << dev.getResolutionIndex();
         QString rule = "SUBSYSTEMS==\"usb\", ATTRS{idVendor}==\"" + dev.getVideoDeviceVendorId() + "\", ATTRS{idProduct}==\"" + dev.getVideoDeviceModelId() + "\", PROGRAM=\"/usr/bin/v4l2-ctl --set-ctrl ";
         if (dev.getAbsoluteZoomVisible()) {
+            if (!first_control){rule.append(",");first_control=false;}
             rule.append("zoom_absolute=" + QString::number(dev.getAbsoluteZoom()));
          }
         if (dev.getBrightnessVisible()) {
-            rule.append(",brightness=" + QString::number(dev.getBrightness()));
+            if (!first_control){rule.append(",");first_control=false;}
+            rule.append("brightness=" + QString::number(dev.getBrightness()));
          }
         if (dev.getContrastVisible()) {
-            rule.append(",contrast=" + QString::number(dev.getContrast()));
+            if (!first_control){rule.append(",");first_control=false;}
+            rule.append("contrast=" + QString::number(dev.getContrast()));
         }
         if (dev.getSaturationVisible()) {
-            rule.append(",saturation=" + QString::number(dev.getSaturation()));
+            if (!first_control){rule.append(",");first_control=false;}
+            rule.append("saturation=" + QString::number(dev.getSaturation()));
         }
         if (dev.getSharpnessVisible()) {
-            rule.append(",sharpness=" + QString::number(dev.getSharpness()));
+            if (!first_control){rule.append(",");first_control=false;}
+            rule.append("sharpness=" + QString::number(dev.getSharpness()));
         }
         rule.append(" --set-fmt-video width=" + QString::number(dev.getCurrentFormatWidth()) + ",height=" + QString::number(dev.getCurrentFormatHeight()) + ",pixelformat=" + dev.getCurrentFormatName() + ",field=none --device /dev/%k\"");
-        qCDebug(webcam_settings_kcm) << "Udev rul : " << rule;
+        qCDebug(webcam_settings_kcm) << "Udev rule : " << rule;
         udevrule << rule;
     }
     return udevrule;
