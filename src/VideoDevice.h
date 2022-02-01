@@ -23,11 +23,11 @@ public:
     void initializeCtrl(const QString);
     void initializeFormats();
     QStringList getFormatList(){return m_format_list;};
-    QStringList getResolutionList();
+    // QStringList getResolutionList();
     void setFormatIndex(int);
     int getFormatIndex(){return m_current_format_index;};
-    void setResolutionIndex(int);
-    int getResolutionIndex(){return 0;};
+    // void setResolutionIndex(int);
+    // int getResolutionIndex(){return 0;};
     bool setBrightness(double);
     double getBrightness(){return m_ctrl_brightness["value"];};
     double getBrightnessMin(){return m_ctrl_brightness["min"];};
@@ -60,11 +60,11 @@ public:
     bool getAbsoluteZoomVisible(){return m_ctrl_zoom_absolute_visible;};
     double getCtrlDefaultValue(QString);
     bool resetCrtlToDefault(QString);
-    void applyResolution();
+    // void applyResolution();
     bool resetToDefault();
-    int getCurrentFormatWidth(){return 0;};
-    int getCurrentFormatHeight(){return 0;};
-    QString getCurrentFormatName(){return "name";};
+    int getCurrentFormatWidth(){return QString(m_current_fmt.at(1)).toInt();};
+    int getCurrentFormatHeight(){return QString(m_current_fmt.at(2)).toInt();};
+    QString getCurrentFormatName(){return m_current_fmt.at(0);};
     // QString getUdevRule();
 private:
     QString m_device_name;
@@ -85,11 +85,13 @@ private:
 
     QList<QStringList> m_device_formats;
     QString m_current_fmt;
-    QString m_current_resolution;
+    // QString m_current_resolution;
+    // int m_current_resolution_width;
+    // int m_current_resolution_height;
     QStringList m_format_list;
-    QStringList m_resolution_list;
+    // QStringList m_resolution_list;
     int m_current_format_index = 0;
-    int m_current_resolution_index = 0;
+    // int m_current_resolution_index = 0;
 };
 
 #endif

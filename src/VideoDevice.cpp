@@ -77,43 +77,47 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
 void VideoDevice::initializeFormats() {
 	qCDebug(webcam_settings_kcm) << "VideoDevice::initializeFormats";
     qCDebug(webcam_settings_kcm) << "Initializing pixel formats for video device with path " << m_device_path;
-//     std::string cmd;
-//     int i = 0;
-//     cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video | grep \"Pixel Format\"");
-//     std::string current_fmt = get_str_between_two_str(exec_cmd(cmd)," \'","\' ");
-//     cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-formats | grep \"\\[\"");
-//     QStringList output = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
-//     for (QString & line : output){
-//         if (line.length() == 0){break;}
-//         QString fmt = QString::fromStdString(get_str_between_two_str(line.toStdString().c_str()," \'","\' ")).simplified();
-//         qCDebug(webcam_settings_kcm) << m_device_path << "Created format : " << fmt;
-//         VideoDeviceCapFormat new_fmt = VideoDeviceCapFormat(fmt,m_device_path);
-//         m_device_formats.push_back(new_fmt);
-//         m_format_list.append(fmt);
-//         if (fmt.toStdString() == current_fmt){
-//             m_current_fmt = new_fmt;
-//             m_current_format_index = i;
-//         }
-//         i++;
-//     }
-// 	qCDebug(webcam_settings_kcm) << "VideoDevice::initializeFormats format path " << m_current_fmt.getFormatName();
-}
+    
 
+    std::string cmd;
+    cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video | grep \"Pixel Format\"");
+    std::string current_fmt = get_str_between_two_str(exec_cmd(cmd)," \'","\' ");
+    cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-formats | grep \"\\[\"");
+    QStringList output = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
+    for (QString & line : output){
+        if (line.length() == 0){break;}
+        QString fmt = QString::fromStdString(get_str_between_two_str(line.toStdString().c_str()," \'","\' ")).simplified();
 
-QStringList VideoDevice::getResolutionList(){
-    for (QStringList & fmtlist : m_device_formats){
-        if (fmtlist.contains(m_current_fmt)){
-            m_resolution_list << QString(fmtlist.at(1)+"x"+fmtlist.at(2));
+        cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-framesizes " + fmt.toStdString() + " | grep Size");
+        QStringList output2 = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
+        for (QString & line2 : output2){
+            if (line2.length() == 0){break;}
+            QString res = QString::fromStdString(get_str_right_of_substr(line2.simplified().trimmed().toStdString(),"Discrete ")).simplified();
+            QString width = QString::fromStdString(get_str_left_of_substr(res.toStdString(),"x"));
+            QString height = QString::fromStdString(get_str_right_of_substr(res.toStdString(),"x"));
+            QStringList list = QStringList();
+            list << fmt << width << height;
+            m_device_formats << list;
+            m_format_list << QString(fmt + " - " + width + "x" + height);
         }
     }
-    return m_resolution_list;
 }
 
-void VideoDevice::setResolutionIndex(int resindex){
-	qCDebug(webcam_settings_kcm) << "VideoDevice::setResolutionIndex"; 
-    m_current_resolution_index = resindex;
-    m_current_resolution = m_resolution_list.at(resindex);
-}
+
+// QStringList VideoDevice::getResolutionList(){
+//     for (QStringList & fmtlist : m_device_formats){
+//         if (fmtlist.contains(m_current_fmt)){
+//             m_resolution_list << QString(fmtlist.at(1)+"x"+fmtlist.at(2));
+//         }
+//     }
+//     return m_resolution_list;
+// }
+
+// void VideoDevice::setResolutionIndex(int resindex){
+// 	qCDebug(webcam_settings_kcm) << "VideoDevice::setResolutionIndex"; 
+//     m_current_resolution_index = resindex;
+//     m_current_resolution = m_resolution_list.at(resindex);
+// }
 
 void VideoDevice::setFormatIndex(int fmtindex){
 	qCDebug(webcam_settings_kcm) << "VideoDevice::setFormatIndex";
@@ -124,19 +128,19 @@ void VideoDevice::setFormatIndex(int fmtindex){
 
 double VideoDevice::getCtrlDefaultValue(QString ctrl_name) {
     double default_value;
-    if (ctrl_name.toStdString() == "brightness") {
+    if (ctrl_name == "brightness") {
         default_value = m_ctrl_brightness["default"];
     }
-    if (ctrl_name.toStdString() == "contrast") {
+    if (ctrl_name == "contrast") {
         default_value = m_ctrl_contrast["default"];
     }
-    if (ctrl_name.toStdString() == "sharpness") {
+    if (ctrl_name == "sharpness") {
         default_value = m_ctrl_sharpness["default"];
     }
-    if (ctrl_name.toStdString() == "saturation") {
+    if (ctrl_name == "saturation") {
         default_value = m_ctrl_saturation["default"];
     }
-    if (ctrl_name.toStdString() == "zoom_absolute") {
+    if (ctrl_name == "zoom_absolute") {
         default_value = m_ctrl_zoom_absolute["default"];
     }
     return default_value;
@@ -178,7 +182,7 @@ bool VideoDevice::setAbsoluteZoom(double value){
 }
 
 bool VideoDevice::resetCrtlToDefault(QString ctrl_name) {
-	qCDebug(webcam_settings_kcm) << "QWebcamSettings::resetCrtlToDefault";
+	qCDebug(webcam_settings_kcm) << "VideoDevice::resetCrtlToDefault";
     bool ret = false;
 	if (ctrl_name == "brightness") {
 		ret = setBrightness(m_ctrl_brightness["default"]);
@@ -198,10 +202,10 @@ bool VideoDevice::resetCrtlToDefault(QString ctrl_name) {
     return ret;
 }
 
-void VideoDevice::applyResolution(){
-	qCDebug(webcam_settings_kcm) << "VideoDevice::applyResolution";
-	//m_current_fmt.applyResolution();
-}
+// void VideoDevice::applyResolution(){
+// 	qCDebug(webcam_settings_kcm) << "VideoDevice::applyResolution";
+// 	//m_current_fmt.applyResolution();
+// }
 
 bool VideoDevice::resetToDefault(){
 	qCDebug(webcam_settings_kcm) << "VideoDevice::resetToDefault";

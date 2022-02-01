@@ -103,7 +103,7 @@ void QWebcamSettings::populateDeviceList() {
 		}
 		if (!m_devicename_list.contains(cameraInfo.description())){
 			m_device_list << VideoDevice(cameraInfo.description(),cameraInfo.deviceName(),vendorid,modelid);
-			m_devname_list << cameraInfo.description();
+			m_devicename_list << cameraInfo.description();
 		}
 	}
 	setDeviceIndex(0);
@@ -132,7 +132,7 @@ void QWebcamSettings::setDeviceIndex(int devindex) {
 	qCInfo(webcam_settings_kcm) << "Selected device " << m_current_device.getVideoDeviceName();
 	Q_EMIT deviceIndexChanged();
 	Q_EMIT formatIndexChanged();
-	Q_EMIT resolutionIndexChanged();
+	// Q_EMIT resolutionIndexChanged();
 	Q_EMIT absoluteZoomChanged();
 	Q_EMIT brightnessChanged();
 	Q_EMIT contrastChanged();
@@ -146,14 +146,14 @@ void QWebcamSettings::setFormatIndex(int fmtindex) {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setFormatIndex";
 	m_current_device.setFormatIndex(fmtindex);
 	Q_EMIT formatIndexChanged();
-	Q_EMIT resolutionIndexChanged();
+	// Q_EMIT resolutionIndexChanged();
 }
 
-void QWebcamSettings::setResolutionIndex(int resindex) {
-	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setResolutionIndex";
-	m_current_device.setResolutionIndex(resindex);
-	Q_EMIT resolutionIndexChanged();
-}
+// void QWebcamSettings::setResolutionIndex(int resindex) {
+// 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setResolutionIndex";
+// 	m_current_device.setResolutionIndex(resindex);
+// 	Q_EMIT resolutionIndexChanged();
+// }
 
 void QWebcamSettings::setAbsoluteZoom(double zoom) {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setAbsoluteZoom";
@@ -190,11 +190,11 @@ void QWebcamSettings::setSaturation(double saturation) {
 	if (save_needed){setNeedsSave(true);}
 }
 
-void QWebcamSettings::applyResolution(){
-	qCDebug(webcam_settings_kcm) << "QWebcamSettings::applyResolution";
-	m_current_device.applyResolution();
-	setNeedsSave(true);
-}
+// void QWebcamSettings::applyResolution(){
+// 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::applyResolution";
+// 	m_current_device.applyResolution();
+// 	setNeedsSave(true);
+// }
 
 void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::resetCrtlToDefault";

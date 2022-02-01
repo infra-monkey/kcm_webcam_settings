@@ -23,8 +23,8 @@ class QWebcamSettings : public KQuickAddons::ConfigModule
     Q_PROPERTY(QStringList format_list READ getFormatList NOTIFY formatIndexChanged)
     Q_PROPERTY(int formatIndex READ getFormatIndex WRITE setFormatIndex NOTIFY formatIndexChanged)
 
-    Q_PROPERTY(QStringList resolution_list READ getResolutionList NOTIFY resolutionIndexChanged)
-    Q_PROPERTY(int resolutionIndex READ getResolutionIndex WRITE setResolutionIndex NOTIFY resolutionIndexChanged)
+    // Q_PROPERTY(QStringList resolution_list READ getResolutionList NOTIFY resolutionIndexChanged)
+    // Q_PROPERTY(int resolutionIndex READ getResolutionIndex WRITE setResolutionIndex NOTIFY resolutionIndexChanged)
 
     Q_PROPERTY(qreal brightness READ getBrightness WRITE setBrightness NOTIFY brightnessChanged)
     Q_PROPERTY(qreal brightness_min READ getBrightnessMin NOTIFY deviceIndexChanged)
@@ -61,11 +61,11 @@ public:
     virtual ~QWebcamSettings() override = default;
     QStringList getDeviceList(){return m_devicename_list;};
     QStringList getFormatList(){return m_current_device.getFormatList();};
-    QStringList getResolutionList(){return m_current_device.getResolutionList();};
+    // QStringList getResolutionList(){return m_current_device.getResolutionList();};
     void populateDeviceList();
     int getDeviceIndex(){return m_device_index;};
     int getFormatIndex(){return m_current_device.getFormatIndex();};
-    int getResolutionIndex(){return m_current_device.getResolutionIndex();};
+    // int getResolutionIndex(){return m_current_device.getResolutionIndex();};
     qreal getBrightness() {return m_current_device.getBrightness();};
     qreal getBrightnessMin() {return m_current_device.getBrightnessMin();};
     qreal getBrightnessMax() {return m_current_device.getBrightnessMax();};
@@ -97,18 +97,18 @@ public:
 
     Q_INVOKABLE void setDeviceIndex(int);
     Q_INVOKABLE void setFormatIndex(int);
-    Q_INVOKABLE void setResolutionIndex(int);
+    // Q_INVOKABLE void setResolutionIndex(int);
     Q_INVOKABLE void setAbsoluteZoom(double);
     Q_INVOKABLE void setBrightness(double);
     Q_INVOKABLE void setContrast(double);
     Q_INVOKABLE void setSaturation(double);
     Q_INVOKABLE void setSharpness(double);
     Q_INVOKABLE void resetCrtlToDefault(QString);
-    Q_INVOKABLE void applyResolution();
+    // Q_INVOKABLE void applyResolution();
 Q_SIGNALS:
     void deviceIndexChanged();
     void formatIndexChanged();
-    void resolutionIndexChanged();
+    // void resolutionIndexChanged();
     void absoluteZoomChanged();
     void brightnessChanged();
     void contrastChanged();
@@ -120,12 +120,11 @@ private:
     QStringList m_devicename_list;
     QList<VideoDevice> m_device_list;
     VideoDevice m_current_device;
-    QStringList m_devname_list;
     QStringList m_current_format_list;
-    QStringList m_current_resolution_list;
+    // QStringList m_current_resolution_list;
     int m_device_index;
     int m_format_index;
-    int m_resolution_index;
+    // int m_resolution_index;
 };
 
 #endif
