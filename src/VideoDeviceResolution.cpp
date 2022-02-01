@@ -3,6 +3,7 @@
 
 VideoDeviceResolution::VideoDeviceResolution(){}
 VideoDeviceResolution::VideoDeviceResolution(QString res, QString fmt, QString devpath) {
+	qCDebug(webcam_settings_kcm) << "VideoDeviceResolution::VideoDeviceResolution";
     std::string cmd;
     m_width = stoi(get_str_left_of_substr(res.toStdString(),"x"));
     m_height = stoi(get_str_right_of_substr(res.toStdString(),"x"));

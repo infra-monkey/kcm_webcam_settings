@@ -5,6 +5,7 @@ VideoDeviceList::VideoDeviceList() {
 }
 VideoDeviceList::~VideoDeviceList() {}
 void VideoDeviceList::addVideoDevice(QString devpath, QString devname) {
+	qCDebug(webcam_settings_kcm) << "VideoDeviceList::addVideoDevice";
     std::string cmd;
     bool device_exists = false;
     QString vendorid,modelid,serial;
@@ -58,42 +59,11 @@ VideoDevice VideoDeviceList::getDeviceFromIndex(int index) {
 }
 
 QStringList VideoDeviceList::getUdevRules(){
+	qCDebug(webcam_settings_kcm) << "VideoDeviceList::getUdevRules";
     QStringList udevrule;
-    bool first_control;
     for (VideoDevice & dev : m_device_list)
     {
-        first_control = true;
-        dev.printRes();
-        qCDebug(webcam_settings_kcm) << "Res index : " << dev.getResolutionIndex();
-        QString rule = "SUBSYSTEMS==\"usb\", ATTRS{idVendor}==\"" + dev.getVideoDeviceVendorId() + "\", ATTRS{idProduct}==\"" + dev.getVideoDeviceModelId() + "\", PROGRAM=\"/usr/bin/v4l2-ctl --set-ctrl ";
-        if (dev.getAbsoluteZoomVisible()) {
-            if (!first_control){rule.append(",");}
-            rule.append("zoom_absolute=" + QString::number(dev.getAbsoluteZoom()));
-            first_control=false;
-         }
-        if (dev.getBrightnessVisible()) {
-            if (!first_control){rule.append(",");}
-            rule.append("brightness=" + QString::number(dev.getBrightness()));
-            first_control=false;
-         }
-        if (dev.getContrastVisible()) {
-            if (!first_control){rule.append(",");}
-            rule.append("contrast=" + QString::number(dev.getContrast()));
-            first_control=false;
-        }
-        if (dev.getSaturationVisible()) {
-            if (!first_control){rule.append(",");}
-            rule.append("saturation=" + QString::number(dev.getSaturation()));
-            first_control=false;
-        }
-        if (dev.getSharpnessVisible()) {
-            if (!first_control){rule.append(",");}
-            rule.append("sharpness=" + QString::number(dev.getSharpness()));
-            first_control=false;
-        }
-        rule.append(" --set-fmt-video width=" + QString::number(dev.getCurrentFormatWidth()) + ",height=" + QString::number(dev.getCurrentFormatHeight()) + ",pixelformat=" + dev.getCurrentFormatName() + ",field=none --device /dev/%k\"");
-        qCDebug(webcam_settings_kcm) << "Udev rule : " << rule;
-        udevrule << rule;
+        udevrule << dev.getUdevRule();
     }
     return udevrule;
 }

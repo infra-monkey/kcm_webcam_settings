@@ -42,6 +42,7 @@ void VideoDeviceCtrl::getCtrlSettings() {
 }
 
 bool VideoDeviceCtrl::setValue(double ctrl_value) {
+	qCDebug(webcam_settings_kcm) << "VideoDeviceCtrl::setValue";
     if (ctrl_value != m_value){
         qCDebug(webcam_settings_kcm) << "Control " << QString::fromStdString(m_ctrl_name) << " value changed to " << QString::number(ctrl_value);
         m_value = ctrl_value;
@@ -51,6 +52,7 @@ bool VideoDeviceCtrl::setValue(double ctrl_value) {
     return false;
 }
 void VideoDeviceCtrl::applyValue() {
+	qCDebug(webcam_settings_kcm) << "VideoDeviceCtrl::applyValue";
     int value = (int)round(m_value);
     std::string cmd = std::string("v4l2-ctl -d " + m_device_path + " --set-ctrl " + m_ctrl_name + "=" + std::to_string(value));
     exec_cmd(cmd);

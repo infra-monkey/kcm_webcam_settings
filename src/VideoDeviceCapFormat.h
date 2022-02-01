@@ -21,6 +21,8 @@ public:
     void addResolution(QString,bool);
     void applyResolution();
     VideoDeviceResolution getCurrentResolution(){return m_current_resolution;};
+    int getCurrentFormatWidth(){ return m_current_resolution.getWidth();};
+    int getCurrentFormatHeight(){ return m_current_resolution.getHeight();};
 private:
     int m_current_resolution_index = 0;
     QString m_format_name;

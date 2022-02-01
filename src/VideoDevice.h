@@ -63,10 +63,10 @@ public:
     double getCtrlDefaultValue(QString);
     void applyResolution();
     bool resetToDefault();
-    int getCurrentFormatWidth(){ return m_current_resolution_width;};
-    int getCurrentFormatHeight(){ return m_current_resolution_height;};
-    QString getCurrentFormatName(){ return m_current_resolution_format;};
-    void printRes(){ qCDebug(webcam_settings_kcm) << "printRes" << m_current_resolution_format << m_current_resolution_width << m_current_resolution_height;};
+    int getCurrentFormatWidth(){return m_current_fmt.getCurrentFormatWidth();};
+    int getCurrentFormatHeight(){return m_current_fmt.getCurrentFormatHeight();};
+    QString getCurrentFormatName(){return m_current_fmt.getFormatName();};
+    QString getUdevRule();
 private:
     QString m_device_name;
     QString m_device_vendor_id;
@@ -75,10 +75,8 @@ private:
     QStringList m_device_paths;
     std::list<VideoDeviceCapFormat> m_device_formats;
     VideoDeviceCapFormat m_current_fmt;
-    QString m_current_resolution;
     QStringList m_format_list;
     int m_current_format_index = 0;
-    int m_current_resolution_index = 0;
     QString m_device_path;
     VideoDeviceCtrl m_ctrl_brightness;
     VideoDeviceCtrl m_ctrl_contrast;
@@ -110,9 +108,6 @@ private:
     double m_saturation_max;
     double m_saturation_step;
     bool m_saturation_visible;
-    QString m_current_resolution_format;
-    int m_current_resolution_width = 0;
-    int m_current_resolution_height = 0;
 };
 
 #endif

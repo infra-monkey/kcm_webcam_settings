@@ -27,6 +27,7 @@ K_PLUGIN_CLASS_WITH_JSON(QWebcamSettings, "metadata.json")
 QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
     : KQuickAddons::ConfigModule(parent, args)
 {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::QWebcamSettings";
     KAboutData *aboutData = new KAboutData(QStringLiteral("kcm_webcam_settings"),
         i18nc("@title", "Webcam"),
         QStringLiteral("0.1"),
@@ -113,6 +114,7 @@ QStringList QWebcamSettings::getResolutionList(){
 }
 
 void QWebcamSettings::setDeviceIndex(int devindex) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setDeviceIndex";
 	m_device_index = devindex;
 	m_current_device = m_device_list.getDeviceFromIndex(devindex);
 	qCInfo(webcam_settings_kcm) << "Selected device " << m_current_device.getVideoDeviceName();
@@ -154,17 +156,20 @@ void QWebcamSettings::setDeviceIndex(int devindex) {
 }
 
 void QWebcamSettings::setFormatIndex(int fmtindex) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setFormatIndex";
 	m_current_device.setFormatIndex(fmtindex);
 	Q_EMIT formatIndexChanged();
 	Q_EMIT resolutionIndexChanged();
 }
 
 void QWebcamSettings::setResolutionIndex(int resindex) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setResolutionIndex";
 	m_current_device.setResolutionIndex(resindex);
 	Q_EMIT resolutionIndexChanged();
 }
 
 void QWebcamSettings::setAbsoluteZoom(double zoom) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setAbsoluteZoom";
 	m_absolute_zoom = zoom;
 	bool save_needed = m_current_device.setAbsoluteZoom(zoom);
 	Q_EMIT absoluteZoomChanged();
@@ -172,6 +177,7 @@ void QWebcamSettings::setAbsoluteZoom(double zoom) {
 }
 
 void QWebcamSettings::setBrightness(double brightness) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setBrightness";
 	m_brightness = brightness;
 	bool save_needed = m_current_device.setBrightness(brightness);
 	Q_EMIT brightnessChanged();
@@ -179,6 +185,7 @@ void QWebcamSettings::setBrightness(double brightness) {
 }
 
 void QWebcamSettings::setContrast(double contrast) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setContrast";
 	m_contrast = contrast;
 	bool save_needed = m_current_device.setContrast(contrast);
 	Q_EMIT contrastChanged();
@@ -186,6 +193,7 @@ void QWebcamSettings::setContrast(double contrast) {
 }
 
 void QWebcamSettings::setSharpness(double sharpness) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setSharpness";
 	m_sharpness = sharpness;
 	bool save_needed = m_current_device.setSharpness(sharpness);
 	Q_EMIT sharpnessChanged();
@@ -193,6 +201,7 @@ void QWebcamSettings::setSharpness(double sharpness) {
 }
 
 void QWebcamSettings::setSaturation(double saturation) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setSaturation";
 	m_saturation = saturation;
 	bool save_needed = m_current_device.setSaturation(saturation);
 	Q_EMIT saturationChanged();
@@ -200,6 +209,7 @@ void QWebcamSettings::setSaturation(double saturation) {
 }
 
 void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::resetCrtlToDefault";
 	double default_value = m_current_device.getCtrlDefaultValue(ctrl_name);
 	m_absolute_zoom = m_current_device.getCtrlDefaultValue(ctrl_name);
 
@@ -231,6 +241,7 @@ void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
 }
 
 void QWebcamSettings::applyResolution(){
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::applyResolution";
 	m_current_device.applyResolution();
 	setNeedsSave(true);
 }
