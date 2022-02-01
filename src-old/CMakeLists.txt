@@ -38,6 +38,10 @@ remove_definitions(
 set(QWebcamSettings_SRCS
     QWebcamSettings.cpp
     VideoDevice.cpp
+    VideoDeviceList.cpp
+    VideoDeviceCtrl.cpp
+    VideoDeviceCapFormat.cpp
+    VideoDeviceResolution.cpp
     helpers.cpp
 )
 
