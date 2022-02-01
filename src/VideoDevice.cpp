@@ -8,6 +8,7 @@ VideoDevice::VideoDevice() {
 VideoDevice::~VideoDevice() {}
 
 void VideoDevice::setVideoDevicePath(QString path) {
+	qCDebug(webcam_settings_kcm) << "VideoDevice::setVideoDevicePath";
     
     bool path_exists = false;
     for (QString & devpath : m_device_paths)
@@ -27,27 +28,32 @@ void VideoDevice::setVideoDevicePath(QString path) {
 }
 
 void VideoDevice::setVideoDeviceName(QString devname){
+	qCDebug(webcam_settings_kcm) << "VideoDevice::setVideoDeviceName";
     qCDebug(webcam_settings_kcm) << "Set device name " << devname << " for video device with path " << m_device_path;
     m_device_name = QString(devname);
 }
 
 void VideoDevice::setVideoDeviceSerialId(QString devserial){
+	qCDebug(webcam_settings_kcm) << "VideoDevice::setVideoDeviceSerialId";
     qCDebug(webcam_settings_kcm) << "Set serial id " << devserial << " for video device with path " << m_device_path;
     m_device_serial_id = QString(devserial);
 }
 
 void VideoDevice::setVideoDeviceVendorId(QString devvendorid){
+	qCDebug(webcam_settings_kcm) << "VideoDevice::setVideoDeviceVendorId";
     qCDebug(webcam_settings_kcm) << "Set vendor id " << devvendorid << " for video device with path " << m_device_path;
     m_device_vendor_id = QString(devvendorid);
 }
 
 void VideoDevice::setVideoDeviceModelId(QString devmodelid){
+	qCDebug(webcam_settings_kcm) << "VideoDevice::setVideoDeviceModelId";
     qCDebug(webcam_settings_kcm) << "Set model id " << devmodelid << " for video device with path " << m_device_path;
     m_device_model_id = QString(devmodelid);
 }
 
-void VideoDevice::setBrightness(double value) {
-    m_ctrl_brightness.setValue(value);
+bool VideoDevice::setBrightness(double value) {
+	qCDebug(webcam_settings_kcm) << "VideoDevice::setBrightness";
+    return m_ctrl_brightness.setValue(value);
 }
 double VideoDevice::getBrightness() {
     m_brightness = m_ctrl_brightness.getValue();
@@ -70,8 +76,9 @@ bool VideoDevice::getBrightnessVisible() {
     return m_brightness_visible;
 }
 
-void VideoDevice::setContrast(double value) {
-    m_ctrl_contrast.setValue(value);
+bool VideoDevice::setContrast(double value) {
+	qCDebug(webcam_settings_kcm) << "VideoDevice::setContrast";
+    return m_ctrl_contrast.setValue(value);
 }
 double VideoDevice::getContrast() {
     m_contrast = m_ctrl_contrast.getValue();
@@ -94,8 +101,9 @@ bool VideoDevice::getContrastVisible() {
     return m_contrast_visible;
 }
 
-void VideoDevice::setSaturation(double value) {
-    m_ctrl_saturation.setValue(value);
+bool VideoDevice::setSaturation(double value) {
+	qCDebug(webcam_settings_kcm) << "VideoDevice::setSaturation";
+    return m_ctrl_saturation.setValue(value);
 }
 double VideoDevice::getSaturation() {
     m_saturation = m_ctrl_saturation.getValue();
@@ -118,8 +126,9 @@ bool VideoDevice::getSaturationVisible() {
     return m_saturation_visible;
 }
 
-void VideoDevice::setSharpness(double value) {
-    m_ctrl_sharpness.setValue(value);
+bool VideoDevice::setSharpness(double value) {
+	qCDebug(webcam_settings_kcm) << "VideoDevice::setSharpness";
+    return m_ctrl_sharpness.setValue(value);
 }
 double VideoDevice::getSharpness() {
     m_sharpness = m_ctrl_sharpness.getValue();
@@ -142,8 +151,9 @@ bool VideoDevice::getSharpnessVisible() {
     return m_sharpness_visible;
 }
 
-void VideoDevice::setAbsoluteZoom(double value) {
-    m_ctrl_zoom_absolute.setValue(value);
+bool VideoDevice::setAbsoluteZoom(double value) {
+	qCDebug(webcam_settings_kcm) << "VideoDevice::setAbsoluteZoom";
+    return m_ctrl_zoom_absolute.setValue(value);
 }
 double VideoDevice::getAbsoluteZoom() {
     m_zoom_absolute = m_ctrl_zoom_absolute.getValue();
@@ -168,6 +178,7 @@ bool VideoDevice::getAbsoluteZoomVisible() {
 
 
 void VideoDevice::initializeCtrls() {
+	qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrls";
     qCDebug(webcam_settings_kcm) << "Initializing controls for video device with path " << m_device_path;
     m_ctrl_brightness = VideoDeviceCtrl(m_device_path.toStdString(),"brightness");
     m_ctrl_contrast = VideoDeviceCtrl(m_device_path.toStdString(),"contrast");
@@ -177,6 +188,7 @@ void VideoDevice::initializeCtrls() {
 }
 
 void VideoDevice::initializeFormats() {
+	qCDebug(webcam_settings_kcm) << "VideoDevice::initializeFormats";
     qCDebug(webcam_settings_kcm) << "Initializing pixel formats for video device with path " << m_device_path;
     std::string cmd;
     int i = 0;
@@ -197,6 +209,7 @@ void VideoDevice::initializeFormats() {
         }
         i++;
     }
+	qCDebug(webcam_settings_kcm) << "VideoDevice::initializeFormats format path " << m_current_fmt.getFormatName();
 }
 
 
@@ -213,16 +226,23 @@ QStringList VideoDevice::getResolutionList(){
     return list;
 }
 
+void VideoDevice::setResolutionIndex(int resindex){
+	qCDebug(webcam_settings_kcm) << "VideoDevice::setResolutionIndex";
+    m_current_fmt.setResolutionIndex(resindex);    
+    qCDebug(webcam_settings_kcm) << "VideoDevice::setResolutionIndex" << m_device_path << "with format : " << m_current_fmt.getFormatName() << " change resolution to width " << m_current_fmt.getCurrentFormatWidth() << "height" << m_current_fmt.getCurrentFormatHeight();
+}
+
 void VideoDevice::setFormatIndex(int fmtindex){
+	qCDebug(webcam_settings_kcm) << "VideoDevice::setFormatIndex";
     int i = 0;
     for (VideoDeviceCapFormat & fmt : m_device_formats){
         if (i == fmtindex){
             m_current_fmt = fmt;
+            qCDebug(webcam_settings_kcm) << m_device_path << "Changed format to " << m_current_fmt.getFormatName();
         }
         i++;
     }
     m_current_format_index = fmtindex;
-    qCDebug(webcam_settings_kcm) << m_device_path << "Changed format to " << m_current_fmt.getFormatName();
 }
 
 
@@ -247,6 +267,54 @@ double VideoDevice::getCtrlDefaultValue(QString ctrl_name) {
 }
 
 void VideoDevice::applyResolution(){
+	qCDebug(webcam_settings_kcm) << "VideoDevice::applyResolution";
 	m_current_fmt.applyResolution();
 }
 
+bool VideoDevice::resetToDefault(){
+	qCDebug(webcam_settings_kcm) << "VideoDevice::resetToDefault";
+    bool ret = false;
+	if (m_ctrl_brightness.resetValueToDefault()){ ret = true;}
+    if (m_ctrl_contrast.resetValueToDefault()){ ret = true;}
+    if (m_ctrl_sharpness.resetValueToDefault()){ ret = true;}
+    if (m_ctrl_saturation.resetValueToDefault()){ ret = true;}
+    if (m_ctrl_zoom_absolute.resetValueToDefault()){ ret = true;}
+    return ret;
+}
+
+QString VideoDevice::getUdevRule(){
+	qCDebug(webcam_settings_kcm) << "VideoDevice::getUdevRules";
+    QStringList udevrule;
+    bool first_control = true;
+    qCDebug(webcam_settings_kcm) << "VideoDevice::getUdevRules for device" << getVideoDevicePath() << getVideoDeviceVendorId() << getVideoDeviceModelId();
+    qCDebug(webcam_settings_kcm) << "VideoDevice::getUdevRules resolution" << getCurrentFormatName() << getCurrentFormatWidth() << getCurrentFormatHeight();
+QString rule = "SUBSYSTEMS==\"usb\", ATTRS{idVendor}==\"" + getVideoDeviceVendorId() + "\", ATTRS{idProduct}==\"" + getVideoDeviceModelId() + "\", PROGRAM=\"/usr/bin/v4l2-ctl --set-ctrl ";
+    if (getAbsoluteZoomVisible()) {
+        if (!first_control){rule.append(",");}
+        rule.append("zoom_absolute=" + QString::number(getAbsoluteZoom()));
+        first_control=false;
+        }
+    if (getBrightnessVisible()) {
+        if (!first_control){rule.append(",");}
+        rule.append("brightness=" + QString::number(getBrightness()));
+        first_control=false;
+        }
+    if (getContrastVisible()) {
+        if (!first_control){rule.append(",");}
+        rule.append("contrast=" + QString::number(getContrast()));
+        first_control=false;
+    }
+    if (getSaturationVisible()) {
+        if (!first_control){rule.append(",");}
+        rule.append("saturation=" + QString::number(getSaturation()));
+        first_control=false;
+    }
+    if (getSharpnessVisible()) {
+        if (!first_control){rule.append(",");}
+        rule.append("sharpness=" + QString::number(getSharpness()));
+        first_control=false;
+    }
+    rule.append(" --set-fmt-video width=" + QString::number(getCurrentFormatWidth()) + ",height=" + QString::number(getCurrentFormatHeight()) + ",pixelformat=" + getCurrentFormatName() + ",field=none --device /dev/%k\"");
+    qCDebug(webcam_settings_kcm) << "Udev rule : " << rule;
+    return rule;
+}

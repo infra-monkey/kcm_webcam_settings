@@ -10,6 +10,7 @@ public:
     virtual ~VideoDeviceResolution();
     QString getLabel(){return m_res_label;};
     QString getRes(){return m_res;};
+    QString getFormat(){return m_format;};
     int getHeight(){return m_height;};
     int getWidth(){return m_width;};
 private:

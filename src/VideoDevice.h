@@ -5,6 +5,7 @@
 #include <QStringList>
 #include "VideoDeviceCtrl.h"
 #include "VideoDeviceCapFormat.h"
+#include "helpers.h"
 
 class VideoDevice {
 public:
@@ -27,28 +28,28 @@ public:
     QStringList getResolutionList();
     void setFormatIndex(int);
     int getFormatIndex(){return m_current_format_index;};
-    void setResolutionIndex(int resindex){m_current_fmt.setResolutionIndex(resindex);};
+    void setResolutionIndex(int);
     int getResolutionIndex(){return m_current_fmt.getResolutionIndex();};
-    void setAbsoluteZoom(double);
-    void setBrightness(double);
+    bool setAbsoluteZoom(double);
+    bool setBrightness(double);
     double getBrightness();
     double getBrightnessMin();
     double getBrightnessMax();
     double getBrightnessStep();
     bool getBrightnessVisible();
-    void setContrast(double);
+    bool setContrast(double);
     double getContrast();
     double getContrastMin();
     double getContrastMax();
     double getContrastStep();
     bool getContrastVisible();
-    void setSharpness(double);
+    bool setSharpness(double);
     double getSharpness();
     double getSharpnessMin();
     double getSharpnessMax();
     double getSharpnessStep();
     bool getSharpnessVisible();
-    void setSaturation(double);
+    bool setSaturation(double);
     double getSaturation();
     double getSaturationMin();
     double getSaturationMax();
@@ -61,6 +62,11 @@ public:
     bool getAbsoluteZoomVisible();
     double getCtrlDefaultValue(QString);
     void applyResolution();
+    bool resetToDefault();
+    int getCurrentFormatWidth(){return m_current_fmt.getCurrentFormatWidth();};
+    int getCurrentFormatHeight(){return m_current_fmt.getCurrentFormatHeight();};
+    QString getCurrentFormatName(){return m_current_fmt.getFormatName();};
+    QString getUdevRule();
 private:
     QString m_device_name;
     QString m_device_vendor_id;
@@ -69,10 +75,8 @@ private:
     QStringList m_device_paths;
     std::list<VideoDeviceCapFormat> m_device_formats;
     VideoDeviceCapFormat m_current_fmt;
-    QString m_current_resolution;
     QStringList m_format_list;
     int m_current_format_index = 0;
-    int m_current_resolution_index = 0;
     QString m_device_path;
     VideoDeviceCtrl m_ctrl_brightness;
     VideoDeviceCtrl m_ctrl_contrast;

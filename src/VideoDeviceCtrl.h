@@ -18,8 +18,8 @@ public:
     double getValueDefault() {if (m_is_defined){return m_value_default;}else{return static_cast<double>(0);}};
     bool getEnabled() {return m_is_defined;};
     void getCtrlSettings();
-    void setValue(double);
-    void resetValueToDefault() {setValue(m_value_default);};
+    bool setValue(double);
+    bool resetValueToDefault() {return setValue(m_value_default);};
 private:
     std::string m_device_path;
     void applyValue();

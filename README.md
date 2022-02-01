@@ -1,12 +1,22 @@
 # Build Dependencies
 
-cmake
-v4l2-utils
-kf5-ki18n-devel
-kf5-kcmutils-devel
-kf5-kdeclarative-devel
-qt5-qtsvg-devel
-kf5-plasma-devel
+    cmake
+    kf5-ki18n-devel
+    kf5-kcmutils-devel
+    kf5-kdeclarative-devel
+    qt5-qtsvg-devel
+    kf5-plasma-devel
+    qt5-qtmultimedia-devel
+
+# Runtime Dependencies
+
+    cmake
+    v4l2-utils
+    kf5-ki18n
+    kf5-kcmutils
+    kf5-kdeclarative
+    qt5-qtsvg
+    kf5-plasma
 
 # Enable debug logging
 

@@ -78,6 +78,8 @@ KCM.SimpleKCM {
                 live: true
             }
             Controls.SpinBox {
+                implicitWidth: 100
+                implicitHeight: 45
                 id: brightnessSpinbox
                 from: kcm.brightness_min
                 to: kcm.brightness_max
@@ -107,6 +109,8 @@ KCM.SimpleKCM {
                 live: true
             }
             Controls.SpinBox {
+                implicitWidth: 100
+                implicitHeight: 45
                 id: contrastSpinbox
                 from: kcm.contrast_min
                 to: kcm.contrast_max
@@ -136,6 +140,8 @@ KCM.SimpleKCM {
                 live: true
             }
             Controls.SpinBox {
+                implicitWidth: 100
+                implicitHeight: 45
                 id: sharpnessSpinbox
                 from: kcm.sharpness_min
                 to: kcm.sharpness_max
@@ -165,6 +171,8 @@ KCM.SimpleKCM {
                 live: true
             }
             Controls.SpinBox {
+                implicitWidth: 100
+                implicitHeight: 45
                 id: saturationSpinbox
                 from: kcm.saturation_min
                 to: kcm.saturation_max
@@ -194,6 +202,8 @@ KCM.SimpleKCM {
                 live: true
             }
             Controls.SpinBox {
+                implicitWidth: 100
+                implicitHeight: 45
                 id: absoluteZoomSpinbox
                 from: kcm.absolute_zoom_min
                 to: kcm.absolute_zoom_max

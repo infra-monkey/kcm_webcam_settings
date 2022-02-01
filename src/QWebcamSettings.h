@@ -63,7 +63,7 @@ public:
     QStringList getDeviceList();
     QStringList getFormatList();
     QStringList getResolutionList();
-    void populateDeviceList(VideoDeviceList);
+    void populateDeviceList();
     int getDeviceIndex(){return m_device_index;};
     int getFormatIndex(){return m_current_device.getFormatIndex();};
     int getResolutionIndex(){return m_current_device.getResolutionIndex();};
@@ -92,6 +92,11 @@ public:
     qreal getAbsoluteZoomMax() const {return m_absolute_zoom_max;};
     qreal getAbsoluteZoomStep() const {return m_absolute_zoom_step;};
     bool getAbsoluteZoomVisible() const {return m_absolute_zoom_visible;};
+
+    void load() override;
+    void save() override;
+    void defaults() override;
+
     Q_INVOKABLE void setDeviceIndex(int);
     Q_INVOKABLE void setFormatIndex(int);
     Q_INVOKABLE void setResolutionIndex(int);
@@ -111,6 +116,7 @@ Q_SIGNALS:
     void contrastChanged();
     void saturationChanged();
     void sharpnessChanged();
+
 private:
     VideoDeviceList m_device_list;
     VideoDevice m_current_device;

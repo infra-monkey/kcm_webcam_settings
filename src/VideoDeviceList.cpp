@@ -4,15 +4,11 @@
 VideoDeviceList::VideoDeviceList() {
 }
 VideoDeviceList::~VideoDeviceList() {}
-void VideoDeviceList::addVideoDevice(QString devpath) {
+void VideoDeviceList::addVideoDevice(QString devpath, QString devname) {
+	qCDebug(webcam_settings_kcm) << "VideoDeviceList::addVideoDevice";
     std::string cmd;
     bool device_exists = false;
-    QString devname,vendorid,modelid,serial,model;
-
-    // cmd = std::string("v4l2-ctl -d " + devpath.toStdString() + " --info | grep Model");
-    // devname = QString::fromStdString(get_str_left_of_substr(get_str_right_of_substr(exec_cmd(cmd),std::string(":")),std::string(":"))).simplified();
-    // cmd = std::string("v4l2-ctl -d " + devpath.toStdString() + " --info | grep \"Bus info\" | sort -u");
-    // businfo = QString::fromStdString(get_str_right_of_substr(exec_cmd(cmd),std::string(":"))).simplified();
+    QString vendorid,modelid,serial;
 
     cmd = std::string("udevadm info --query=all --name=" + devpath.toStdString());
     
@@ -24,10 +20,6 @@ void VideoDeviceList::addVideoDevice(QString devpath) {
             serial = QString::fromStdString(get_str_right_of_substr(line.toStdString(),std::string("=")));
             qCDebug(webcam_settings_kcm) << "Found ID_SERIAL=" << serial;
         }
-        if (line.contains(QString::fromStdString("ID_MODEL="))){
-            model = QString::fromStdString(get_str_right_of_substr(line.toStdString(),std::string("=")));
-            qCDebug(webcam_settings_kcm) << "Found ID_MODEL=" << model;
-        }
         if (line.contains(QString::fromStdString("ID_VENDOR_ID="))){
             vendorid = QString::fromStdString(get_str_right_of_substr(line.toStdString(),std::string("=")));
             qCDebug(webcam_settings_kcm) << "Found ID_VENDOR_ID=" << vendorid;
@@ -38,18 +30,9 @@ void VideoDeviceList::addVideoDevice(QString devpath) {
         }
     }
 
-    for (VideoDevice & dev : m_device_list)
-    {
-        if (dev.getVideoDeviceSerialId().toStdString() == serial.toStdString()) {
-            dev.setVideoDevicePath(devpath);
-            device_exists = true;
-            break;
-        }
-    }
-
     if (!device_exists && devpath.contains(QString::fromStdString("/dev/video"))){
         VideoDevice device = VideoDevice();
-        device.setVideoDeviceName(model);
+        device.setVideoDeviceName(devname);
         device.setVideoDevicePath(devpath);
         device.setVideoDeviceSerialId(serial);
         device.setVideoDeviceVendorId(vendorid);
@@ -58,7 +41,7 @@ void VideoDeviceList::addVideoDevice(QString devpath) {
         // device.initializeResolutions();
         device.initializeCtrls();
         m_device_list.push_back(device);
-        m_devname_list.append(model);
+        m_devname_list.append(devname);
     }
 }
 
@@ -73,4 +56,14 @@ VideoDevice VideoDeviceList::getDeviceFromIndex(int index) {
         i++;
     }
     return m_device;
+}
+
+QStringList VideoDeviceList::getUdevRules(){
+	qCDebug(webcam_settings_kcm) << "VideoDeviceList::getUdevRules";
+    QStringList udevrule;
+    for (VideoDevice & dev : m_device_list)
+    {
+        udevrule << dev.getUdevRule();
+    }
+    return udevrule;
 }

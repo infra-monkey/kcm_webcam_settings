@@ -13,6 +13,7 @@ VideoDeviceCapFormat::~VideoDeviceCapFormat() {
 }
 
 void VideoDeviceCapFormat::initializeResolutions() {
+	qCDebug(webcam_settings_kcm) << "VideoDeviceCapFormat::initializeResolutions";
     qCDebug(webcam_settings_kcm) << "Initializing resolutions for video device with path " << m_device_path;
     std::string cmd;
     int i=0;
@@ -49,6 +50,7 @@ void VideoDeviceCapFormat::initializeResolutions() {
 }
 
 void VideoDeviceCapFormat::addResolution(QString res, bool is_current){
+	qCDebug(webcam_settings_kcm) << "VideoDeviceCapFormat::addResolution";
     VideoDeviceResolution new_res = VideoDeviceResolution(res,m_format_name,m_device_path);
     m_resolutions.push_back(new_res);
     if (!m_resolution_list.contains(new_res.getLabel())){
@@ -60,6 +62,7 @@ void VideoDeviceCapFormat::addResolution(QString res, bool is_current){
 }
 
 void VideoDeviceCapFormat::setResolutionIndex(int resindex){
+	qCDebug(webcam_settings_kcm) << "VideoDeviceCapFormat::setResolutionIndex";
     int i = 0;
     for (VideoDeviceResolution & res : m_resolutions){
         if (i == resindex){
@@ -68,11 +71,11 @@ void VideoDeviceCapFormat::setResolutionIndex(int resindex){
         i++;
     }
     m_current_resolution_index = resindex;
-    qCDebug(webcam_settings_kcm) << m_device_path << "with format : " << getFormatName() << " change resolution to " << m_current_resolution.getLabel();
-
+    qCDebug(webcam_settings_kcm) << "VideoDeviceCapFormat::setResolutionIndex" << m_device_path << "with format : " << getFormatName() << " change resolution to width " << m_current_resolution.getWidth() << "height" << m_current_resolution.getHeight();
 }
 
 void VideoDeviceCapFormat::applyResolution(){
+	qCDebug(webcam_settings_kcm) << "VideoDeviceCapFormat::applyResolution";
     std::string cmd;
     cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --set-fmt-video width=" + std::to_string(m_current_resolution.getWidth()) + ",height=" + std::to_string(m_current_resolution.getHeight()) + ",pixelformat=" + getFormatName().toStdString());
     exec_cmd(cmd);
