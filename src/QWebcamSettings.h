@@ -61,11 +61,9 @@ public:
     virtual ~QWebcamSettings() override = default;
     QStringList getDeviceList(){return m_devicename_list;};
     QStringList getFormatList(){return m_current_device.getFormatList();};
-    // QStringList getResolutionList(){return m_current_device.getResolutionList();};
     void populateDeviceList();
     int getDeviceIndex(){return m_device_index;};
     int getFormatIndex(){return m_current_device.getFormatIndex();};
-    // int getResolutionIndex(){return m_current_device.getResolutionIndex();};
     qreal getBrightness() {return m_current_device.getBrightness();};
     qreal getBrightnessMin() {return m_current_device.getBrightnessMin();};
     qreal getBrightnessMax() {return m_current_device.getBrightnessMax();};
@@ -81,11 +79,11 @@ public:
     qreal getSharpnessMax() {return m_current_device.getSharpnessMax();};
     qreal getSharpnessStep() {return m_current_device.getSharpnessStep();};
     bool getSharpnessVisible() {return m_current_device.getSharpnessVisible();};
-    qreal getSaturation() {return m_current_device.getSharpness();};
-    qreal getSaturationMin() {return m_current_device.getSharpnessMin();};
-    qreal getSaturationMax() {return m_current_device.getSharpnessMax();};
-    qreal getSaturationStep() {return m_current_device.getSharpnessStep();};
-    bool getSaturationVisible() {return m_current_device.getSharpnessVisible();};
+    qreal getSaturation() {return m_current_device.getSaturation();};
+    qreal getSaturationMin() {return m_current_device.getSaturationMin();};
+    qreal getSaturationMax() {return m_current_device.getSaturationMax();};
+    qreal getSaturationStep() {return m_current_device.getSaturationStep();};
+    bool getSaturationVisible() {return m_current_device.getSaturationVisible();};
     qreal getAbsoluteZoom() {return m_current_device.getAbsoluteZoom();};
     qreal getAbsoluteZoomMin() {return m_current_device.getAbsoluteZoomMin();};
     qreal getAbsoluteZoomMax() {return m_current_device.getAbsoluteZoomMax();};
@@ -97,7 +95,6 @@ public:
 
     Q_INVOKABLE void setDeviceIndex(int);
     Q_INVOKABLE void setFormatIndex(int);
-    // Q_INVOKABLE void setResolutionIndex(int);
     Q_INVOKABLE void setAbsoluteZoom(double);
     Q_INVOKABLE void setBrightness(double);
     Q_INVOKABLE void setContrast(double);
@@ -108,7 +105,6 @@ public:
 Q_SIGNALS:
     void deviceIndexChanged();
     void formatIndexChanged();
-    // void resolutionIndexChanged();
     void absoluteZoomChanged();
     void brightnessChanged();
     void contrastChanged();
@@ -121,10 +117,8 @@ private:
     QList<VideoDevice> m_device_list;
     VideoDevice m_current_device;
     QStringList m_current_format_list;
-    // QStringList m_current_resolution_list;
     int m_device_index;
     int m_format_index;
-    // int m_resolution_index;
 };
 
 #endif

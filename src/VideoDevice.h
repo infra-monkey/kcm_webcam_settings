@@ -23,11 +23,8 @@ public:
     void initializeCtrl(const QString);
     void initializeFormats();
     QStringList getFormatList(){return m_format_list;};
-    // QStringList getResolutionList();
     void setFormatIndex(int);
     int getFormatIndex(){return m_current_format_index;};
-    // void setResolutionIndex(int);
-    // int getResolutionIndex(){return 0;};
     bool setBrightness(double);
     double getBrightness(){return m_ctrl_brightness["value"];};
     double getBrightnessMin(){return m_ctrl_brightness["min"];};
@@ -49,7 +46,7 @@ public:
     bool setSaturation(double);
     double getSaturation(){return m_ctrl_saturation["value"];};
     double getSaturationMin(){return m_ctrl_saturation["min"];};
-    double getSaturationMax(){return m_ctrl_saturation["min"];};
+    double getSaturationMax(){return m_ctrl_saturation["max"];};
     double getSaturationStep(){return m_ctrl_saturation["step"];};
     bool getSaturationVisible(){return m_ctrl_saturation_visible;};
     bool setAbsoluteZoom(double);
@@ -85,13 +82,8 @@ private:
 
     QList<QStringList> m_device_formats;
     QString m_current_fmt;
-    // QString m_current_resolution;
-    // int m_current_resolution_width;
-    // int m_current_resolution_height;
     QStringList m_format_list;
-    // QStringList m_resolution_list;
     int m_current_format_index = 0;
-    // int m_current_resolution_index = 0;
 };
 
 #endif

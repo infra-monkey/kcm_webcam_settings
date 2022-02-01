@@ -10,6 +10,7 @@ VideoDevice::VideoDevice(QString device_name, QString device_path, QString devic
     m_device_vendor_id = QString(device_vendorid);
     m_device_model_id = QString(device_modelid);
     m_device_path = QString(device_path);
+    qCDebug(webcam_settings_kcm) << "VideoDevice::VideoDevice" << m_device_name << m_device_path << m_device_vendor_id << m_device_model_id;
     initializeCtrls();
     initializeFormats();
 }
@@ -23,6 +24,7 @@ void VideoDevice::initializeCtrls() {
 }
 
 void VideoDevice::initializeCtrl(const QString ctrl_label) {
+	qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl for device " << m_device_name;
     bool is_defined;
     std::string cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-ctrls | grep " + ctrl_label.toStdString());
     std::string line = exec_cmd(cmd);
@@ -39,6 +41,11 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
         m_ctrl_brightness["max"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("max="),std::string(" "))));
         m_ctrl_brightness["step"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("step="),std::string(" "))));
         m_ctrl_brightness_visible = is_defined;
+        qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Brightness: value: " << QString::number(m_ctrl_brightness["value"])
+            << "min: " << m_ctrl_brightness["min"]
+            << "max: " << m_ctrl_brightness["max"]
+            << "step: " << m_ctrl_brightness["step"]
+            << "default: " << m_ctrl_brightness["default"];
     }
     if (ctrl_label == "contrast") {
         m_ctrl_contrast["value"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("value="),std::string(" "))));
@@ -47,6 +54,11 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
         m_ctrl_contrast["max"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("max="),std::string(" "))));
         m_ctrl_contrast["step"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("step="),std::string(" "))));
         m_ctrl_contrast_visible = is_defined;
+        qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Contrast: value: " << QString::number(m_ctrl_contrast["value"])
+            << "min: " << m_ctrl_contrast["min"]
+            << "max: " << m_ctrl_contrast["max"]
+            << "step: " << m_ctrl_contrast["step"]
+            << "default: " << m_ctrl_contrast["default"];
     }
     if (ctrl_label == "sharpness") {
         m_ctrl_sharpness["value"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("value="),std::string(" "))));
@@ -55,6 +67,11 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
         m_ctrl_sharpness["max"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("max="),std::string(" "))));
         m_ctrl_sharpness["step"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("step="),std::string(" "))));
         m_ctrl_sharpness_visible = is_defined;
+        qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Sharpness: value: " << QString::number(m_ctrl_sharpness["value"])
+            << "min: " << m_ctrl_sharpness["min"]
+            << "max: " << m_ctrl_sharpness["max"]
+            << "step: " << m_ctrl_sharpness["step"]
+            << "default: " << m_ctrl_sharpness["default"];
     }
     if (ctrl_label == "saturation") {
         m_ctrl_saturation["value"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("value="),std::string(" "))));
@@ -63,6 +80,11 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
         m_ctrl_saturation["max"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("max="),std::string(" "))));
         m_ctrl_saturation["step"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("step="),std::string(" "))));
         m_ctrl_saturation_visible = is_defined;
+        qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Saturation: value: " << QString::number(m_ctrl_saturation["value"])
+            << "min: " << m_ctrl_saturation["min"]
+            << "max: " << m_ctrl_saturation["max"]
+            << "step: " << m_ctrl_saturation["step"]
+            << "default: " << m_ctrl_saturation["default"];
     }
     if (ctrl_label == "zoom_absolute") {
         m_ctrl_zoom_absolute["value"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("value="),std::string(" "))));
@@ -71,6 +93,11 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
         m_ctrl_zoom_absolute["max"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("max="),std::string(" "))));
         m_ctrl_zoom_absolute["step"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("step="),std::string(" "))));
         m_ctrl_zoom_absolute_visible = is_defined;
+        qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Zoom Absolute: value: " << QString::number(m_ctrl_zoom_absolute["value"])
+            << "min: " << m_ctrl_zoom_absolute["min"]
+            << "max: " << m_ctrl_zoom_absolute["max"]
+            << "step: " << m_ctrl_zoom_absolute["step"]
+            << "default: " << m_ctrl_zoom_absolute["default"];
     }
 }
 
@@ -103,22 +130,6 @@ void VideoDevice::initializeFormats() {
     }
 }
 
-
-// QStringList VideoDevice::getResolutionList(){
-//     for (QStringList & fmtlist : m_device_formats){
-//         if (fmtlist.contains(m_current_fmt)){
-//             m_resolution_list << QString(fmtlist.at(1)+"x"+fmtlist.at(2));
-//         }
-//     }
-//     return m_resolution_list;
-// }
-
-// void VideoDevice::setResolutionIndex(int resindex){
-// 	qCDebug(webcam_settings_kcm) << "VideoDevice::setResolutionIndex"; 
-//     m_current_resolution_index = resindex;
-//     m_current_resolution = m_resolution_list.at(resindex);
-// }
-
 void VideoDevice::setFormatIndex(int fmtindex){
 	qCDebug(webcam_settings_kcm) << "VideoDevice::setFormatIndex";
     m_current_format_index = fmtindex;
@@ -147,6 +158,7 @@ double VideoDevice::getCtrlDefaultValue(QString ctrl_name) {
 }
 
 bool VideoDevice::setBrightness(double value){
+    qCDebug(webcam_settings_kcm) << "VideoDevice::setBrightness" << value;
     bool save_needed = false;
     if (value != m_ctrl_brightness["value"]){save_needed = true;}
     m_ctrl_brightness["value"] = value;
@@ -154,6 +166,7 @@ bool VideoDevice::setBrightness(double value){
 }
 
 bool VideoDevice::setContrast(double value){
+    qCDebug(webcam_settings_kcm) << "VideoDevice::setContrast" << value;
     bool save_needed = false;
     if (value != m_ctrl_contrast["value"]){save_needed = true;}
     m_ctrl_contrast["value"] = value;
@@ -161,6 +174,7 @@ bool VideoDevice::setContrast(double value){
 }
 
 bool VideoDevice::setSharpness(double value){
+    qCDebug(webcam_settings_kcm) << "VideoDevice::setSharpness" << value;
     bool save_needed = false;
     if (value != m_ctrl_sharpness["value"]){save_needed = true;}
     m_ctrl_sharpness["value"] = value;
@@ -168,6 +182,7 @@ bool VideoDevice::setSharpness(double value){
 }
 
 bool VideoDevice::setSaturation(double value){
+    qCDebug(webcam_settings_kcm) << "VideoDevice::setSaturation" << value;
     bool save_needed = false;
     if (value != m_ctrl_saturation["value"]){save_needed = true;}
     m_ctrl_saturation["value"] = value;
@@ -175,6 +190,7 @@ bool VideoDevice::setSaturation(double value){
 }
 
 bool VideoDevice::setAbsoluteZoom(double value){
+    qCDebug(webcam_settings_kcm) << "VideoDevice::setAbsoluteZoom" << value;
     bool save_needed = false;
     if (value != m_ctrl_zoom_absolute["value"]){save_needed = true;}
     m_ctrl_zoom_absolute["value"] = value;
@@ -182,7 +198,7 @@ bool VideoDevice::setAbsoluteZoom(double value){
 }
 
 bool VideoDevice::resetCrtlToDefault(QString ctrl_name) {
-	qCDebug(webcam_settings_kcm) << "VideoDevice::resetCrtlToDefault";
+	qCDebug(webcam_settings_kcm) << "VideoDevice::resetCrtlToDefault" << ctrl_name;
     bool ret = false;
 	if (ctrl_name == "brightness") {
 		ret = setBrightness(m_ctrl_brightness["default"]);
