@@ -122,10 +122,12 @@ void VideoDevice::initializeFormats() {
             QString res = QString::fromStdString(get_str_right_of_substr(line2.simplified().trimmed().toStdString(),"Discrete ")).simplified();
             QString width = QString::fromStdString(get_str_left_of_substr(res.toStdString(),"x"));
             QString height = QString::fromStdString(get_str_right_of_substr(res.toStdString(),"x"));
+            cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-frameintervals width=" + width.toStdString() + ",height=" + height.toStdString() + ",pixelformat=" + fmt.toStdString() + " | grep Interval");
+            QString framerate = QString::fromStdString(get_str_between_two_str(QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'))[0].simplified().toStdString(),"(","fps )"));
             QStringList list = QStringList();
-            list << fmt << width << height;
+            list << fmt << width << height << framerate;
             m_device_formats << list;
-            m_format_list << QString(fmt + " - " + width + "x" + height);
+            m_format_list << QString(fmt + " - " + width + "x" + height + " - (" + framerate + " fps)");
         }
     }
 }
