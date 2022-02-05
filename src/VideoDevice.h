@@ -59,7 +59,11 @@ public:
     double getAbsoluteZoomStep(){return m_ctrl_zoom_absolute["step"];};
     double getAbsoluteZoomDefault(){return m_ctrl_zoom_absolute["default"];};
     bool getAbsoluteZoomVisible(){return m_ctrl_zoom_absolute_visible;};
-    double getCtrlDefaultValue(QString);
+    bool setAutoFocus(int);
+    int getAutoFocus(){return m_ctrl_auto_focus["value"];};
+    int getAutoFocusDefault(){return m_ctrl_auto_focus["default"];};
+    bool getAutoFocusVisible(){return m_ctrl_auto_focus_visible;};
+    // double getCtrlDefaultValue(QString);
     bool resetCrtlToDefault(QString);
     QString getCtrlOptions();
     void applyConfiguration();
@@ -78,7 +82,7 @@ private:
     QString m_device_vendor_id;
     QString m_device_model_id;
     QString m_device_path;
-    QStringList m_ctrl_list = {"brightness","contrast","sharpness","saturation","zoom_absolute"};
+    QStringList m_ctrl_list = {"brightness","contrast","sharpness","saturation","zoom_absolute","focus_automatic_continuous"};
     QMap<QString, double> m_ctrl_brightness;
     bool m_ctrl_brightness_visible;
     QMap<QString, double> m_ctrl_contrast;
@@ -89,6 +93,8 @@ private:
     bool m_ctrl_saturation_visible;
     QMap<QString, double> m_ctrl_zoom_absolute;
     bool m_ctrl_zoom_absolute_visible;
+    QMap<QString, int> m_ctrl_auto_focus;
+    bool m_ctrl_auto_focus_visible;
     QString m_current_fmt;
     int m_current_width;
     int m_current_height;

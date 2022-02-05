@@ -37,3 +37,25 @@ std::string get_str_left_of_substr(const std::string &s,const std::string &delim
     return s.substr(0,delim_pos);
 }
 
+bool stob(std::string s)
+{
+    auto result = false;
+
+    std::string lower = s;
+    std::transform( lower.begin(), lower.end(), lower.begin(), ::tolower );
+
+    if (lower == "true" || lower == "1") { result= true;}
+    else{result = false;}
+
+    return result;
+}
+
+int btoi(bool b)
+{
+    int result = 0;
+
+    if (b) { result= 1;}
+    else{result = 0;}
+
+    return result;
+}

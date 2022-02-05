@@ -28,7 +28,7 @@ QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::QWebcamSettings";
     KAboutData *aboutData = new KAboutData(QStringLiteral("kcm_webcam_settings"),
         i18nc("@title", "Webcam"),
-        QStringLiteral("0.1"),
+        QStringLiteral("0.0.1"),
         QStringLiteral(""),
         KAboutLicense::LicenseKey::GPL_V3,
         i18nc("@info:credit", "Copyright 2021 Antoine Gatineau"));
@@ -79,10 +79,21 @@ void QWebcamSettings::save() {
 	devconf.writeEntry("CtrlBrightnessVisible",m_current_device.getBrightnessVisible());
 	devconf.writeEntry("CtrlContrastValue",m_current_device.getBrightness());
 	devconf.writeEntry("CtrlContrastVisible",m_current_device.getBrightnessVisible());
+	devconf.writeEntry("CtrlSharpnessValue",m_current_device.getSharpness());
+	devconf.writeEntry("CtrlSharpnessVisible",m_current_device.getSharpnessVisible());
+	devconf.writeEntry("CtrlSaturationValue",m_current_device.getSaturation());
+	devconf.writeEntry("CtrlSaturationVisible",m_current_device.getSaturationVisible());
+	devconf.writeEntry("CtrlAbsoluteZoomValue",m_current_device.getAbsoluteZoom());
+	devconf.writeEntry("CtrlAbsoluteZoomVisible",m_current_device.getAbsoluteZoom());
+	devconf.writeEntry("CtrlAutoFocusValue",m_current_device.getAutoFocus());
+	devconf.writeEntry("CtrlAutoFocusVisible",m_current_device.getAutoFocusVisible());
 	devconf.writeEntry("UdevRule",m_current_device.getUdevRule());
 	devconf.config()->sync();
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::save Saved data from camera " << devconf.readEntry("Name");
 	config.sync();
+
+    QStringList m_ctrl_list = {"brightness","contrast","sharpness","saturation","zoom_absolute","focus_automatic_continuous"};
+
 
 	QStringList config_grouplist = config.groupList();
 	for (QString & devserial: config_grouplist){
@@ -119,6 +130,7 @@ void QWebcamSettings::load() {
 	Q_EMIT contrastChanged();
 	Q_EMIT saturationChanged();
 	Q_EMIT sharpnessChanged();
+	Q_EMIT autoFocusChanged();
 }
 
 void QWebcamSettings::defaults() {
@@ -129,6 +141,7 @@ void QWebcamSettings::defaults() {
 	Q_EMIT contrastChanged();
 	Q_EMIT saturationChanged();
 	Q_EMIT sharpnessChanged();
+	Q_EMIT autoFocusChanged();
 	if (save_needed){setNeedsSave(true);}
 }
 
@@ -198,6 +211,7 @@ void QWebcamSettings::setDeviceIndex(int devindex) {
 	Q_EMIT contrastChanged();
 	Q_EMIT saturationChanged();
 	Q_EMIT sharpnessChanged();
+	Q_EMIT autoFocusChanged();
 
 
 }
@@ -245,11 +259,12 @@ void QWebcamSettings::setSaturation(double saturation) {
 	if (save_needed){setNeedsSave(true);}
 }
 
-// void QWebcamSettings::applyResolution(){
-// 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::applyResolution";
-// 	m_current_device.applyResolution();
-// 	setNeedsSave(true);
-// }
+void QWebcamSettings::setAutoFocus(bool autofocus) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setAutoFocus value: " << QString::number(autofocus);
+	bool save_needed = m_current_device.setAutoFocus(autofocus);
+	Q_EMIT autoFocusChanged();
+	if (save_needed){setNeedsSave(true);}
+}
 
 void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::resetCrtlToDefault";
@@ -270,6 +285,10 @@ void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
     if (ctrl_name == "zoom_absolute") {
 		if (ret) {Q_EMIT absoluteZoomChanged();}
     }
+    if (ctrl_name == "focus_automatic_continuous") {
+		if (ret) {Q_EMIT autoFocusChanged();}
+    }
+	if (ret) {setNeedsSave(true);}
 }
 
 #include "QWebcamSettings.moc"
