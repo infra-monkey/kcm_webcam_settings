@@ -58,6 +58,9 @@ class QWebcamSettings : public KQuickAddons::ConfigModule
     Q_PROPERTY(qreal absolute_zoom_step READ getAbsoluteZoomStep NOTIFY deviceIndexChanged)
     Q_PROPERTY(qreal absolute_zoom_visible READ getAbsoluteZoomVisible NOTIFY deviceIndexChanged)
 
+    Q_PROPERTY(int auto_focus READ getAutoFocus WRITE setAutoFocus NOTIFY autoFocusChanged)
+    Q_PROPERTY(int auto_focus_visible READ getAutoFocusVisible NOTIFY autoFocusChanged)
+
 public:
     QWebcamSettings(QObject *parent, const QVariantList &args);
     virtual ~QWebcamSettings() override = default;
@@ -91,6 +94,8 @@ public:
     qreal getAbsoluteZoomMax() {return m_current_device.getAbsoluteZoomMax();};
     qreal getAbsoluteZoomStep() {return m_current_device.getAbsoluteZoomStep();};
     bool getAbsoluteZoomVisible() {return m_current_device.getAbsoluteZoomVisible();};
+    qreal getAutoFocus() {return m_current_device.getAutoFocus();};
+    bool getAutoFocusVisible() {return m_current_device.getAutoFocusVisible();};
     void load() override;
     void save() override;
     void defaults() override;
@@ -103,6 +108,7 @@ public:
     Q_INVOKABLE void setSaturation(double);
     Q_INVOKABLE void setSharpness(double);
     Q_INVOKABLE void resetCrtlToDefault(QString);
+    Q_INVOKABLE void setAutoFocus(bool);
     // Q_INVOKABLE void applyResolution();
 Q_SIGNALS:
     void deviceIndexChanged();
@@ -112,6 +118,7 @@ Q_SIGNALS:
     void contrastChanged();
     void saturationChanged();
     void sharpnessChanged();
+    void autoFocusChanged();
 
 private:
     VideoDevice getDeviceFromIndex(int);

@@ -200,6 +200,25 @@ KCM.SimpleKCM {
                 onClicked: kcm.resetCrtlToDefault("zoom_absolute")
             }
         }
+        RowLayout {
+            id: focusCtrl
+            visible: kcm.focus_automatic_continuous_visible
+            Layout.fillWidth: true
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 16
+            Kirigami.FormData.label: i18n("Auto Focus:")
+            Controls.CheckBox {
+                implicitWidth: 100
+                implicitHeight: 45
+                id: autoFocusCheckbox
+                checked: kcm.auto_focus
+                onClicked: kcm.setAutoFocus(checked)
+            }
+            Controls.Button {
+                id: autoFocusResetCtrl
+                text: i18n("Reset To Default")
+                onClicked: kcm.resetCrtlToDefault("focus_automatic_continuous")
+            }
+        }
     }
 }
 

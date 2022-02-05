@@ -26,7 +26,7 @@ void VideoDevice::initializeCtrls() {
 }
 
 void VideoDevice::initializeCtrl(const QString ctrl_label) {
-	qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl for device " << m_device_name;
+	// qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl for device " << m_device_name;
     bool is_defined;
     std::string cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-ctrls | grep " + ctrl_label.toStdString());
     std::string line = exec_cmd(cmd);
@@ -100,6 +100,13 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
             << "max: " << m_ctrl_zoom_absolute["max"]
             << "step: " << m_ctrl_zoom_absolute["step"]
             << "default: " << m_ctrl_zoom_absolute["default"];
+    }
+    if (ctrl_label == "focus_automatic_continuous") {
+        m_ctrl_auto_focus["value"] = stoi(get_str_between_two_str(line,std::string("value="),std::string(" ")));
+        m_ctrl_auto_focus["default"] = stoi(get_str_between_two_str(line,std::string("default="),std::string(" ")));
+        m_ctrl_auto_focus_visible = is_defined;
+        qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Auto Focus: value: " << m_ctrl_auto_focus["value"]
+            << "default: " << m_ctrl_auto_focus["default"];
     }
 }
 
@@ -189,25 +196,25 @@ bool VideoDevice::setCurrentFormatHeight(int value){
 }
 
 
-double VideoDevice::getCtrlDefaultValue(QString ctrl_name) {
-    double default_value;
-    if (ctrl_name == "brightness") {
-        default_value = m_ctrl_brightness["default"];
-    }
-    if (ctrl_name == "contrast") {
-        default_value = m_ctrl_contrast["default"];
-    }
-    if (ctrl_name == "sharpness") {
-        default_value = m_ctrl_sharpness["default"];
-    }
-    if (ctrl_name == "saturation") {
-        default_value = m_ctrl_saturation["default"];
-    }
-    if (ctrl_name == "zoom_absolute") {
-        default_value = m_ctrl_zoom_absolute["default"];
-    }
-    return default_value;
-}
+// double VideoDevice::getCtrlDefaultValue(QString ctrl_name) {
+//     double default_value;
+//     if (ctrl_name == "brightness") {
+//         default_value = m_ctrl_brightness["default"];
+//     }
+//     if (ctrl_name == "contrast") {
+//         default_value = m_ctrl_contrast["default"];
+//     }
+//     if (ctrl_name == "sharpness") {
+//         default_value = m_ctrl_sharpness["default"];
+//     }
+//     if (ctrl_name == "saturation") {
+//         default_value = m_ctrl_saturation["default"];
+//     }
+//     if (ctrl_name == "zoom_absolute") {
+//         default_value = m_ctrl_zoom_absolute["default"];
+//     }
+//     return default_value;
+// }
 
 bool VideoDevice::setBrightness(double value){
     qCDebug(webcam_settings_kcm) << "VideoDevice::setBrightness" << value;
@@ -249,6 +256,14 @@ bool VideoDevice::setAbsoluteZoom(double value){
     return save_needed;
 }
 
+bool VideoDevice::setAutoFocus(int value){
+    qCDebug(webcam_settings_kcm) << "VideoDevice::setAutoFocus" << value;
+    bool save_needed = false;
+    if (value != m_ctrl_auto_focus["value"]){save_needed = true;}
+    m_ctrl_auto_focus["value"] = value;
+    return save_needed;
+}
+
 bool VideoDevice::resetCrtlToDefault(QString ctrl_name) {
 	qCDebug(webcam_settings_kcm) << "VideoDevice::resetCrtlToDefault" << ctrl_name;
     bool ret = false;
@@ -266,6 +281,9 @@ bool VideoDevice::resetCrtlToDefault(QString ctrl_name) {
     }
     if (ctrl_name == "zoom_absolute") {
 		ret = setAbsoluteZoom(m_ctrl_zoom_absolute["default"]);
+    }
+    if (ctrl_name == "focus_automatic_continuous") {
+		ret = setAutoFocus(m_ctrl_auto_focus["default"]);
     }
     return ret;
 }
@@ -296,6 +314,10 @@ QString VideoDevice::getCtrlOptions(){
     if (getSharpnessVisible()) {
         if (!first_control){ctrl_options.append(",");}
         ctrl_options.append("sharpness=" + QString::number(getSharpness()));
+        first_control=false;
+    }if (getAutoFocusVisible()) {
+        if (!first_control){ctrl_options.append(",");}
+        ctrl_options.append("focus_automatic_continuous=" + QString::number(getAutoFocus()));
         first_control=false;
     }
     qCDebug(webcam_settings_kcm) << "VideoDevice::getCtrlOptions: " << ctrl_options;
