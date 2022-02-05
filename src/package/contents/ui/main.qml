@@ -44,23 +44,6 @@ KCM.SimpleKCM {
                 }
                 onCurrentIndexChanged: kcm.formatIndex
             }
-            Controls.ComboBox {
-                id: resolutionList
-                editable: false
-                Kirigami.FormData.label: "Resolution list:"
-                model: kcm.resolution_list
-                currentIndex: kcm.resolutionIndex
-                onActivated: {
-                    kcm.setResolutionIndex(currentIndex)
-                    currentIndex=index
-                }
-                onCurrentIndexChanged: kcm.resolutionIndex
-            }
-            Controls.Button {
-                id: resolutionApply
-                text: i18n("Apply")
-                onClicked: kcm.applyResolution()
-            }
         }
         RowLayout {
             id: brightnessCtrl

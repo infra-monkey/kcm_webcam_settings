@@ -27,8 +27,9 @@ before running kcmshell5
 
 mkdir build
 cd build
-cmake ../src -DCMAKE_INSTALL_PREFIX=~/.local/kde
-make -j8 install
+cmake .. -DCMAKE_INSTALL_PREFIX=~/.local/kde
+make
+sudo make install
 source prefix.sh
 kcmshell5 kcm_webcam_settings
 
@@ -36,8 +37,9 @@ kcmshell5 kcm_webcam_settings
 
 git clone https://github.com/infra-monkey/kcm_webcam_settings.git
 cd kcm_webcam_settings
-cmake ../src
-sudo make -j8 install
+cmake ..
+make
+sudo make install
 
 # Known issues
 
