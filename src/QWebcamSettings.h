@@ -13,6 +13,8 @@
 #include <linux/media.h>
 #include <QString>
 #include <QStringList>
+#include <KConfig>
+#include <KConfigGroup>
 
 class QWebcamSettings : public KQuickAddons::ConfigModule
 {
@@ -119,6 +121,9 @@ private:
     QStringList m_current_format_list;
     int m_device_index;
     int m_format_index;
+	//KConfig m_config;
+    KConfigGroup m_webcam_config;
+	QStringList m_config_grouplist;
 };
 
 #endif

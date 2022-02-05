@@ -14,9 +14,11 @@ ActionReply UdevHelper::applyudevrules(const QVariantMap &args)
     }
     QTextStream stream(&file);
     for (const QString &rule : args["contents"].toStringList()) {
-        stream << rule << Qt::endl;
+        if (rule.size()>0){
+            stream << rule << Qt::endl;
+        }
     }
-    cmd = std::string("udevadm control --reload-rules");
+    std::string("udevadm control --reload-rules");
     exec_cmd(cmd);
     //reply.addData("contents", args["contents"].toStringList());
     return reply;

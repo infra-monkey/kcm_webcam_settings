@@ -8,8 +8,6 @@
 #include <KPluginFactory>
 #include <KLocalizedString>
 #include <KAboutData>
-#include <KSharedConfig>
-#include <KConfigGroup>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -39,34 +37,88 @@ QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
                         i18nc("@info:credit", "Antoine Gatineau"),
                         QStringLiteral("antoine.gatineau@infra-monkey.com"));
 
-	m_device_index = 0;
     setAboutData(aboutData);
     setButtons(Apply | Default);
+	
 }
 
 void QWebcamSettings::save() {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::save save current settings";
-	//build udev rule file
-	// QVariantMap args;
-	// QStringList udevrules = m_device_list.getUdevRules();
-    // args["filename"] = QLatin1String("/etc/udev/rules.d/99-persistent-webcam.rules");
-	// args["contents"] = udevrules;
-    // Action saveAction("kcm.webcam.settings.udevhelper.applyudevrules");
-    // saveAction.setHelperId("kcm.webcam.settings.udevhelper");
-    // saveAction.setArguments(args);
-    // ExecuteJob *job = saveAction.execute();
-    // if (!job->exec()) {
-    //     qCDebug(webcam_settings_kcm) << "KAuth returned an error code:" << job->error();
-	// 	qCDebug(webcam_settings_kcm) << job->errorString();
-    // } else {
-	// 	qCDebug(webcam_settings_kcm) << job->data()["contents"].toString();
+	QStringList udevrules;
+	KConfig config("kcmwebcamsettingsrc");
+	KConfigGroup udevconf;
+	// for (VideoDevice & dev : m_device_list)
+    // {
+	// 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::save resolution "  << dev.getCurrentFormatName() << QString::number(dev.getCurrentFormatWidth()) << QString::number(dev.getCurrentFormatHeight());
+	// 	QString udevrule = dev.getUdevRule();
+    //     KConfigGroup devconf(&config, dev.getVideoDeviceSerialId());
+	// 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::save config group created for " << dev.getVideoDeviceSerialId();
+	// 	devconf.writeEntry("Name",dev.getVideoDeviceName());
+	// 	devconf.writeEntry("VendorId",dev.getVideoDeviceVendorId());
+	// 	devconf.writeEntry("ModelId",dev.getVideoDeviceModelId());
+	// 	devconf.writePathEntry("Path",dev.getVideoDevicePath());
+	// 	devconf.writeEntry("CtrlBrightnessValue",dev.getBrightness());
+	// 	devconf.writeEntry("CtrlBrightnessVisible",dev.getBrightnessVisible());
+	// 	devconf.writeEntry("CtrlContrastValue",dev.getBrightness());
+	// 	devconf.writeEntry("CtrlContrastVisible",dev.getBrightnessVisible());
+	// 	devconf.writeEntry("UdevRule",udevrule);
+	// 	devconf.config()->sync();
+	// 	//udevrules << udevrule;
+	// 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::save Saved data from camera " << devconf.readEntry("Name");
     // }
+	// config.sync();
+
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::save resolution "  << m_current_device.getCurrentFormatName() << QString::number(m_current_device.getCurrentFormatWidth()) << QString::number(m_current_device.getCurrentFormatHeight());
+	KConfigGroup devconf(&config, m_current_device.getVideoDeviceSerialId());
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::save config group created for " << m_current_device.getVideoDeviceSerialId();
+	devconf.writeEntry("Name",m_current_device.getVideoDeviceName());
+	devconf.writeEntry("VendorId",m_current_device.getVideoDeviceVendorId());
+	devconf.writeEntry("ModelId",m_current_device.getVideoDeviceModelId());
+	devconf.writePathEntry("Path",m_current_device.getVideoDevicePath());
+	devconf.writeEntry("CtrlBrightnessValue",m_current_device.getBrightness());
+	devconf.writeEntry("CtrlBrightnessVisible",m_current_device.getBrightnessVisible());
+	devconf.writeEntry("CtrlContrastValue",m_current_device.getBrightness());
+	devconf.writeEntry("CtrlContrastVisible",m_current_device.getBrightnessVisible());
+	devconf.writeEntry("UdevRule",m_current_device.getUdevRule());
+	devconf.config()->sync();
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::save Saved data from camera " << devconf.readEntry("Name");
+	config.sync();
+
+	QStringList config_grouplist = config.groupList();
+	for (QString & devserial: config_grouplist){
+		KConfigGroup udevconf(&config, devserial);
+		udevrules << udevconf.readEntry("UdevRule").simplified();
+	}
+
+	//build udev rule file
+	QVariantMap args;
+    args["filename"] = QLatin1String("/etc/udev/rules.d/99-persistent-webcam.rules");
+	args["contents"] = udevrules;
+    Action saveAction("kcm.webcam.settings.udevhelper.applyudevrules");
+    saveAction.setHelperId("kcm.webcam.settings.udevhelper");
+    saveAction.setArguments(args);
+    ExecuteJob *job = saveAction.execute();
+    if (!job->exec()) {
+        qCDebug(webcam_settings_kcm) << "KAuth returned an error code:" << job->error();
+		qCDebug(webcam_settings_kcm) << job->errorString();
+    } else {
+		qCDebug(webcam_settings_kcm) << job->data()["contents"].toString();
+    }
+
+	m_current_device.applyConfiguration();
 
 }
 
 void QWebcamSettings::load() {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::load load settings from config";
     populateDeviceList();
+	Q_EMIT deviceIndexChanged();
+	Q_EMIT formatIndexChanged();
+	Q_EMIT absoluteZoomChanged();
+	Q_EMIT brightnessChanged();
+	Q_EMIT contrastChanged();
+	Q_EMIT saturationChanged();
+	Q_EMIT sharpnessChanged();
 }
 
 void QWebcamSettings::defaults() {
@@ -81,7 +133,7 @@ void QWebcamSettings::defaults() {
 }
 
 void QWebcamSettings::populateDeviceList() {
-    QString vendorid,modelid;
+    QString vendorid,modelid,serial;
 	std::string cmd;
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::populateDeviceList Starting to populate the video devices";
 	const QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
@@ -100,13 +152,22 @@ void QWebcamSettings::populateDeviceList() {
 				modelid = QString::fromStdString(get_str_right_of_substr(line.toStdString(),std::string("=")));
 				qCDebug(webcam_settings_kcm) << "Found ID_MODEL_ID=" << modelid;
 			}
+			if (line.contains(QString::fromStdString("ID_SERIAL="))){
+				serial = QString::fromStdString(get_str_right_of_substr(line.toStdString(),std::string("=")));
+				qCDebug(webcam_settings_kcm) << "Found ID_SERIAL=" << serial;
+			}
 		}
 		if (!m_devicename_list.contains(cameraInfo.description())){
-			m_device_list << VideoDevice(cameraInfo.description(),cameraInfo.deviceName(),vendorid,modelid);
-			m_devicename_list << cameraInfo.description();
+			if (!m_config_grouplist.contains(serial)){
+				VideoDevice new_device = VideoDevice(serial,cameraInfo.description(),cameraInfo.deviceName(),vendorid,modelid);
+				m_device_list << new_device;
+				// m_device_list.append(VideoDevice(serial,cameraInfo.description(),cameraInfo.deviceName(),vendorid,modelid));
+				m_devicename_list << cameraInfo.description();
+			}
 		}
 	}
 	setDeviceIndex(0);
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::populateDeviceList current format index = " << m_current_device.getFormatIndex();
 }
 
 
@@ -129,7 +190,7 @@ void QWebcamSettings::setDeviceIndex(int devindex) {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setDeviceIndex";
 	m_device_index = devindex;
 	m_current_device = getDeviceFromIndex(devindex);
-	qCInfo(webcam_settings_kcm) << "Selected device " << m_current_device.getVideoDeviceName();
+	qCDebug(webcam_settings_kcm) << "Selected device " << m_current_device.getVideoDeviceName();
 	Q_EMIT deviceIndexChanged();
 	Q_EMIT formatIndexChanged();
 	Q_EMIT absoluteZoomChanged();
@@ -143,15 +204,17 @@ void QWebcamSettings::setDeviceIndex(int devindex) {
 
 void QWebcamSettings::setFormatIndex(int fmtindex) {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setFormatIndex";
-	m_current_device.setFormatIndex(fmtindex);
+	bool save_needed = m_current_device.setFormatIndex(fmtindex);
 	Q_EMIT formatIndexChanged();
+	if (save_needed){setNeedsSave(true);}
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setFormatIndex" << m_current_device.getCurrentFormatName() << m_current_device.getCurrentFormatWidth() << m_current_device.getCurrentFormatHeight();
 }
 
 void QWebcamSettings::setAbsoluteZoom(double zoom) {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setAbsoluteZoom value: " << QString::number(zoom);
 	bool save_needed = m_current_device.setAbsoluteZoom(zoom);
 	Q_EMIT absoluteZoomChanged();
-	if (save_needed){setNeedsSave(true);}
+	if (save_needed){setNeedsSave(true);qCDebug(webcam_settings_kcm) << "QWebcamSettings::setAbsoluteZoom set save true: ";}
 }
 
 void QWebcamSettings::setBrightness(double brightness) {
