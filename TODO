@@ -1,6 +1,5 @@
 code:
-add save/restore/reset-to-default features
-apply on plasma session start
+load values from saved data if available.
 
 UI:
 allow to preview the camera in the page
