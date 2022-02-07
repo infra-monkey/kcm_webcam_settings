@@ -20,29 +20,36 @@
 
 # Enable debug logging
 
-export QT_LOGGING_RULES="kcm.webcam_settings.debug=true"
-before running kcmshell5
+before running `kcmshell5 kcm_webcam_settings` or `systemsettings5`
+
+    export QT_LOGGING_RULES="kcm.webcam_settings.debug=true"
+
 
 # Test Build
 
-mkdir build
-cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=~/.local/kde
-make
-sudo make install
-source prefix.sh
-kcmshell5 kcm_webcam_settings
+    mkdir build
+    cd build
+    cmake .. -DCMAKE_INSTALL_PREFIX=~/.local/kde
+    make
+    sudo make install
+    source prefix.sh
+    kcmshell5 kcm_webcam_settings
 
 # Install from source
 
-git clone https://github.com/infra-monkey/kcm_webcam_settings.git
-cd kcm_webcam_settings
-cmake ..
-make
-sudo make install
+    git clone https://github.com/infra-monkey/kcm_webcam_settings.git
+    cd kcm_webcam_settings
+    cmake ..
+    make
+    sudo make install
 
 # Known issues
 
-The unique identifier of the device is probably not that unique depending on the model. In the case of twa devices with the same uid, only the first one would be configured.
+The unique identifier of the device is probably not that unique depending on the model. In the case of two devices with the same serialid, only the first one would be configured.
 
 The resolution and pixel format is defined through v4l2 but the applications don't seem to use it. The result might not be what is configured here.
+
+# Security and permissions
+
+The kcm need root permission to write the udev rules.
+An action is create allowing one function to use root privileges. This function only writes in `/etc/udev/rules.d/99-persistent-webcam.rules` and reloads the udev rules.
