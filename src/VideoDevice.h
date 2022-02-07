@@ -7,7 +7,7 @@
 #include "helpers.h"
 #include <unistd.h>
 
-class VideoDevice {
+class VideoDevice : public QObject {
 public:
     VideoDevice();
     VideoDevice(QString,QString,QString,QString,QString);

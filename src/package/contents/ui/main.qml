@@ -202,7 +202,7 @@ KCM.SimpleKCM {
         }
         RowLayout {
             id: focusCtrl
-            visible: kcm.focus_automatic_continuous_visible
+            visible: kcm.auto_focus_visible
             Layout.fillWidth: true
             Layout.maximumWidth: Kirigami.Units.gridUnit * 16
             Kirigami.FormData.label: i18n("Auto Focus:")

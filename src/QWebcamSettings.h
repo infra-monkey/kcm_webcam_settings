@@ -25,9 +25,6 @@ class QWebcamSettings : public KQuickAddons::ConfigModule
     Q_PROPERTY(QStringList format_list READ getFormatList NOTIFY formatIndexChanged)
     Q_PROPERTY(int formatIndex READ getFormatIndex WRITE setFormatIndex NOTIFY formatIndexChanged)
 
-    // Q_PROPERTY(QStringList resolution_list READ getResolutionList NOTIFY resolutionIndexChanged)
-    // Q_PROPERTY(int resolutionIndex READ getResolutionIndex WRITE setResolutionIndex NOTIFY resolutionIndexChanged)
-
     Q_PROPERTY(qreal brightness READ getBrightness WRITE setBrightness NOTIFY brightnessChanged)
     Q_PROPERTY(qreal brightness_min READ getBrightnessMin NOTIFY deviceIndexChanged)
     Q_PROPERTY(qreal brightness_max READ getBrightnessMax NOTIFY deviceIndexChanged)
@@ -65,37 +62,37 @@ public:
     QWebcamSettings(QObject *parent, const QVariantList &args);
     virtual ~QWebcamSettings() override = default;
     QStringList getDeviceList(){return m_devicename_list;};
-    QStringList getFormatList(){return m_current_device.getFormatList();};
+    QStringList getFormatList(){return this->m_current_device->getFormatList();};
     void populateDeviceList();
     int getDeviceIndex(){return m_device_index;};
-    int getFormatIndex(){return m_current_device.getFormatIndex();};
-    qreal getBrightness() {return m_current_device.getBrightness();};
-    qreal getBrightnessMin() {return m_current_device.getBrightnessMin();};
-    qreal getBrightnessMax() {return m_current_device.getBrightnessMax();};
-    qreal getBrightnessStep() {return m_current_device.getBrightnessStep();};
-    bool getBrightnessVisible() {return m_current_device.getBrightnessVisible();};
-    qreal getContrast() {return m_current_device.getContrast();};
-    qreal getContrastMin() {return m_current_device.getContrastMin();};
-    qreal getContrastMax() {return m_current_device.getContrastMax();};
-    qreal getContrastStep() {return m_current_device.getContrastStep();};
-    bool getContrastVisible() {return m_current_device.getContrastVisible();};
-    qreal getSharpness() {return m_current_device.getSharpness();};
-    qreal getSharpnessMin() {return m_current_device.getSharpnessMin();};
-    qreal getSharpnessMax() {return m_current_device.getSharpnessMax();};
-    qreal getSharpnessStep() {return m_current_device.getSharpnessStep();};
-    bool getSharpnessVisible() {return m_current_device.getSharpnessVisible();};
-    qreal getSaturation() {return m_current_device.getSaturation();};
-    qreal getSaturationMin() {return m_current_device.getSaturationMin();};
-    qreal getSaturationMax() {return m_current_device.getSaturationMax();};
-    qreal getSaturationStep() {return m_current_device.getSaturationStep();};
-    bool getSaturationVisible() {return m_current_device.getSaturationVisible();};
-    qreal getAbsoluteZoom() {return m_current_device.getAbsoluteZoom();};
-    qreal getAbsoluteZoomMin() {return m_current_device.getAbsoluteZoomMin();};
-    qreal getAbsoluteZoomMax() {return m_current_device.getAbsoluteZoomMax();};
-    qreal getAbsoluteZoomStep() {return m_current_device.getAbsoluteZoomStep();};
-    bool getAbsoluteZoomVisible() {return m_current_device.getAbsoluteZoomVisible();};
-    qreal getAutoFocus() {return m_current_device.getAutoFocus();};
-    bool getAutoFocusVisible() {return m_current_device.getAutoFocusVisible();};
+    int getFormatIndex(){return this->m_current_device->getFormatIndex();};
+    qreal getBrightness() {return this->m_current_device->getBrightness();};
+    qreal getBrightnessMin() {return this->m_current_device->getBrightnessMin();};
+    qreal getBrightnessMax() {return this->m_current_device->getBrightnessMax();};
+    qreal getBrightnessStep() {return this->m_current_device->getBrightnessStep();};
+    bool getBrightnessVisible() {return this->m_current_device->getBrightnessVisible();};
+    qreal getContrast() {return this->m_current_device->getContrast();};
+    qreal getContrastMin() {return this->m_current_device->getContrastMin();};
+    qreal getContrastMax() {return this->m_current_device->getContrastMax();};
+    qreal getContrastStep() {return this->m_current_device->getContrastStep();};
+    bool getContrastVisible() {return this->m_current_device->getContrastVisible();};
+    qreal getSharpness() {return this->m_current_device->getSharpness();};
+    qreal getSharpnessMin() {return this->m_current_device->getSharpnessMin();};
+    qreal getSharpnessMax() {return this->m_current_device->getSharpnessMax();};
+    qreal getSharpnessStep() {return this->m_current_device->getSharpnessStep();};
+    bool getSharpnessVisible() {return this->m_current_device->getSharpnessVisible();};
+    qreal getSaturation() {return this->m_current_device->getSaturation();};
+    qreal getSaturationMin() {return this->m_current_device->getSaturationMin();};
+    qreal getSaturationMax() {return this->m_current_device->getSaturationMax();};
+    qreal getSaturationStep() {return this->m_current_device->getSaturationStep();};
+    bool getSaturationVisible() {return this->m_current_device->getSaturationVisible();};
+    qreal getAbsoluteZoom() {return this->m_current_device->getAbsoluteZoom();};
+    qreal getAbsoluteZoomMin() {return this->m_current_device->getAbsoluteZoomMin();};
+    qreal getAbsoluteZoomMax() {return this->m_current_device->getAbsoluteZoomMax();};
+    qreal getAbsoluteZoomStep() {return this->m_current_device->getAbsoluteZoomStep();};
+    bool getAbsoluteZoomVisible() {return this->m_current_device->getAbsoluteZoomVisible();};
+    int getAutoFocus(){return this->m_current_device->getAutoFocus();};
+    bool getAutoFocusVisible() {return this->m_current_device->getAutoFocusVisible();};
     void load() override;
     void save() override;
     void defaults() override;
@@ -108,7 +105,7 @@ public:
     Q_INVOKABLE void setSaturation(double);
     Q_INVOKABLE void setSharpness(double);
     Q_INVOKABLE void resetCrtlToDefault(QString);
-    Q_INVOKABLE void setAutoFocus(bool);
+    Q_INVOKABLE void setAutoFocus(int);
     // Q_INVOKABLE void applyResolution();
 Q_SIGNALS:
     void deviceIndexChanged();
@@ -121,10 +118,10 @@ Q_SIGNALS:
     void autoFocusChanged();
 
 private:
-    VideoDevice getDeviceFromIndex(int);
+    VideoDevice* getDeviceFromIndex(int);
     QStringList m_devicename_list;
-    QList<VideoDevice> m_device_list;
-    VideoDevice m_current_device;
+    QList<VideoDevice*> m_device_list;
+    VideoDevice *m_current_device;
     QStringList m_current_format_list;
     int m_device_index;
     int m_format_index;
