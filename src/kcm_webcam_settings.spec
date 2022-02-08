@@ -31,11 +31,13 @@ This module for systemsettings in KDE Plasma 5.23+ allows to configure Video4Lin
 {{{ git_dir_setup_macro}}}
 
 %build
-%cmake_qt5
-%make
+mkdir build
+cd build
+%cmake
+%cmake_build
 
 %install
-%makeinstall_std -C build
+%cmake_install
 
 %files
 
