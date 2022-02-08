@@ -28,7 +28,7 @@ Requires: qt5-qtmultimedia >= %{qt5_version}
 This module for systemsettings in KDE Plasma 5.23+ allows to configure Video4Linux (Webcam devices) settings such as brightness, saturation, auto-focus or even absolute zomm when the controles are exposed by the device. The default resolution and pixel format can also be adjusted. Note that not all software will respect the resolution and format.
 
 %prep
-{{{ git_dir_setup_macro}}}
+{{{ git_dir_setup_macro }}}
 
 %build
 %cmake_kf5
@@ -38,6 +38,7 @@ This module for systemsettings in KDE Plasma 5.23+ allows to configure Video4Lin
 %cmake_install
 
 %files
+%defattr(-,root,root,-)
 /usr/share/polkit-1/actions/kcm.webcam.settings.udevhelper.policy
 /usr/libexec/kf5/kauth/udevhelper
 /usr/share/dbus-1/system.d/kcm.webcam.settings.udevhelper.conf
