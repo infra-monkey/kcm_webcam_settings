@@ -62,7 +62,7 @@ target_link_libraries(kcm_webcam_settings
     Qt5::Multimedia
 )
 target_compile_options (kcm_webcam_settings PUBLIC -fexceptions)
-target_link_libraries(kcm_webcam_settings -lv4l2)
+#target_link_libraries(kcm_webcam_settings -lv4l2)
 kcoreaddons_desktop_to_json(kcm_webcam_settings "package/metadata.desktop")
 
 install(TARGETS kcm_webcam_settings DESTINATION ${KDE_INSTALL_PLUGINDIR}/kcms)
