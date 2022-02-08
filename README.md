@@ -10,7 +10,6 @@
 
 # Runtime Dependencies
 
-    cmake
     v4l2-utils
     kf5-ki18n
     kf5-kcmutils
@@ -48,6 +47,8 @@ before running `kcmshell5 kcm_webcam_settings` or `systemsettings5`
 The unique identifier of the device is probably not that unique depending on the model. In the case of two devices with the same serialid, only the first one would be configured.
 
 The resolution and pixel format is defined through v4l2 but the applications don't seem to use it. The result might not be what is configured here.
+
+The settings are set system wide. This means that if multiple users are configured on the system and define different settings, the last one to modify the settings will define it for everyone.
 
 # Security and permissions
 
