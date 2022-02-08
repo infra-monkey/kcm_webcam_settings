@@ -15,7 +15,7 @@ BuildRequires: kf5-kdeclarative-devel >= %{kf5_version}
 BuildRequires: qt5-qtsvg-devel >= %{qt5_version}
 BuildRequires: kf5-plasma-devel >= %{kf5_version}
 BuildRequires: qt5-qtmultimedia-devel >= %{qt5_version}
-Requires: v4l2-utils
+Requires: v4l-utils
 Requires: kf5-ki18n >= %{kf5_version}
 Requires: kf5-kcmutils >= %{kf5_version}
 Requires: kf5-kdeclarative >= %{kf5_version}
