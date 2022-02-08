@@ -6,7 +6,7 @@ Release:  1%{?dist}
 Summary:  KDE Plasma system-settings module to configure your webcam
 License:  GPLv3+
 URL:      https://github.com/infra-monkey/kcm_webcam_settings
-Source0:	%{name}-%{version}.tar.gz
+Source:     {{{ git_dir_pack }}}
 BuildArch: x86_64
 BuildRequires: cmake >= 3.16
 BuildRequires: kf5-ki18n-devel >= %{kf5_version}
@@ -27,6 +27,7 @@ Requires: qt5-qtmultimedia >= %{qt5_version}
 This module for systemsettings in KDE Plasma 5.23+ allows to configure Video4Linux (Webcam devices) settings such as brightness, saturation, auto-focus or even absolute zomm when the controles are exposed by the device. The default resolution and pixel format can also be adjusted. Note that not all software will respect the resolution and format.
 
 %prep
+{{{ git_dir_setup_macro }}}
 %setup -q
 
 %build
