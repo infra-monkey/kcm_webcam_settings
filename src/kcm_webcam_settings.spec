@@ -38,6 +38,19 @@ This module for systemsettings in KDE Plasma 5.23+ allows to configure Video4Lin
 %cmake_install
 
 %files
+%defattr(-,root,root,-)
+/usr/share/polkit-1/actions/kcm.webcam.settings.udevhelper.policy
+/usr/libexec/kf5/kauth/udevhelper
+/usr/share/dbus-1/system.d/kcm.webcam.settings.udevhelper.conf
+/usr/share/dbus-1/system-services/kcm.webcam.settings.udevhelper.service
+/usr/lib64/qt5/plugins/kcms/kcm_webcam_settings.so
+/usr/share/kservices5/kcm_webcam_settings.desktop
+/usr/share/kpackage/kcms/kcm_webcam_settings
+/usr/share/kpackage/kcms/kcm_webcam_settings/metadata.desktop
+/usr/share/kpackage/kcms/kcm_webcam_settings/contents
+/usr/share/kpackage/kcms/kcm_webcam_settings/contents/ui
+/usr/share/kpackage/kcms/kcm_webcam_settings/contents/ui/main.qml
+/usr/share/kpackage/kcms/kcm_webcam_settings/metadata.json
 
 %changelog
 * Mon Feb 07 2022 Antoine Gatineau <antoine.gatineau@infra-monkey.com> - 0.0.1
