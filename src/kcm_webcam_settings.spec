@@ -6,7 +6,7 @@ Release:  1%{?dist}
 Summary:  KDE Plasma system-settings module to configure your webcam
 License:  GPLv3+
 URL:      https://github.com/infra-monkey/kcm_webcam_settings
-Source0:	%{name}-%{version}.tar.gz
+Source0:  %{name}-%{version}.tar.gz
 BuildArch: x86_64
 BuildRequires: cmake >= 3.16
 BuildRequires: kf5-ki18n-devel >= %{kf5_version}
