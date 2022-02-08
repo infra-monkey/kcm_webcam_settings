@@ -33,7 +33,7 @@ This module for systemsettings in KDE Plasma 5.23+ allows to configure Video4Lin
 %build
 mkdir build
 cd build
-%cmake
+%cmake_kf5 src
 %cmake_build
 
 %install
