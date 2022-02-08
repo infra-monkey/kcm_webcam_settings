@@ -1,12 +1,13 @@
 %global kf5_version 5.89.0
 %global qt5_version 5.15.2
-Name:     kcm_webcam_settings
+Name:     {{{ git_dir_name }}}
 Version:  0.0.1
 Release:  1%{?dist}
 Summary:  KDE Plasma system-settings module to configure your webcam
 License:  GPLv3+
 URL:      https://github.com/infra-monkey/kcm_webcam_settings
-Source:     {{{ git_dir_pack }}}
+VCS:      {{{ git_dir_vcs }}}
+Source:   {{{ git_dir_pack }}}
 BuildArch: x86_64
 BuildRequires: cmake >= 3.16
 BuildRequires: kf5-ki18n-devel >= %{kf5_version}
