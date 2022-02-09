@@ -10,7 +10,7 @@
 
 # Runtime Dependencies
 
-    v4l2-utils
+    v4l-utils
     kf5-ki18n
     kf5-kcmutils
     kf5-kdeclarative
