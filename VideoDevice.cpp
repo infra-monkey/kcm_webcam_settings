@@ -4,6 +4,15 @@
 #include <QStringList>
 
 VideoDevice::VideoDevice() {
+    qCDebug(webcam_settings_kcm) << "VideoDevice::VideoDevice Creating a dummy device";
+    m_device_serial = QString("no_device");
+    m_device_name = QString("No Video4Linux Device Was Found On The System");
+    m_device_vendor_id = QString("0000");
+    m_device_model_id = QString("0000");
+    m_device_path = QString("/dev/null");
+    m_is_dummy_device = true;
+    initializeCtrls();
+    initializeFormats();
 }
 VideoDevice::VideoDevice(QString device_serial,QString device_name, QString device_path, QString device_vendorid, QString device_modelid) {
     m_device_serial = QString(device_serial);
@@ -28,12 +37,17 @@ void VideoDevice::initializeCtrls() {
 void VideoDevice::initializeCtrl(const QString ctrl_label) {
 	// qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl for device " << m_device_name;
     bool is_defined;
-    std::string cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-ctrls | grep " + ctrl_label.toStdString());
-    std::string line = exec_cmd(cmd);
-    if (line.size() == 0) {
+    std::string line,cmd;
+    if (m_is_dummy_device){
         is_defined = false;
     } else {
-        is_defined = true;
+        cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-ctrls | grep " + ctrl_label.toStdString());
+        line = exec_cmd(cmd);
+        if (line.size() == 0) {
+            is_defined = false;
+        } else {
+            is_defined = true;
+        }
     }
     if (ctrl_label == "brightness") {
         m_ctrl_brightness_visible = is_defined;
@@ -146,44 +160,56 @@ void VideoDevice::initializeFormats() {
 	qCDebug(webcam_settings_kcm) << "VideoDevice::initializeFormats";
     qCDebug(webcam_settings_kcm) << "Initializing pixel formats for video device with path " << m_device_path;
     
-    int i = 0;
-    std::string cmd;
-    cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video | grep \"Pixel Format\"");
-    std::string current_fmt = get_str_between_two_str(exec_cmd(cmd)," \'","\' ");
-    cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video | grep \"Width/Height\"");
-    std::string current_resolution = get_str_between_two_str(exec_cmd(cmd),": ","\n");
-    std::string current_width = get_str_left_of_substr(current_resolution,"/");
-    std::string current_height = get_str_right_of_substr(current_resolution,"/");
-    qCDebug(webcam_settings_kcm) << "Current format " << QString::fromStdString(current_fmt) << QString::fromStdString(current_width) << QString::fromStdString(current_height);
-
-
-    cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-formats | grep \"\\[\"");
-    QStringList output = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
-    for (QString & line : output){
-        if (line.length() == 0){break;}
-        QString fmt = QString::fromStdString(get_str_between_two_str(line.toStdString().c_str()," \'","\' ")).simplified();
-        qCDebug(webcam_settings_kcm) << "VideoDevice::initializeFormats list framesizes for format " << fmt;
-        cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-framesizes " + fmt.toStdString() + " | grep Size");
-        QStringList output2 = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
-        for (QString & line2 : output2){
-            if (line2.length() == 0){break;}
-            QString res = QString::fromStdString(get_str_right_of_substr(line2.simplified().trimmed().toStdString(),"Discrete ")).simplified();
-            QString width = QString::fromStdString(get_str_left_of_substr(res.toStdString(),"x"));
-            QString height = QString::fromStdString(get_str_right_of_substr(res.toStdString(),"x"));
-            cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-frameintervals width=" + width.toStdString() + ",height=" + height.toStdString() + ",pixelformat=" + fmt.toStdString() + " | grep Interval");
-            QString framerate = QString::fromStdString(get_str_between_two_str(QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'))[0].simplified().toStdString(),"(","fps )"));
-            QStringList list = QStringList();
-            list.append(fmt);
-            list.append(width);
-            list.append(height);
-            list.append(framerate);
+    if (m_is_dummy_device){
+        QStringList list = QStringList();
+            list.append("UNKOWN");
+            list.append("0");
+            list.append("0");
+            list.append("0");
             m_device_formats << QStringList(list);
-            m_format_list.append(fmt + " - " + width + "x" + height + " - (" + framerate + " fps)");
-            if (fmt.toStdString() == current_fmt && width.toStdString() == current_width && height.toStdString() == current_height){
-                setFormatIndex(i);
-                qCDebug(webcam_settings_kcm) << "VideoDevice::initializeFormats set index  " << m_current_format_index;
+            m_format_list.append("UNKOWN - 0x0 - (0 fps)");
+            setFormatIndex(0);
+
+    } else {
+        int i = 0;
+        std::string cmd;
+        cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video | grep \"Pixel Format\"");
+        std::string current_fmt = get_str_between_two_str(exec_cmd(cmd)," \'","\' ");
+        cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video | grep \"Width/Height\"");
+        std::string current_resolution = get_str_between_two_str(exec_cmd(cmd),": ","\n");
+        std::string current_width = get_str_left_of_substr(current_resolution,"/");
+        std::string current_height = get_str_right_of_substr(current_resolution,"/");
+        qCDebug(webcam_settings_kcm) << "Current format " << QString::fromStdString(current_fmt) << QString::fromStdString(current_width) << QString::fromStdString(current_height);
+
+
+        cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-formats | grep \"\\[\"");
+        QStringList output = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
+        for (QString & line : output){
+            if (line.length() == 0){break;}
+            QString fmt = QString::fromStdString(get_str_between_two_str(line.toStdString().c_str()," \'","\' ")).simplified();
+            qCDebug(webcam_settings_kcm) << "VideoDevice::initializeFormats list framesizes for format " << fmt;
+            cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-framesizes " + fmt.toStdString() + " | grep Size");
+            QStringList output2 = QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'));
+            for (QString & line2 : output2){
+                if (line2.length() == 0){break;}
+                QString res = QString::fromStdString(get_str_right_of_substr(line2.simplified().trimmed().toStdString(),"Discrete ")).simplified();
+                QString width = QString::fromStdString(get_str_left_of_substr(res.toStdString(),"x"));
+                QString height = QString::fromStdString(get_str_right_of_substr(res.toStdString(),"x"));
+                cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-frameintervals width=" + width.toStdString() + ",height=" + height.toStdString() + ",pixelformat=" + fmt.toStdString() + " | grep Interval");
+                QString framerate = QString::fromStdString(get_str_between_two_str(QString::fromStdString(exec_cmd(cmd)).split(QLatin1Char('\n'))[0].simplified().toStdString(),"(","fps )"));
+                QStringList list = QStringList();
+                list.append(fmt);
+                list.append(width);
+                list.append(height);
+                list.append(framerate);
+                m_device_formats << QStringList(list);
+                m_format_list.append(fmt + " - " + width + "x" + height + " - (" + framerate + " fps)");
+                if (fmt.toStdString() == current_fmt && width.toStdString() == current_width && height.toStdString() == current_height){
+                    setFormatIndex(i);
+                    qCDebug(webcam_settings_kcm) << "VideoDevice::initializeFormats set index  " << m_current_format_index;
+                }
+                i++;
             }
-            i++;
         }
     }
     for (QStringList & fmt_list : m_device_formats){

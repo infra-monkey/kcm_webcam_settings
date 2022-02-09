@@ -128,6 +128,7 @@ private:
 	//KConfig m_config;
     KConfigGroup m_webcam_config;
 	QStringList m_config_grouplist;
+    bool m_devices_available;
 };
 
 #endif

@@ -105,14 +105,17 @@ void QWebcamSettings::save() {
 void QWebcamSettings::load() {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::load load settings from config";
     // populateDeviceList();
-	Q_EMIT deviceIndexChanged();
-	Q_EMIT formatIndexChanged();
-	Q_EMIT absoluteZoomChanged();
-	Q_EMIT brightnessChanged();
-	Q_EMIT contrastChanged();
-	Q_EMIT saturationChanged();
-	Q_EMIT sharpnessChanged();
-	Q_EMIT autoFocusChanged();
+	if (m_devices_available){
+		Q_EMIT deviceIndexChanged();
+		Q_EMIT formatIndexChanged();
+		Q_EMIT absoluteZoomChanged();
+		Q_EMIT brightnessChanged();
+		Q_EMIT contrastChanged();
+		Q_EMIT saturationChanged();
+		Q_EMIT sharpnessChanged();
+		Q_EMIT autoFocusChanged();
+	}
+	
 }
 
 void QWebcamSettings::defaults() {
@@ -161,8 +164,20 @@ void QWebcamSettings::populateDeviceList() {
 			}
 		}
 	}
-	setDeviceIndex(0);
-	qCDebug(webcam_settings_kcm) << "QWebcamSettings::populateDeviceList current format index = " << m_current_device->getFormatIndex() << "autofocus" << m_current_device->getAutoFocus();
+	if (cameras.size() == 0){
+		m_devices_available = false;
+		VideoDevice* new_device = new VideoDevice();
+		m_device_list.append(new_device);
+		qCDebug(webcam_settings_kcm) << "QWebcamSettings::populateDeviceList No device was found.";
+		m_devicename_list << QString("No Video4Linux Device Was Found On The System");
+		setDeviceIndex(0);
+	} else {
+		m_devices_available = true;
+		setDeviceIndex(0);
+		qCDebug(webcam_settings_kcm) << "QWebcamSettings::populateDeviceList current format index = " << m_current_device->getFormatIndex() << "autofocus" << m_current_device->getAutoFocus();
+	}
+	
+	
 }
 
 
