@@ -280,6 +280,7 @@ bool VideoDevice::setBrightness(double value){
     if (m_ctrl_brightness_visible && value != m_ctrl_brightness["value"]){
         save_needed = true;
         m_ctrl_brightness["value"] = value;
+        applyControlValue("brightness",QString::number(value));
     }
     return save_needed;
 }
@@ -290,6 +291,7 @@ bool VideoDevice::setContrast(double value){
     if (m_ctrl_contrast_visible && value != m_ctrl_contrast["value"]){
         save_needed = true;
         m_ctrl_contrast["value"] = value;
+        applyControlValue("contrast",QString::number(value));
     }
     return save_needed;
 }
@@ -300,6 +302,7 @@ bool VideoDevice::setSharpness(double value){
     if (m_ctrl_sharpness_visible && value != m_ctrl_sharpness["value"]){
         save_needed = true;
         m_ctrl_sharpness["value"] = value;
+        applyControlValue("sharpness",QString::number(value));
     }
     return save_needed;
 }
@@ -310,6 +313,7 @@ bool VideoDevice::setSaturation(double value){
     if (m_ctrl_saturation_visible && value != m_ctrl_saturation["value"]){
         save_needed = true;
         m_ctrl_saturation["value"] = value;
+        applyControlValue("saturation",QString::number(value));
     }
     return save_needed;
 }
@@ -320,6 +324,7 @@ bool VideoDevice::setAbsoluteZoom(double value){
     if (m_ctrl_zoom_absolute_visible && value != m_ctrl_zoom_absolute["value"]){
         save_needed = true;
         m_ctrl_zoom_absolute["value"] = value;
+        applyControlValue("zoom_absolute",QString::number(value));
     }
     return save_needed;
 }
@@ -330,6 +335,7 @@ bool VideoDevice::setAutoFocus(int value){
     if (m_ctrl_auto_focus_visible && value != m_ctrl_auto_focus["value"]){
         save_needed = true;
         m_ctrl_auto_focus["value"] = value;
+        applyControlValue("focus_automatic_continuous",QString::number(value));
     }
     return save_needed;
 }
@@ -392,6 +398,14 @@ QString VideoDevice::getCtrlOptions(){
     }
     qCDebug(webcam_settings_kcm) << "VideoDevice::getCtrlOptions: " << ctrl_options;
     return ctrl_options;
+}
+
+void VideoDevice::applyControlValue(QString ctrl_name,QString value){
+    qCDebug(webcam_settings_kcm) << "VideoDevice::applyControlValue";
+	std::string cmd;
+    cmd = std::string("v4l2-ctl -d " + getVideoDevicePath().toStdString() + " --set-ctrl " + ctrl_name.toStdString() +"=" + value.toStdString());
+    exec_cmd(cmd);
+    qCDebug(webcam_settings_kcm) << "VideoDevice::applyControlValue: " << "v4l2-ctl -d " + getVideoDevicePath() + " --set-ctrl " + ctrl_name + "=" + value;
 }
 
 void VideoDevice::applyConfiguration(){
