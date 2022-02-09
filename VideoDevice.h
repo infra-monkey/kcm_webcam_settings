@@ -77,6 +77,7 @@ public:
     QString getUdevRule();
 
 private:
+    void applyControlValue(QString,QString);
     QString m_device_serial;
     QString m_device_name;
     QString m_device_vendor_id;
