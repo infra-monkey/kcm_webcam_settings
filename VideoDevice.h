@@ -101,6 +101,7 @@ private:
     QList<QStringList> m_device_formats;
     QStringList m_format_list;
     int m_current_format_index;
+    bool m_is_dummy_device = false;
 };
 
 #endif
