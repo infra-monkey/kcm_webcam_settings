@@ -71,6 +71,8 @@ void QWebcamSettings::save() {
 		devconf.writeEntry("CtrlAbsoluteZoomVisible",dev->getAbsoluteZoomVisible());
 		devconf.writeEntry("CtrlAutoFocusValue",dev->getAutoFocus());
 		devconf.writeEntry("CtrlAutoFocusVisible",dev->getAutoFocusVisible());
+		devconf.writeEntry("CtrlAbsoluteFocusValue",dev->getFocus());
+		devconf.writeEntry("CtrlAbsoluteFocusVisible",dev->getFocusVisible());
 		devconf.writeEntry("UdevRule",udevrule);
 		devconf.config()->sync();
 		qCDebug(webcam_settings_kcm) << "QWebcamSettings::save Saved data from camera " << devconf.readEntry("Name");
@@ -115,6 +117,7 @@ void QWebcamSettings::load() {
 			if(dev->setSaturation(devconf.readEntry("CtrlSaturationValue").toDouble())){Q_EMIT saturationChanged();}
 			if(dev->setAbsoluteZoom(devconf.readEntry("CtrlAbsoluteZoomValue").toDouble())){Q_EMIT absoluteZoomChanged();}
 			if(dev->setAutoFocus(devconf.readEntry("CtrlAutoFocusValue").toInt())){Q_EMIT autoFocusChanged();}
+			if(dev->setFocus(devconf.readEntry("CtrlAbsoluteFocusValue").toInt())){Q_EMIT focusChanged();}
 		}
 	}
 	setNeedsSave(false);
@@ -130,6 +133,7 @@ void QWebcamSettings::defaults() {
 	Q_EMIT saturationChanged();
 	Q_EMIT sharpnessChanged();
 	Q_EMIT autoFocusChanged();
+	Q_EMIT focusChanged();
 	if (save_needed){setNeedsSave(true);}
 }
 
@@ -213,6 +217,7 @@ void QWebcamSettings::setDeviceIndex(int devindex) {
 	Q_EMIT saturationChanged();
 	Q_EMIT sharpnessChanged();
 	Q_EMIT autoFocusChanged();
+	Q_EMIT focusChanged();
 
 
 }
@@ -267,6 +272,13 @@ void QWebcamSettings::setAutoFocus(int autofocus) {
 	if (save_needed){setNeedsSave(true);}
 }
 
+void QWebcamSettings::setFocus(double focus) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setFocus value: " << QString::number(focus);
+	bool save_needed = m_current_device->setFocus(focus);
+	Q_EMIT focusChanged();
+	if (save_needed){setNeedsSave(true);}
+}
+
 void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::resetCrtlToDefault";
     bool ret = false;
@@ -288,6 +300,9 @@ void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
     }
     if (ctrl_name == "focus_automatic_continuous") {
 		if (ret) {Q_EMIT autoFocusChanged();}
+    }
+    if (ctrl_name == "focus_absolute") {
+		if (ret) {Q_EMIT focusChanged();}
     }
 	if (ret) {setNeedsSave(true);}
 }

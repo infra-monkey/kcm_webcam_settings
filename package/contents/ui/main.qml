@@ -62,7 +62,7 @@ KCM.SimpleKCM {
             }
             Controls.SpinBox {
                 implicitWidth: 100
-                implicitHeight: 45
+                implicitHeight: 33
                 id: brightnessSpinbox
                 from: kcm.brightness_min
                 to: kcm.brightness_max
@@ -93,7 +93,7 @@ KCM.SimpleKCM {
             }
             Controls.SpinBox {
                 implicitWidth: 100
-                implicitHeight: 45
+                implicitHeight: 33
                 id: contrastSpinbox
                 from: kcm.contrast_min
                 to: kcm.contrast_max
@@ -124,7 +124,7 @@ KCM.SimpleKCM {
             }
             Controls.SpinBox {
                 implicitWidth: 100
-                implicitHeight: 45
+                implicitHeight: 33
                 id: sharpnessSpinbox
                 from: kcm.sharpness_min
                 to: kcm.sharpness_max
@@ -155,7 +155,7 @@ KCM.SimpleKCM {
             }
             Controls.SpinBox {
                 implicitWidth: 100
-                implicitHeight: 45
+                implicitHeight: 33
                 id: saturationSpinbox
                 from: kcm.saturation_min
                 to: kcm.saturation_max
@@ -186,7 +186,7 @@ KCM.SimpleKCM {
             }
             Controls.SpinBox {
                 implicitWidth: 100
-                implicitHeight: 45
+                implicitHeight: 33
                 id: absoluteZoomSpinbox
                 from: kcm.absolute_zoom_min
                 to: kcm.absolute_zoom_max
@@ -217,6 +217,37 @@ KCM.SimpleKCM {
                 id: autoFocusResetCtrl
                 text: i18n("Reset To Default")
                 onClicked: kcm.resetCrtlToDefault("focus_automatic_continuous")
+            }
+        }
+        RowLayout {
+            id: absoluteFocusCtrl
+            visible: kcm.absolute_focus_visible
+            Layout.fillWidth: true
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 16
+            Kirigami.FormData.label: i18n("Absolute Focus:")
+            Controls.Slider {
+                id: absoluteFocusSlide
+                from: kcm.absolute_focus_min
+                to: kcm.absolute_focus_max
+                stepSize: kcm.absolute_focus_step
+                value: kcm.absolute_focus
+                onMoved: kcm.absolute_focus = value
+                live: true
+            }
+            Controls.SpinBox {
+                implicitWidth: 100
+                implicitHeight: 33
+                id: absoluteFocusSpinbox
+                from: kcm.absolute_focus_min
+                to: kcm.absolute_focus_max
+                stepSize: kcm.absolute_focus_step
+                value: kcm.absolute_focus
+                onValueModified: kcm.absolute_focus = value
+            }
+            Controls.Button {
+                id: absoluteFocusResetCtrl
+                text: i18n("Reset To Default")
+                onClicked: kcm.resetCrtlToDefault("focus_absolute")
             }
         }
     }

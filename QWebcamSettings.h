@@ -58,6 +58,12 @@ class QWebcamSettings : public KQuickAddons::ConfigModule
     Q_PROPERTY(int auto_focus READ getAutoFocus WRITE setAutoFocus NOTIFY autoFocusChanged)
     Q_PROPERTY(int auto_focus_visible READ getAutoFocusVisible NOTIFY autoFocusChanged)
 
+    Q_PROPERTY(qreal absolute_focus READ getFocus WRITE setFocus NOTIFY focusChanged)
+    Q_PROPERTY(qreal absolute_focus_min READ getFocusMin NOTIFY deviceIndexChanged)
+    Q_PROPERTY(qreal absolute_focus_max READ getFocusMax NOTIFY deviceIndexChanged)
+    Q_PROPERTY(qreal absolute_focus_step READ getFocusStep NOTIFY deviceIndexChanged)
+    Q_PROPERTY(qreal absolute_focus_visible READ getFocusVisible NOTIFY autoFocusChanged)
+
 public:
     QWebcamSettings(QObject *parent, const QVariantList &args);
     virtual ~QWebcamSettings() override = default;
@@ -93,6 +99,11 @@ public:
     bool getAbsoluteZoomVisible() {return this->m_current_device->getAbsoluteZoomVisible();};
     int getAutoFocus(){return this->m_current_device->getAutoFocus();};
     bool getAutoFocusVisible() {return this->m_current_device->getAutoFocusVisible();};
+    qreal getFocus() {return this->m_current_device->getFocus();};
+    qreal getFocusMin() {return this->m_current_device->getFocusMin();};
+    qreal getFocusMax() {return this->m_current_device->getFocusMax();};
+    qreal getFocusStep() {return this->m_current_device->getFocusStep();};
+    bool getFocusVisible() {qCDebug(webcam_settings_kcm) << "QWebcamSettings::getFocusVisible" << this->m_current_device->getFocusVisible();return this->m_current_device->getFocusVisible();};
     void load() override;
     void save() override;
     void defaults() override;
@@ -106,6 +117,7 @@ public:
     Q_INVOKABLE void setSharpness(double);
     Q_INVOKABLE void resetCrtlToDefault(QString);
     Q_INVOKABLE void setAutoFocus(int);
+    Q_INVOKABLE void setFocus(double);
     // Q_INVOKABLE void applyResolution();
 Q_SIGNALS:
     void deviceIndexChanged();
@@ -116,6 +128,7 @@ Q_SIGNALS:
     void saturationChanged();
     void sharpnessChanged();
     void autoFocusChanged();
+    void focusChanged();
 
 private:
     VideoDevice* getDeviceFromIndex(int);
