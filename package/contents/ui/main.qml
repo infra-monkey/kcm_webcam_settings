@@ -88,7 +88,7 @@ KCM.SimpleKCM {
                     Controls.Label {
                         Layout.fillWidth: true
                         horizontalAlignment: Basic.Text.AlignRight
-                        //wrapMode: Text.WordWrap
+                        wrapMode: Text.WordWrap
                         id: deviceInfoName
                         text: kcm.device_info_name
                         color: Kirigami.Theme.textColor
@@ -105,7 +105,7 @@ KCM.SimpleKCM {
                     Controls.Label {
                         Layout.fillWidth: true
                         horizontalAlignment: Basic.Text.AlignRight
-                        //wrapMode: Text.WordWrap
+                        wrapMode: Text.WordWrap
                         id: deviceInfoPath
                         text: kcm.device_info_path
                         color: Kirigami.Theme.textColor
@@ -122,7 +122,7 @@ KCM.SimpleKCM {
                     Controls.Label {
                         Layout.fillWidth: true
                         horizontalAlignment: Basic.Text.AlignRight
-                        //wrapMode: Text.WordWrap
+                        wrapMode: Text.WordWrap
                         id: deviceInfoVendorId
                         text: kcm.device_info_vendorid
                         color: Kirigami.Theme.textColor
@@ -139,7 +139,7 @@ KCM.SimpleKCM {
                     Controls.Label {
                         Layout.fillWidth: true
                         horizontalAlignment: Basic.Text.AlignRight
-                        //wrapMode: Text.WordWrap
+                        wrapMode: Text.WordWrap
                         id: deviceInfoModelId
                         text: kcm.device_info_modelid
                         color: Kirigami.Theme.textColor
@@ -148,21 +148,19 @@ KCM.SimpleKCM {
             }
         }
         Kirigami.FormLayout {
-            //RowLayout {
-                Controls.ComboBox {
-                    id: formatList
-                    Layout.fillWidth: true
-                    editable: false
-                    Kirigami.FormData.label: "Format list:"
-                    model: kcm.format_list
-                    currentIndex: kcm.formatIndex
-                    onActivated: {
-                        kcm.setFormatIndex(currentIndex)
-                        currentIndex=index
-                    }
-                    onCurrentIndexChanged: kcm.formatIndex
+            Controls.ComboBox {
+                id: formatList
+                Layout.fillWidth: true
+                editable: false
+                Kirigami.FormData.label: "Format list:"
+                model: kcm.format_list
+                currentIndex: kcm.formatIndex
+                onActivated: {
+                    kcm.setFormatIndex(currentIndex)
+                    currentIndex=index
                 }
-            //}
+                onCurrentIndexChanged: kcm.formatIndex
+            }
             RowLayout {
                 id: brightnessCtrl
                 visible: kcm.brightness_visible
