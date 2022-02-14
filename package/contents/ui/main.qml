@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-import QtQuick 2.15
+import QtQuick 2.15 as Basic
 import QtQuick.Controls 2.15 as Controls
 import QtMultimedia 5.8
 import QtQuick.Layouts 1.15

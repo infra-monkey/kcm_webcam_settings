@@ -19,7 +19,7 @@
 class QWebcamSettings : public KQuickAddons::ConfigModule
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList device_list READ getDeviceList NOTIFY deviceIndexChanged)
+    Q_PROPERTY(QVariant device_list READ getDeviceList NOTIFY deviceIndexChanged)
     Q_PROPERTY(int deviceIndex READ getDeviceIndex WRITE setDeviceIndex NOTIFY deviceIndexChanged)
 
     Q_PROPERTY(QStringList format_list READ getFormatList NOTIFY formatIndexChanged)
@@ -67,7 +67,7 @@ class QWebcamSettings : public KQuickAddons::ConfigModule
 public:
     QWebcamSettings(QObject *parent, const QVariantList &args);
     virtual ~QWebcamSettings() override = default;
-    QStringList getDeviceList(){return m_devicename_list;};
+    QVariant getDeviceList(){return QVariant::fromValue(m_devicename_list);};
     QStringList getFormatList(){return this->m_current_device->getFormatList();};
     void populateDeviceList();
     int getDeviceIndex(){return m_device_index;};
