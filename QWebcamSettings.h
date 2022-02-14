@@ -25,6 +25,8 @@ class QWebcamSettings : public KQuickAddons::ConfigModule
     Q_PROPERTY(int deviceIndex READ getDeviceIndex WRITE setDeviceIndex NOTIFY deviceIndexChanged)
     Q_PROPERTY(QString device_info_name READ getSelectedDeviceName NOTIFY deviceIndexChanged)
     Q_PROPERTY(QString device_info_path READ getSelectedDevicePath NOTIFY deviceIndexChanged)
+    Q_PROPERTY(QString device_info_vendorid READ getSelectedDeviceVendorId NOTIFY deviceIndexChanged)
+    Q_PROPERTY(QString device_info_modelid READ getSelectedDeviceModelId NOTIFY deviceIndexChanged)
     
 
     Q_PROPERTY(QStringList format_list READ getFormatList NOTIFY formatIndexChanged)
@@ -78,6 +80,8 @@ public:
     int getDeviceIndex(){return m_device_index;};
     QString getSelectedDeviceName();
     QString getSelectedDevicePath();
+    QString getSelectedDeviceVendorId();
+    QString getSelectedDeviceModelId();
     int getFormatIndex(){return this->m_current_device->getFormatIndex();};
     qreal getBrightness() {return this->m_current_device->getBrightness();};
     qreal getBrightnessMin() {return this->m_current_device->getBrightnessMin();};

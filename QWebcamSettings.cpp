@@ -200,6 +200,14 @@ QString QWebcamSettings::getSelectedDevicePath(){
 	return m_current_device->getVideoDevicePath().simplified();
 }
 
+QString QWebcamSettings::getSelectedDeviceVendorId(){
+	return m_current_device->getVideoDeviceVendorId().simplified();
+}
+
+QString QWebcamSettings::getSelectedDeviceModelId(){
+	return m_current_device->getVideoDeviceModelId().simplified();
+}
+
 VideoDevice* QWebcamSettings::getDeviceFromIndex(int index) {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::getDeviceFromIndex";
     int i = 0;

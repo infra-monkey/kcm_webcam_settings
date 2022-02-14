@@ -26,6 +26,7 @@ KCM.SimpleKCM {
         RowLayout {
             ColumnLayout {
                 Layout.margins: 20
+                Layout.alignment: Qt.AlignTop
                 Kirigami.Heading {
                     Layout.fillWidth: true
                     level: 2
@@ -64,6 +65,7 @@ KCM.SimpleKCM {
             }
             ColumnLayout {
                 Layout.margins: 20
+                Layout.alignment: Qt.AlignTop
                 Kirigami.Heading {
                     Layout.fillWidth: true
                     level: 2
@@ -106,6 +108,40 @@ KCM.SimpleKCM {
                         //wrapMode: Text.WordWrap
                         id: deviceInfoPath
                         text: kcm.device_info_path
+                        color: Kirigami.Theme.textColor
+                    }
+                }
+                RowLayout {
+                    Kirigami.Heading {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignLeft
+                        level: 3
+                        text: "Device Vendor Id"
+                        color: Kirigami.Theme.textColor
+                    }
+                    Controls.Label {
+                        Layout.fillWidth: true
+                        horizontalAlignment: Basic.Text.AlignRight
+                        //wrapMode: Text.WordWrap
+                        id: deviceInfoVendorId
+                        text: kcm.device_info_vendorid
+                        color: Kirigami.Theme.textColor
+                    }
+                }
+                RowLayout {
+                    Kirigami.Heading {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignLeft
+                        level: 3
+                        text: "Device Model Id"
+                        color: Kirigami.Theme.textColor
+                    }
+                    Controls.Label {
+                        Layout.fillWidth: true
+                        horizontalAlignment: Basic.Text.AlignRight
+                        //wrapMode: Text.WordWrap
+                        id: deviceInfoModelId
+                        text: kcm.device_info_modelid
                         color: Kirigami.Theme.textColor
                     }
                 }
