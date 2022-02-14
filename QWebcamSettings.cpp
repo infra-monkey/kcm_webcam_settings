@@ -24,6 +24,7 @@ K_PLUGIN_CLASS_WITH_JSON(QWebcamSettings, "metadata.json")
 
 QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
     : KQuickAddons::ConfigModule(parent, args)
+	, m_devicename_list_model(new QStringListModel(this))
 {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::QWebcamSettings";
     KAboutData *aboutData = new KAboutData(QStringLiteral("kcm_webcam_settings"),
@@ -39,9 +40,8 @@ QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
 
     setAboutData(aboutData);
     setButtons(Apply | Default);
+	setNeedsSave(false);
 	populateDeviceList();
-	qCDebug(webcam_settings_kcm) << "QWebcamSettings::QWebcamSettings current format index = " << m_current_device->getFormatIndex() << "autofocus" << m_current_device->getAutoFocus();
-	
 }
 
 void QWebcamSettings::save() {
@@ -183,10 +183,22 @@ void QWebcamSettings::populateDeviceList() {
 		setDeviceIndex(0);
 		qCDebug(webcam_settings_kcm) << "QWebcamSettings::populateDeviceList current format index = " << m_current_device->getFormatIndex() << "autofocus" << m_current_device->getAutoFocus();
 	}
-	
-	
+	m_devicename_list_model->setStringList(m_devicename_list);
 }
 
+QStringListModel* QWebcamSettings::getDeviceList(){
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::getDeviceList " << this->engine();
+	this->engine()->rootContext()->setContextProperty("device_list_model", m_devicename_list_model);
+	return m_devicename_list_model;
+}
+
+QString QWebcamSettings::getSelectedDeviceName(){
+	return m_current_device->getVideoDeviceName().simplified();
+}
+
+QString QWebcamSettings::getSelectedDevicePath(){
+	return m_current_device->getVideoDevicePath().simplified();
+}
 
 VideoDevice* QWebcamSettings::getDeviceFromIndex(int index) {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::getDeviceFromIndex";

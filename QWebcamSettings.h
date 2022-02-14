@@ -15,12 +15,17 @@
 #include <QStringList>
 #include <KConfig>
 #include <KConfigGroup>
+#include <QStringListModel>
+#include <QJSValue>
 
 class QWebcamSettings : public KQuickAddons::ConfigModule
 {
     Q_OBJECT
-    Q_PROPERTY(QVariant device_list READ getDeviceList NOTIFY deviceIndexChanged)
+    Q_PROPERTY(QStringListModel* device_list_model READ getDeviceList NOTIFY deviceIndexChanged)
     Q_PROPERTY(int deviceIndex READ getDeviceIndex WRITE setDeviceIndex NOTIFY deviceIndexChanged)
+    Q_PROPERTY(QString device_info_name READ getSelectedDeviceName NOTIFY deviceIndexChanged)
+    Q_PROPERTY(QString device_info_path READ getSelectedDevicePath NOTIFY deviceIndexChanged)
+    
 
     Q_PROPERTY(QStringList format_list READ getFormatList NOTIFY formatIndexChanged)
     Q_PROPERTY(int formatIndex READ getFormatIndex WRITE setFormatIndex NOTIFY formatIndexChanged)
@@ -67,10 +72,12 @@ class QWebcamSettings : public KQuickAddons::ConfigModule
 public:
     QWebcamSettings(QObject *parent, const QVariantList &args);
     virtual ~QWebcamSettings() override = default;
-    QVariant getDeviceList(){return QVariant::fromValue(m_devicename_list);};
+    QStringListModel* getDeviceList();
     QStringList getFormatList(){return this->m_current_device->getFormatList();};
     void populateDeviceList();
     int getDeviceIndex(){return m_device_index;};
+    QString getSelectedDeviceName();
+    QString getSelectedDevicePath();
     int getFormatIndex(){return this->m_current_device->getFormatIndex();};
     qreal getBrightness() {return this->m_current_device->getBrightness();};
     qreal getBrightnessMin() {return this->m_current_device->getBrightnessMin();};
@@ -133,6 +140,7 @@ Q_SIGNALS:
 private:
     VideoDevice* getDeviceFromIndex(int);
     QStringList m_devicename_list;
+    QStringListModel *m_devicename_list_model;
     QList<VideoDevice*> m_device_list;
     VideoDevice *m_current_device;
     QStringList m_current_format_list;
