@@ -24,6 +24,7 @@ K_PLUGIN_CLASS_WITH_JSON(QWebcamSettings, "metadata.json")
 
 QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
     : KQuickAddons::ConfigModule(parent, args)
+	, m_devicename_list_model(new QStringListModel(this))
 {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::QWebcamSettings";
     KAboutData *aboutData = new KAboutData(QStringLiteral("kcm_webcam_settings"),
@@ -39,9 +40,8 @@ QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
 
     setAboutData(aboutData);
     setButtons(Apply | Default);
+	setNeedsSave(false);
 	populateDeviceList();
-	qCDebug(webcam_settings_kcm) << "QWebcamSettings::QWebcamSettings current format index = " << m_current_device->getFormatIndex() << "autofocus" << m_current_device->getAutoFocus();
-	
 }
 
 void QWebcamSettings::save() {
@@ -59,6 +59,7 @@ void QWebcamSettings::save() {
 		devconf.writeEntry("VendorId",dev->getVideoDeviceVendorId());
 		devconf.writeEntry("ModelId",dev->getVideoDeviceModelId());
 		devconf.writePathEntry("Path",dev->getVideoDevicePath());
+		devconf.writeEntry("FormatIndex",dev->getFormatIndex());
 		devconf.writeEntry("CtrlBrightnessValue",dev->getBrightness());
 		devconf.writeEntry("CtrlBrightnessVisible",dev->getBrightnessVisible());
 		devconf.writeEntry("CtrlContrastValue",dev->getContrast());
@@ -118,6 +119,7 @@ void QWebcamSettings::load() {
 			if(dev->setAbsoluteZoom(devconf.readEntry("CtrlAbsoluteZoomValue").toDouble())){Q_EMIT absoluteZoomChanged();}
 			if(dev->setAutoFocus(devconf.readEntry("CtrlAutoFocusValue").toInt())){Q_EMIT autoFocusChanged();}
 			if(dev->setFocus(devconf.readEntry("CtrlAbsoluteFocusValue").toInt())){Q_EMIT focusChanged();}
+			if(dev->setFormatIndex(devconf.readEntry("FormatIndex").toInt())){Q_EMIT formatIndexChanged();}
 		}
 	}
 	setNeedsSave(false);
@@ -183,10 +185,30 @@ void QWebcamSettings::populateDeviceList() {
 		setDeviceIndex(0);
 		qCDebug(webcam_settings_kcm) << "QWebcamSettings::populateDeviceList current format index = " << m_current_device->getFormatIndex() << "autofocus" << m_current_device->getAutoFocus();
 	}
-	
-	
+	m_devicename_list_model->setStringList(m_devicename_list);
 }
 
+QStringListModel* QWebcamSettings::getDeviceList(){
+	this->engine()->rootContext()->setContextProperty("device_list_model", m_devicename_list_model);
+	return m_devicename_list_model;
+}
+
+QString QWebcamSettings::getSelectedDeviceName(){
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::getSelectedDeviceName " << m_current_device->getVideoDeviceName();
+	return m_current_device->getVideoDeviceName().simplified();
+}
+
+QString QWebcamSettings::getSelectedDevicePath(){
+	return m_current_device->getVideoDevicePath().simplified();
+}
+
+QString QWebcamSettings::getSelectedDeviceVendorId(){
+	return m_current_device->getVideoDeviceVendorId().simplified();
+}
+
+QString QWebcamSettings::getSelectedDeviceModelId(){
+	return m_current_device->getVideoDeviceModelId().simplified();
+}
 
 VideoDevice* QWebcamSettings::getDeviceFromIndex(int index) {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::getDeviceFromIndex";
@@ -205,10 +227,12 @@ VideoDevice* QWebcamSettings::getDeviceFromIndex(int index) {
 
 
 void QWebcamSettings::setDeviceIndex(int devindex) {
-	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setDeviceIndex";
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setDeviceIndex " << devindex;
 	m_device_index = devindex;
 	m_current_device = getDeviceFromIndex(devindex);
+	m_format_index = m_current_device->getFormatIndex();
 	qCDebug(webcam_settings_kcm) << "Selected device " << this->m_current_device->getVideoDeviceName();
+	qCDebug(webcam_settings_kcm) << "format index " << this->m_current_device->getFormatIndex();
 	Q_EMIT deviceIndexChanged();
 	Q_EMIT formatIndexChanged();
 	Q_EMIT absoluteZoomChanged();
@@ -223,11 +247,10 @@ void QWebcamSettings::setDeviceIndex(int devindex) {
 }
 
 void QWebcamSettings::setFormatIndex(int fmtindex) {
-	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setFormatIndex";
 	bool save_needed = this->m_current_device->setFormatIndex(fmtindex);
 	Q_EMIT formatIndexChanged();
 	if (save_needed){setNeedsSave(true);}
-	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setFormatIndex" << m_current_device->getCurrentFormatName() << m_current_device->getCurrentFormatWidth() << m_current_device->getCurrentFormatHeight();
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setFormatIndex "<< fmtindex << m_current_device->getCurrentFormatName() << m_current_device->getCurrentFormatWidth() << m_current_device->getCurrentFormatHeight();
 }
 
 void QWebcamSettings::setAbsoluteZoom(double zoom) {
