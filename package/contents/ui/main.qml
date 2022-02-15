@@ -57,7 +57,11 @@ KCM.SimpleKCM {
                             anchors.fill: parent
                             onClicked: {
                                 cameraList.currentIndex = index
+                                //camera.stop()
                                 kcm.setDeviceIndex(cameraList.currentIndex)
+                                camera.deviceId = kcm.device_info_path
+                                formatList.currentIndex = kcm.formatIndex
+                                //camera.start()
                             }
                         }
                     }
@@ -148,30 +152,28 @@ KCM.SimpleKCM {
             }
         }
         Kirigami.FormLayout {
+            id: formId
             Controls.CheckBox {
+                visible: false //to enable when it works
                 implicitWidth: 217
                 implicitHeight: 45
                 id: previewCheckbox
                 checked: false
                 text: qsTr("Preview Webcam")
-                onClicked: {
-                    checked = !checked
-                    previewSpace.visible = checked
-                }
             }
             Basic.Item {
                 id: previewSpace
-                visible: false
+                visible: previewCheckbox.checked
                 implicitWidth: 320
                 implicitHeight: 180
                 VideoOutput {
+                    id: previewOutput
                     visible: previewSpace.visible
                     source: camera
                     anchors.fill: parent
                     Camera {
                         id: camera
-                        deviceId: kcm.device_info_name
-                        
+                        deviceId: kcm.device_info_path
                     }
                 }
             }
