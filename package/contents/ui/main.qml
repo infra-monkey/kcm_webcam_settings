@@ -88,7 +88,7 @@ KCM.SimpleKCM {
                     Controls.Label {
                         Layout.fillWidth: true
                         horizontalAlignment: Basic.Text.AlignRight
-                        wrapMode: Text.WordWrap
+                        wrapMode: Basic.Text.WordWrap
                         id: deviceInfoName
                         text: kcm.device_info_name
                         color: Kirigami.Theme.textColor
@@ -105,7 +105,7 @@ KCM.SimpleKCM {
                     Controls.Label {
                         Layout.fillWidth: true
                         horizontalAlignment: Basic.Text.AlignRight
-                        wrapMode: Text.WordWrap
+                        wrapMode: Basic.Text.WordWrap
                         id: deviceInfoPath
                         text: kcm.device_info_path
                         color: Kirigami.Theme.textColor
@@ -122,7 +122,7 @@ KCM.SimpleKCM {
                     Controls.Label {
                         Layout.fillWidth: true
                         horizontalAlignment: Basic.Text.AlignRight
-                        wrapMode: Text.WordWrap
+                        wrapMode: Basic.Text.WordWrap
                         id: deviceInfoVendorId
                         text: kcm.device_info_vendorid
                         color: Kirigami.Theme.textColor
@@ -139,7 +139,7 @@ KCM.SimpleKCM {
                     Controls.Label {
                         Layout.fillWidth: true
                         horizontalAlignment: Basic.Text.AlignRight
-                        wrapMode: Text.WordWrap
+                        wrapMode: Basic.Text.WordWrap
                         id: deviceInfoModelId
                         text: kcm.device_info_modelid
                         color: Kirigami.Theme.textColor
@@ -157,6 +157,22 @@ KCM.SimpleKCM {
                 onClicked: {
                     checked = !checked
                     previewSpace.visible = checked
+                }
+            }
+            Basic.Item {
+                id: previewSpace
+                visible: false
+                implicitWidth: 320
+                implicitHeight: 180
+                VideoOutput {
+                    visible: previewSpace.visible
+                    source: camera
+                    anchors.fill: parent
+                    Camera {
+                        id: camera
+                        deviceId: kcm.device_info_name
+                        
+                    }
                 }
             }
 
