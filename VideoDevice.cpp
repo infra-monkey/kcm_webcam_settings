@@ -222,13 +222,15 @@ void VideoDevice::initializeFormats() {
                 list.append(width);
                 list.append(height);
                 list.append(framerate);
-                m_device_formats << QStringList(list);
-                m_format_list.append(fmt + " - " + width + "x" + height + " - (" + framerate + " fps)");
-                if (fmt.toStdString() == current_fmt && width.toStdString() == current_width && height.toStdString() == current_height){
-                    setFormatIndex(i);
-                    qCDebug(webcam_settings_kcm) << "VideoDevice::initializeFormats set index  " << m_current_format_index;
+                if (!m_device_formats.contains(list)){
+                    m_device_formats << QStringList(list);
+                    m_format_list.append(fmt + " - " + width + "x" + height + " - (" + framerate + " fps)");
+                    if (fmt.toStdString() == current_fmt && width.toStdString() == current_width && height.toStdString() == current_height){
+                        setFormatIndex(i);
+                        qCDebug(webcam_settings_kcm) << "VideoDevice::initializeFormats set index  " << m_current_format_index;
+                    }
+                    i++;
                 }
-                i++;
             }
         }
     }
