@@ -148,6 +148,18 @@ KCM.SimpleKCM {
             }
         }
         Kirigami.FormLayout {
+            Controls.CheckBox {
+                implicitWidth: 217
+                implicitHeight: 45
+                id: previewCheckbox
+                checked: false
+                text: qsTr("Preview Webcam")
+                onClicked: {
+                    checked = !checked
+                    previewSpace.visible = checked
+                }
+            }
+
             Controls.ComboBox {
                 id: formatList
                 Layout.fillWidth: true
