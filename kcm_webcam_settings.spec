@@ -15,6 +15,7 @@ BuildRequires: kf5-kdeclarative-devel >= %{kf5_version}
 BuildRequires: qt5-qtsvg-devel >= %{qt5_version}
 BuildRequires: kf5-plasma-devel >= %{kf5_version}
 BuildRequires: qt5-qtmultimedia-devel >= %{qt5_version}
+BuildRequires: kf5-rpm-macros >= %{kf5_version_min}
 Requires: v4l-utils
 Requires: kf5-ki18n >= %{kf5_version}
 Requires: kf5-kcmutils >= %{kf5_version}
@@ -41,7 +42,7 @@ This module for systemsettings in KDE Plasma 5.23+ allows to configure Video4Lin
 %{_kf5_libexecdir}/kauth/udevhelper
 %{_datadir}/dbus-1/system.d/kcm.webcam.settings.udevhelper.conf
 %{_datadir}/dbus-1/system-services/kcm.webcam.settings.udevhelper.service
-%{%_qt5_plugindir}/kcms/kcm_webcam_settings.so
+%{_qt5_plugindir}/kcms/kcm_webcam_settings.so
 %{_datadir}/kservices5/kcm_webcam_settings.desktop
 %{_datadir}/kpackage/kcms/kcm_webcam_settings
 %{_datadir}/kpackage/kcms/kcm_webcam_settings/metadata.desktop
