@@ -54,3 +54,14 @@ The settings are set system wide. This means that if multiple users are configur
 
 The kcm need root permission to write the udev rules.
 An action is create allowing one function to use root privileges. This function only writes in `/etc/udev/rules.d/99-persistent-webcam.rules` and reloads the udev rules.
+
+# Packaging
+
+The rpm spec file is build for the rpkg builder.
+
+I maintain rpm for Fedora in [Copr](https://copr.fedorainfracloud.org/coprs/monkeybizness/kcm_webcam_settings/).
+
+Supported platforms are :
+- Fedora 34 (x86_64,aarch64)
+- Fedora 35 (x86_64,aarch64)
+- Fedora Rawhide (x86_64,aarch64)
