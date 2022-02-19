@@ -297,7 +297,7 @@ bool VideoDevice::setBrightness(qreal value){
         save_needed = true;
         m_ctrl_brightness["value"] = value;
         m_current_camera->imageProcessing()->setBrightness(value);
-        //applyControlValue(true,"brightness",value,m_ctrl_brightness["max"],m_ctrl_brightness["step"]);
+        applyControlValue(true,"brightness",value,m_ctrl_brightness["max"],m_ctrl_brightness["step"]);
     }
     return save_needed;
 }
@@ -346,7 +346,7 @@ void VideoDevice::setZoom(qreal optical_value,qreal digital_value){
 bool VideoDevice::setOpticalZoom(qreal value){
     qCDebug(webcam_settings_kcm) << "VideoDevice::setOpticalZoom" << value;
     bool save_needed = false;
-    if (m_ctrl_zoom_optical_visible && value != m_ctrl_zoom_optical["value"]){
+    if (m_ctrl_zoom_optical_visible && (int)value != (int)m_ctrl_zoom_optical["value"]){
         save_needed = true;
         m_ctrl_zoom_optical["value"] = value;
         setZoom(value,m_ctrl_zoom_digital["value"]);
@@ -357,10 +357,11 @@ bool VideoDevice::setOpticalZoom(qreal value){
 bool VideoDevice::setDigitalZoom(qreal value){
     qCDebug(webcam_settings_kcm) << "VideoDevice::setDigitalZoom" << value;
     bool save_needed = false;
-    if (m_ctrl_zoom_digital_visible && value != m_ctrl_zoom_digital["value"]){
+    if (m_ctrl_zoom_digital_visible && (int)value != (int)m_ctrl_zoom_digital["value"]){
         save_needed = true;
         m_ctrl_zoom_digital["value"] = value;
         setZoom(m_ctrl_zoom_optical["value"],value);
+        applyControlValue(false,"zoom_absolute",value,m_ctrl_saturation["max"],m_ctrl_saturation["step"]);
     }
     return save_needed;
 }
@@ -418,9 +419,9 @@ bool VideoDevice::resetCrtlToDefault(QString ctrl_name) {
 QString VideoDevice::getCtrlOptions(){
     bool first_control = true;
     QString ctrl_options = QString();
-    if (getOpticalZoomVisible()) {
+    if (getDigitalZoomVisible()) {
         if (!first_control){ctrl_options.append(",");}
-        ctrl_options.append("zoom_absolute=" + QString::number(getControlValueV4L(false,m_ctrl_zoom_optical["value"],m_ctrl_zoom_optical["max"],m_ctrl_zoom_optical["step"])));
+        ctrl_options.append("zoom_absolute=" + QString::number(getControlValueV4L(false,m_ctrl_zoom_digital["value"],m_ctrl_zoom_digital["max"],m_ctrl_zoom_digital["step"])));
         first_control=false;
         }
     if (getBrightnessVisible()) {

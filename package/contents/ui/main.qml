@@ -159,7 +159,14 @@ KCM.SimpleKCM {
                 implicitHeight: 45
                 id: previewCheckbox
                 checked: false
-                text: qsTr("Preview Webcam")
+                text: i18n("Preview webcam")
+                onToggled: {
+                    if (checked) {
+                        camera.start();
+                    } else {
+                        camera.stop();
+                    }
+                }
             }
             Basic.Item {
                 id: previewSpace
@@ -174,7 +181,10 @@ KCM.SimpleKCM {
                     Camera {
                         id: camera
                         deviceId: kcm.device_info_path
-                        digitalZoom: kcm.digital_zoom
+                        digitalZoom: kcm.digital_zoom_prev
+                        Basic.Component.onCompleted: {
+                            camera.stop();
+                        }
                     }
                 }
             }

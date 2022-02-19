@@ -65,6 +65,7 @@ class QWebcamSettings : public KQuickAddons::ConfigModule
     Q_PROPERTY(qreal optical_zoom_visible READ getOpticalZoomVisible NOTIFY deviceIndexChanged)
 
     Q_PROPERTY(qreal digital_zoom READ getDigitalZoom WRITE setDigitalZoom NOTIFY digitalZoomChanged)
+    Q_PROPERTY(qreal digital_zoom_prev READ getDigitalZoomPrev NOTIFY digitalZoomChanged)
     Q_PROPERTY(qreal digital_zoom_max READ getDigitalZoomMax NOTIFY deviceIndexChanged)
     Q_PROPERTY(qreal digital_zoom_visible READ getDigitalZoomVisible NOTIFY deviceIndexChanged)
 
@@ -117,6 +118,7 @@ public:
     qreal getOpticalZoomMax() {return this->m_current_device->getOpticalZoomMax();};
     bool getOpticalZoomVisible() {return this->m_current_device->getOpticalZoomVisible();};
     qreal getDigitalZoom() {return this->m_current_device->getDigitalZoom();};
+    qreal getDigitalZoomPrev() {qCDebug(webcam_settings_kcm) << "QWebcamSettings::getDigitalZoomPrev" << 1+(this->m_current_device->getDigitalZoom()/10);return 1+(this->m_current_device->getDigitalZoom()/10);};
     qreal getDigitalZoomMax() {return this->m_current_device->getDigitalZoomMax();};
     bool getDigitalZoomVisible() {return this->m_current_device->getDigitalZoomVisible();};
     int getAutoFocus(){return this->m_current_device->getAutoFocus();};
