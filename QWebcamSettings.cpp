@@ -68,8 +68,10 @@ void QWebcamSettings::save() {
 		devconf.writeEntry("CtrlSharpnessVisible",dev->getSharpnessVisible());
 		devconf.writeEntry("CtrlSaturationValue",dev->getSaturation());
 		devconf.writeEntry("CtrlSaturationVisible",dev->getSaturationVisible());
-		devconf.writeEntry("CtrlAbsoluteZoomValue",dev->getAbsoluteZoom());
-		devconf.writeEntry("CtrlAbsoluteZoomVisible",dev->getAbsoluteZoomVisible());
+		devconf.writeEntry("CtrlOpticalZoomValue",dev->getOpticalZoom());
+		devconf.writeEntry("CtrlOpticalZoomVisible",dev->getOpticalZoomVisible());
+		devconf.writeEntry("CtrlDigitalZoomValue",dev->getDigitalZoom());
+		devconf.writeEntry("CtrlDigitalZoomVisible",dev->getDigitalZoomVisible());
 		devconf.writeEntry("CtrlAutoFocusValue",dev->getAutoFocus());
 		devconf.writeEntry("CtrlAutoFocusVisible",dev->getAutoFocusVisible());
 		devconf.writeEntry("CtrlAbsoluteFocusValue",dev->getFocus());
@@ -110,26 +112,33 @@ void QWebcamSettings::load() {
     KConfig config("kcmwebcamsettingsrc");
 	for (VideoDevice * dev : m_device_list)
     {
+		qCDebug(webcam_settings_kcm) << "QWebcamSettings::load for device " << dev->getVideoDeviceSerialId();
 		if (config.groupList().contains(dev->getVideoDeviceSerialId())){
+			qCDebug(webcam_settings_kcm) << "QWebcamSettings::load configuration detected for device " << dev->getVideoDeviceSerialId();
 			KConfigGroup devconf(&config, dev->getVideoDeviceSerialId());
 			if(dev->setBrightness(devconf.readEntry("CtrlBrightnessValue").toDouble())){Q_EMIT brightnessChanged();}
 			if(dev->setContrast(devconf.readEntry("CtrlContrastValue").toDouble())){Q_EMIT contrastChanged();}
 			if(dev->setSharpness(devconf.readEntry("CtrlSharpnessValue").toDouble())){Q_EMIT sharpnessChanged();}
 			if(dev->setSaturation(devconf.readEntry("CtrlSaturationValue").toDouble())){Q_EMIT saturationChanged();}
-			if(dev->setAbsoluteZoom(devconf.readEntry("CtrlAbsoluteZoomValue").toDouble())){Q_EMIT absoluteZoomChanged();}
+			if(dev->setOpticalZoom(devconf.readEntry("CtrlOpticalZoomValue").toDouble())){Q_EMIT opticalZoomChanged();}
+			if(dev->setDigitalZoom(devconf.readEntry("CtrlDigitalZoomValue").toDouble())){Q_EMIT digitalZoomChanged();}
 			if(dev->setAutoFocus(devconf.readEntry("CtrlAutoFocusValue").toInt())){Q_EMIT autoFocusChanged();}
 			if(dev->setFocus(devconf.readEntry("CtrlAbsoluteFocusValue").toInt())){Q_EMIT focusChanged();}
 			if(dev->setFormatIndex(devconf.readEntry("FormatIndex").toInt())){Q_EMIT formatIndexChanged();}
+		} else {
+
+			qCDebug(webcam_settings_kcm) << "QWebcamSettings::load configuration not detected for device " << dev->getVideoDeviceSerialId();
 		}
 	}
 	setNeedsSave(false);
-	
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::load end of function";
 }
 
 void QWebcamSettings::defaults() {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::defaults reset to default settings";
 	bool save_needed = m_current_device->resetToDefault();
-	Q_EMIT absoluteZoomChanged();
+	Q_EMIT opticalZoomChanged();
+	Q_EMIT digitalZoomChanged();
 	Q_EMIT brightnessChanged();
 	Q_EMIT contrastChanged();
 	Q_EMIT saturationChanged();
@@ -166,7 +175,7 @@ void QWebcamSettings::populateDeviceList() {
 		}
 		if (!m_devicename_list.contains(cameraInfo.description())){
 			if (!m_config_grouplist.contains(serial)){
-				VideoDevice* new_device = new VideoDevice(serial,cameraInfo.description(),cameraInfo.deviceName(),vendorid,modelid);
+				VideoDevice* new_device = new VideoDevice(cameraInfo,serial,vendorid,modelid);
 				m_device_list.append(new_device);
 				// m_device_list.append(VideoDevice(serial,cameraInfo.description(),cameraInfo.deviceName(),vendorid,modelid));
 				m_devicename_list << cameraInfo.description();
@@ -235,7 +244,8 @@ void QWebcamSettings::setDeviceIndex(int devindex) {
 	qCDebug(webcam_settings_kcm) << "format index " << this->m_current_device->getFormatIndex();
 	Q_EMIT deviceIndexChanged();
 	Q_EMIT formatIndexChanged();
-	Q_EMIT absoluteZoomChanged();
+	Q_EMIT opticalZoomChanged();
+	Q_EMIT digitalZoomChanged();
 	Q_EMIT brightnessChanged();
 	Q_EMIT contrastChanged();
 	Q_EMIT saturationChanged();
@@ -253,10 +263,17 @@ void QWebcamSettings::setFormatIndex(int fmtindex) {
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setFormatIndex "<< fmtindex << m_current_device->getCurrentFormatName() << m_current_device->getCurrentFormatWidth() << m_current_device->getCurrentFormatHeight();
 }
 
-void QWebcamSettings::setAbsoluteZoom(double zoom) {
-	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setAbsoluteZoom value: " << QString::number(zoom);
-	bool save_needed = m_current_device->setAbsoluteZoom(zoom);
-	Q_EMIT absoluteZoomChanged();
+void QWebcamSettings::setOpticalZoom(double zoom) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setOpticalZoom value: " << QString::number(zoom);
+	bool save_needed = m_current_device->setOpticalZoom(zoom);
+	Q_EMIT opticalZoomChanged();
+	if (save_needed){setNeedsSave(true);}
+}
+
+void QWebcamSettings::setDigitalZoom(double zoom) {
+	qCDebug(webcam_settings_kcm) << "QWebcamSettings::setDigitalZoom value: " << QString::number(zoom);
+	bool save_needed = m_current_device->setDigitalZoom(zoom);
+	Q_EMIT digitalZoomChanged();
 	if (save_needed){setNeedsSave(true);}
 }
 
@@ -319,7 +336,10 @@ void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
 		if (ret) {Q_EMIT saturationChanged();}
     }
     if (ctrl_name == "zoom_absolute") {
-		if (ret) {Q_EMIT absoluteZoomChanged();}
+		if (ret) {
+			Q_EMIT opticalZoomChanged();
+			Q_EMIT digitalZoomChanged();
+		}
     }
     if (ctrl_name == "focus_automatic_continuous") {
 		if (ret) {Q_EMIT autoFocusChanged();}
