@@ -30,6 +30,7 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
     PlasmaQuick
     Auth
 )
+ki18n_install(po)
 remove_definitions(
     -DQT_NO_CAST_FROM_ASCII
     -DQT_NO_CAST_TO_ASCII
@@ -60,7 +61,6 @@ target_link_libraries(kcm_webcam_settings
     Qt5::Multimedia
 )
 target_compile_options (kcm_webcam_settings PUBLIC -fexceptions)
-#target_link_libraries(kcm_webcam_settings -lv4l2)
 kcoreaddons_desktop_to_json(kcm_webcam_settings "package/metadata.desktop")
 
 install(TARGETS kcm_webcam_settings DESTINATION ${KDE_INSTALL_PLUGINDIR}/kcms)

@@ -30,7 +30,7 @@ KCM.SimpleKCM {
                 Kirigami.Heading {
                     Layout.fillWidth: true
                     level: 2
-                    text: "Device Selection"
+                    text: i18n("Device Selection")
                     color: Kirigami.Theme.textColor
                 }
 
@@ -73,7 +73,7 @@ KCM.SimpleKCM {
                 Kirigami.Heading {
                     Layout.fillWidth: true
                     level: 2
-                    text: "Device Information"
+                    text: i18n("Device Information")
                     color: Kirigami.Theme.textColor
                 }
                 Kirigami.Separator {
@@ -85,7 +85,7 @@ KCM.SimpleKCM {
                     Kirigami.Heading {
                         Layout.fillWidth: true
                         level: 3
-                        text: "Device Name"
+                        text: i18n("Device Name")
                         color: Kirigami.Theme.textColor
                     }
 
@@ -103,7 +103,7 @@ KCM.SimpleKCM {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignLeft
                         level: 3
-                        text: "Device Path"
+                        text: i18n("Device Path")
                         color: Kirigami.Theme.textColor
                     }
                     Controls.Label {
@@ -120,7 +120,7 @@ KCM.SimpleKCM {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignLeft
                         level: 3
-                        text: "Device Vendor Id"
+                        text: i18n("Device Vendor Id")
                         color: Kirigami.Theme.textColor
                     }
                     Controls.Label {
@@ -137,7 +137,7 @@ KCM.SimpleKCM {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignLeft
                         level: 3
-                        text: "Device Model Id"
+                        text: i18n("Device Model Id")
                         color: Kirigami.Theme.textColor
                     }
                     Controls.Label {
@@ -197,7 +197,7 @@ KCM.SimpleKCM {
                 id: formatList
                 Layout.fillWidth: true
                 editable: false
-                Kirigami.FormData.label: "Format list:"
+                Kirigami.FormData.label: i18n("Format list:")
                 model: kcm.format_list
                 currentIndex: kcm.formatIndex
                 onActivated: {
@@ -243,7 +243,7 @@ KCM.SimpleKCM {
                 }
                 Controls.Button {
                     id: brightnessResetCtrl
-                    text: i18n("Reset To Default")
+                    text: i18n("Default")
                     onClicked: kcm.resetCrtlToDefault("brightness")
                 }
             }
@@ -284,7 +284,7 @@ KCM.SimpleKCM {
                 }
                 Controls.Button {
                     id: contrastResetCtrl
-                    text: i18n("Reset To Default")
+                    text: i18n("Default")
                     onClicked: kcm.resetCrtlToDefault("contrast")
                 }
             }
@@ -326,7 +326,7 @@ KCM.SimpleKCM {
                 }
                 Controls.Button {
                     id: sharpnessResetCtrl
-                    text: i18n("Reset To Default")
+                    text: i18n("Default")
                     onClicked: kcm.resetCrtlToDefault("sharpness")
                 }
             }
@@ -368,7 +368,7 @@ KCM.SimpleKCM {
                 }
                 Controls.Button {
                     id: saturationResetCtrl
-                    text: i18n("Reset To Default")
+                    text: i18n("Default")
                     onClicked: kcm.resetCrtlToDefault("saturation")
                 }
             }
@@ -409,7 +409,7 @@ KCM.SimpleKCM {
                 }
                 Controls.Button {
                     id: opticalZoomResetCtrl
-                    text: i18n("Reset To Default")
+                    text: i18n("Default")
                     onClicked: kcm.resetCrtlToDefault("optical_absolute")
                 }
             }
@@ -451,7 +451,7 @@ KCM.SimpleKCM {
                 }
                 Controls.Button {
                     id: digitalZoomResetCtrl
-                    text: i18n("Reset To Default")
+                    text: i18n("Default")
                     onClicked: kcm.resetCrtlToDefault("digital_absolute")
                 }
             }
@@ -477,7 +477,7 @@ KCM.SimpleKCM {
                 }
                 Controls.Button {
                     id: autoFocusResetCtrl
-                    text: i18n("Reset To Default")
+                    text: i18n("Default")
                     onClicked: kcm.resetCrtlToDefault("focus_automatic_continuous")
                 }
             }
@@ -508,7 +508,7 @@ KCM.SimpleKCM {
                 }
                 Controls.Button {
                     id: absoluteFocusResetCtrl
-                    text: i18n("Reset To Default")
+                    text: i18n("Default")
                     onClicked: kcm.resetCrtlToDefault("focus_absolute")
                 }
             }
