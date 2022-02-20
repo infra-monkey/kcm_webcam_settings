@@ -34,7 +34,7 @@ for cat in $catalogs; do
 	catLocale=`basename ${cat%.*}`
 	msgfmt -o "${catLocale}.mo" "$cat"
 
-	installPath="$DIR/../contents/locale/${catLocale}/LC_MESSAGES/${projectName}.mo"
+	installPath="$DIR/locale/${catLocale}/LC_MESSAGES/${projectName}.mo"
 
 	echo "[build] Install to ${installPath}"
 	mkdir -p "$(dirname "$installPath")"
