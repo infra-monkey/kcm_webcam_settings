@@ -154,12 +154,19 @@ KCM.SimpleKCM {
         Kirigami.FormLayout {
             id: formId
             Controls.CheckBox {
-                visible: false //to enable when it works
+                visible: true
                 implicitWidth: 217
                 implicitHeight: 45
                 id: previewCheckbox
                 checked: false
-                text: qsTr("Preview Webcam")
+                text: i18n("Preview webcam")
+                onToggled: {
+                    if (checked) {
+                        camera.start();
+                    } else {
+                        camera.stop();
+                    }
+                }
             }
             Basic.Item {
                 id: previewSpace
@@ -174,6 +181,10 @@ KCM.SimpleKCM {
                     Camera {
                         id: camera
                         deviceId: kcm.device_info_path
+                        digitalZoom: kcm.digital_zoom_prev
+                        Basic.Component.onCompleted: {
+                            camera.stop();
+                        }
                     }
                 }
             }
@@ -194,27 +205,37 @@ KCM.SimpleKCM {
             RowLayout {
                 id: brightnessCtrl
                 visible: kcm.brightness_visible
-                //Layout.fillWidth: true
-                //Layout.maximumWidth: Kirigami.Units.gridUnit * 16
+                Layout.fillWidth: true
                 Kirigami.FormData.label: i18n("Brightness:")
                 Controls.Slider {
                     id: brightnessSlide
-                    from: kcm.brightness_min
-                    to: kcm.brightness_max
-                    stepSize: kcm.brightness_step
+                    from: -1.0
+                    to: 1.0
                     value: kcm.brightness
                     onMoved: kcm.brightness = value
                     live: true
                 }
                 Controls.SpinBox {
-                    implicitWidth: 100
-                    implicitHeight: 33
+                    //implicitWidth: 100
+                    //implicitHeight: 33
                     id: brightnessSpinbox
-                    from: kcm.brightness_min
-                    to: kcm.brightness_max
-                    stepSize: kcm.brightness_step
-                    value: kcm.brightness
-                    onValueModified: kcm.brightness = value
+                    from: -100
+                    value: kcm.brightness_spin
+                    to: 100
+                    stepSize: 5
+                    property int decimals: 2
+                    property real realValue: value / 100
+                    validator: Basic.DoubleValidator {
+                        bottom: Math.min(brightnessSpinbox.from, brightnessSpinbox.to)
+                        top:  Math.max(brightnessSpinbox.from, brightnessSpinbox.to)
+                    }
+                    textFromValue: function(value, locale) {
+                        return Number(value / 100).toLocaleString(locale, 'f', brightnessSpinbox.decimals)
+                    }
+                    valueFromText: function(text, locale) {
+                        return Number.fromLocaleString(locale, text) * 100
+                    }
+                    onValueModified: kcm.brightness = realValue
                 }
                 Controls.Button {
                     id: brightnessResetCtrl
@@ -225,27 +246,37 @@ KCM.SimpleKCM {
             RowLayout {
                 id: contrastCtrl
                 visible: kcm.contrast_visible
-                //Layout.fillWidth: true
-                //Layout.maximumWidth: Kirigami.Units.gridUnit * 16
+                Layout.fillWidth: true
                 Kirigami.FormData.label: i18n("Contrast:")
                 Controls.Slider {
                     id: contrastSlide
-                    from: kcm.contrast_min
-                    to: kcm.contrast_max
-                    stepSize: kcm.contrast_step
+                    from: -1.0
+                    to: 1.0
                     value: kcm.contrast
                     onMoved: kcm.contrast = value
                     live: true
                 }
                 Controls.SpinBox {
-                    implicitWidth: 100
-                    implicitHeight: 33
+                    //implicitWidth: 100
+                    //implicitHeight: 33
                     id: contrastSpinbox
-                    from: kcm.contrast_min
-                    to: kcm.contrast_max
-                    stepSize: kcm.contrast_step
-                    value: kcm.contrast
-                    onValueModified: kcm.contrast = value
+                    from: -100
+                    value: kcm.contrast_spin
+                    to: 100
+                    stepSize: 5
+                    property int decimals: 2
+                    property real realValue: value / 100
+                    validator: Basic.DoubleValidator {
+                        bottom: Math.min(contrastSpinbox.from, contrastSpinbox.to)
+                        top:  Math.max(contrastSpinbox.from, contrastSpinbox.to)
+                    }
+                    textFromValue: function(value, locale) {
+                        return Number(value / 100).toLocaleString(locale, 'f', contrastSpinbox.decimals)
+                    }
+                    valueFromText: function(text, locale) {
+                        return Number.fromLocaleString(locale, text) * 100
+                    }
+                    onValueModified: kcm.contrast = realValue
                 }
                 Controls.Button {
                     id: contrastResetCtrl
@@ -261,22 +292,33 @@ KCM.SimpleKCM {
                 Kirigami.FormData.label: i18n("Sharpness:")
                 Controls.Slider {
                     id: sharpnessSlide
-                    from: kcm.sharpness_min
-                    to: kcm.sharpness_max
-                    stepSize: kcm.sharpness_step
+                    from: -1.0
+                    to: 1.0
                     value: kcm.sharpness
                     onMoved: kcm.sharpness = value
                     live: true
                 }
                 Controls.SpinBox {
-                    implicitWidth: 100
-                    implicitHeight: 33
+                    //implicitWidth: 100
+                    //implicitHeight: 33
                     id: sharpnessSpinbox
-                    from: kcm.sharpness_min
-                    to: kcm.sharpness_max
-                    stepSize: kcm.sharpness_step
-                    value: kcm.sharpness
-                    onValueModified: kcm.sharpness = value
+                    from: -100
+                    value: kcm.sharpness_spin
+                    to: 100
+                    stepSize: 5
+                    property int decimals: 2
+                    property real realValue: value / 100
+                    validator: Basic.DoubleValidator {
+                        bottom: Math.min(sharpnessSpinbox.from, sharpnessSpinbox.to)
+                        top:  Math.max(sharpnessSpinbox.from, sharpnessSpinbox.to)
+                    }
+                    textFromValue: function(value, locale) {
+                        return Number(value / 100).toLocaleString(locale, 'f', sharpnessSpinbox.decimals)
+                    }
+                    valueFromText: function(text, locale) {
+                        return Number.fromLocaleString(locale, text) * 100
+                    }
+                    onValueModified: kcm.sharpness = realValue
                 }
                 Controls.Button {
                     id: sharpnessResetCtrl
@@ -292,22 +334,33 @@ KCM.SimpleKCM {
                 Kirigami.FormData.label: i18n("Saturation:")
                 Controls.Slider {
                     id: saturationSlide
-                    from: kcm.saturation_min
-                    to: kcm.saturation_max
-                    stepSize: kcm.saturation_step
+                    from: -1.0
+                    to: 1.0
                     value: kcm.saturation
                     onMoved: kcm.saturation = value
                     live: true
                 }
                 Controls.SpinBox {
-                    implicitWidth: 100
-                    implicitHeight: 33
+                    //implicitWidth: 100
+                    //implicitHeight: 33
                     id: saturationSpinbox
-                    from: kcm.saturation_min
-                    to: kcm.saturation_max
-                    stepSize: kcm.saturation_step
-                    value: kcm.saturation
-                    onValueModified: kcm.saturation = value
+                    from: -100
+                    value: kcm.saturation_spin
+                    to: 100
+                    stepSize: 5
+                    property int decimals: 2
+                    property real realValue: value / 100
+                    validator: Basic.DoubleValidator {
+                        bottom: Math.min(saturationSpinbox.from, saturationSpinbox.to)
+                        top:  Math.max(saturationSpinbox.from, saturationSpinbox.to)
+                    }
+                    textFromValue: function(value, locale) {
+                        return Number(value / 100).toLocaleString(locale, 'f', saturationSpinbox.decimals)
+                    }
+                    valueFromText: function(text, locale) {
+                        return Number.fromLocaleString(locale, text) * 100
+                    }
+                    onValueModified: kcm.saturation = realValue
                 }
                 Controls.Button {
                     id: saturationResetCtrl
@@ -316,34 +369,87 @@ KCM.SimpleKCM {
                 }
             }
             RowLayout {
-                id: zoomCtrl
-                visible: kcm.absolute_zoom_visible
+                id: opticalZoomCtrl
+                visible: kcm.optical_zoom_visible
                 //Layout.fillWidth: true
                 //Layout.maximumWidth: Kirigami.Units.gridUnit * 16
-                Kirigami.FormData.label: i18n("Absolute Zoom:")
+                Kirigami.FormData.label: i18n("Optical Zoom:")
                 Controls.Slider {
-                    id: absoluteZoomSlide
-                    from: kcm.absolute_zoom_min
-                    to: kcm.absolute_zoom_max
-                    stepSize: kcm.absolute_zoom_step
-                    value: kcm.absolute_zoom
-                    onMoved: kcm.absolute_zoom = value
+                    id: opticalZoomSlide
+                    from: 0
+                    to: kcm.optical_zoom_max
+                    stepSize: 1
+                    value: kcm.optical_zoom
+                    onMoved: kcm.optical_zoom = value
                     live: true
                 }
                 Controls.SpinBox {
-                    implicitWidth: 100
-                    implicitHeight: 33
-                    id: absoluteZoomSpinbox
-                    from: kcm.absolute_zoom_min
-                    to: kcm.absolute_zoom_max
-                    stepSize: kcm.absolute_zoom_step
-                    value: kcm.absolute_zoom
-                    onValueModified: kcm.absolute_zoom = value
+                    //implicitWidth: 100
+                    //implicitHeight: 33
+                    id: opticalZoomSpinbox
+                    from: 0
+                    value: kcm.optical_zoom
+                    to: kcm.optical_zoom_max
+                    //stepSize: 5
+                    property int decimals: 2
+                    validator: Basic.DoubleValidator {
+                        bottom: Math.min(opticalZoomSpinbox.from, opticalZoomSpinbox.to)
+                        top:  Math.max(opticalZoomSpinbox.from, opticalZoomSpinbox.to)
+                    }
+                    textFromValue: function(value, locale) {
+                        return Number(value).toLocaleString(locale, 'f', opticalZoomSpinbox.decimals)
+                    }
+                    valueFromText: function(text, locale) {
+                        return Number.fromLocaleString(locale, text)
+                    }
+                    onValueModified: kcm.optical_zoom = value
                 }
                 Controls.Button {
-                    id: absoluteZoomResetCtrl
+                    id: opticalZoomResetCtrl
                     text: i18n("Reset To Default")
-                    onClicked: kcm.resetCrtlToDefault("zoom_absolute")
+                    onClicked: kcm.resetCrtlToDefault("optical_absolute")
+                }
+            }
+            RowLayout {
+                id: digitalZoomCtrl
+                visible: kcm.digital_zoom_visible
+                //Layout.fillWidth: true
+                //Layout.maximumWidth: Kirigami.Units.gridUnit * 16
+                Kirigami.FormData.label: i18n("Digital Zoom:")
+                Controls.Slider {
+                    id: digitalZoomSlide
+                    from: 0
+                    to: kcm.digital_zoom_max
+                    //stepSize: 1
+                    value: kcm.digital_zoom
+                    onMoved: kcm.digital_zoom = value
+                    live: true
+                }
+                Controls.SpinBox {
+                    //implicitWidth: 100
+                    //implicitHeight: 33
+                    id: digitalZoomSpinbox
+                    from: 0
+                    value: kcm.digital_zoom
+                    to: kcm.digital_zoom_max
+                    //stepSize: 5
+                    property int decimals: 2
+                    validator: Basic.DoubleValidator {
+                        bottom: Math.min(digitalZoomSpinbox.from, digitalZoomSpinbox.to)
+                        top:  Math.max(digitalZoomSpinbox.from, digitalZoomSpinbox.to)
+                    }
+                    textFromValue: function(value, locale) {
+                        return Number(value).toLocaleString(locale, 'f', digitalZoomSpinbox.decimals)
+                    }
+                    valueFromText: function(text, locale) {
+                        return Number.fromLocaleString(locale, text)
+                    }
+                    onValueModified: kcm.digital_zoom = value
+                }
+                Controls.Button {
+                    id: digitalZoomResetCtrl
+                    text: i18n("Reset To Default")
+                    onClicked: kcm.resetCrtlToDefault("digital_absolute")
                 }
             }
             RowLayout {

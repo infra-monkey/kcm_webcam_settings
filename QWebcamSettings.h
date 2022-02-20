@@ -33,34 +33,41 @@ class QWebcamSettings : public KQuickAddons::ConfigModule
     Q_PROPERTY(int formatIndex READ getFormatIndex WRITE setFormatIndex NOTIFY formatIndexChanged)
 
     Q_PROPERTY(qreal brightness READ getBrightness WRITE setBrightness NOTIFY brightnessChanged)
-    Q_PROPERTY(qreal brightness_min READ getBrightnessMin NOTIFY deviceIndexChanged)
-    Q_PROPERTY(qreal brightness_max READ getBrightnessMax NOTIFY deviceIndexChanged)
-    Q_PROPERTY(qreal brightness_step READ getBrightnessStep NOTIFY deviceIndexChanged)
+    Q_PROPERTY(int brightness_spin READ getBrightnessSpin NOTIFY brightnessChanged)
+    // Q_PROPERTY(qreal brightness_min READ getBrightnessMin NOTIFY deviceIndexChanged)
+    // Q_PROPERTY(qreal brightness_max READ getBrightnessMax NOTIFY deviceIndexChanged)
+    // Q_PROPERTY(qreal brightness_step READ getBrightnessStep NOTIFY deviceIndexChanged)
     Q_PROPERTY(qreal brightness_visible READ getBrightnessVisible NOTIFY deviceIndexChanged)
 
     Q_PROPERTY(qreal contrast READ getContrast WRITE setContrast NOTIFY contrastChanged)
-    Q_PROPERTY(qreal contrast_min READ getContrastMin NOTIFY deviceIndexChanged)
-    Q_PROPERTY(qreal contrast_max READ getContrastMax NOTIFY deviceIndexChanged)
-    Q_PROPERTY(qreal contrast_step READ getContrastStep NOTIFY deviceIndexChanged)
+    Q_PROPERTY(int contrast_spin READ getContrastSpin NOTIFY contrastChanged)
+    // Q_PROPERTY(qreal contrast_min READ getContrastMin NOTIFY deviceIndexChanged)
+    // Q_PROPERTY(qreal contrast_max READ getContrastMax NOTIFY deviceIndexChanged)
+    // Q_PROPERTY(qreal contrast_step READ getContrastStep NOTIFY deviceIndexChanged)
     Q_PROPERTY(qreal contrast_visible READ getContrastVisible NOTIFY deviceIndexChanged)
 
     Q_PROPERTY(qreal sharpness READ getSharpness WRITE setSharpness NOTIFY sharpnessChanged)
-    Q_PROPERTY(qreal sharpness_min READ getSharpnessMin NOTIFY deviceIndexChanged)
-    Q_PROPERTY(qreal sharpness_max READ getSharpnessMax NOTIFY deviceIndexChanged)
-    Q_PROPERTY(qreal sharpness_step READ getSharpnessStep NOTIFY deviceIndexChanged)
+    Q_PROPERTY(int sharpness_spin READ getSharpnessSpin NOTIFY sharpnessChanged)
+    // Q_PROPERTY(qreal sharpness_min READ getSharpnessMin NOTIFY deviceIndexChanged)
+    // Q_PROPERTY(qreal sharpness_max READ getSharpnessMax NOTIFY deviceIndexChanged)
+    // Q_PROPERTY(qreal sharpness_step READ getSharpnessStep NOTIFY deviceIndexChanged)
     Q_PROPERTY(qreal sharpness_visible READ getSharpnessVisible NOTIFY deviceIndexChanged)
 
     Q_PROPERTY(qreal saturation READ getSaturation WRITE setSaturation NOTIFY saturationChanged)
-    Q_PROPERTY(qreal saturation_min READ getSaturationMin NOTIFY deviceIndexChanged)
-    Q_PROPERTY(qreal saturation_max READ getSaturationMax NOTIFY deviceIndexChanged)
-    Q_PROPERTY(qreal saturation_step READ getSaturationStep NOTIFY deviceIndexChanged)
+    Q_PROPERTY(int saturation_spin READ getSaturationSpin NOTIFY saturationChanged)
+    // Q_PROPERTY(qreal saturation_min READ getSaturationMin NOTIFY deviceIndexChanged)
+    // Q_PROPERTY(qreal saturation_max READ getSaturationMax NOTIFY deviceIndexChanged)
+    // Q_PROPERTY(qreal saturation_step READ getSaturationStep NOTIFY deviceIndexChanged)
     Q_PROPERTY(qreal saturation_visible READ getSaturationVisible NOTIFY deviceIndexChanged)
 
-    Q_PROPERTY(qreal absolute_zoom READ getAbsoluteZoom WRITE setAbsoluteZoom NOTIFY absoluteZoomChanged)
-    Q_PROPERTY(qreal absolute_zoom_min READ getAbsoluteZoomMin NOTIFY deviceIndexChanged)
-    Q_PROPERTY(qreal absolute_zoom_max READ getAbsoluteZoomMax NOTIFY deviceIndexChanged)
-    Q_PROPERTY(qreal absolute_zoom_step READ getAbsoluteZoomStep NOTIFY deviceIndexChanged)
-    Q_PROPERTY(qreal absolute_zoom_visible READ getAbsoluteZoomVisible NOTIFY deviceIndexChanged)
+    Q_PROPERTY(qreal optical_zoom READ getOpticalZoom WRITE setOpticalZoom NOTIFY opticalZoomChanged)
+    Q_PROPERTY(qreal optical_zoom_max READ getOpticalZoomMax NOTIFY deviceIndexChanged)
+    Q_PROPERTY(qreal optical_zoom_visible READ getOpticalZoomVisible NOTIFY deviceIndexChanged)
+
+    Q_PROPERTY(qreal digital_zoom READ getDigitalZoom WRITE setDigitalZoom NOTIFY digitalZoomChanged)
+    Q_PROPERTY(qreal digital_zoom_prev READ getDigitalZoomPrev NOTIFY digitalZoomChanged)
+    Q_PROPERTY(qreal digital_zoom_max READ getDigitalZoomMax NOTIFY deviceIndexChanged)
+    Q_PROPERTY(qreal digital_zoom_visible READ getDigitalZoomVisible NOTIFY deviceIndexChanged)
 
     Q_PROPERTY(int auto_focus READ getAutoFocus WRITE setAutoFocus NOTIFY autoFocusChanged)
     Q_PROPERTY(int auto_focus_visible READ getAutoFocusVisible NOTIFY autoFocusChanged)
@@ -84,30 +91,36 @@ public:
     QString getSelectedDeviceModelId();
     int getFormatIndex(){return this->m_current_device->getFormatIndex();};
     qreal getBrightness() {return this->m_current_device->getBrightness();};
-    qreal getBrightnessMin() {return this->m_current_device->getBrightnessMin();};
-    qreal getBrightnessMax() {return this->m_current_device->getBrightnessMax();};
-    qreal getBrightnessStep() {return this->m_current_device->getBrightnessStep();};
+    int getBrightnessSpin() {return (int)(this->m_current_device->getBrightness() * 100);};
+    // qreal getBrightnessMin() {return this->m_current_device->getBrightnessMin();};
+    // qreal getBrightnessMax() {return this->m_current_device->getBrightnessMax();};
+    // qreal getBrightnessStep() {return this->m_current_device->getBrightnessStep();};
     bool getBrightnessVisible() {return this->m_current_device->getBrightnessVisible();};
     qreal getContrast() {return this->m_current_device->getContrast();};
-    qreal getContrastMin() {return this->m_current_device->getContrastMin();};
-    qreal getContrastMax() {return this->m_current_device->getContrastMax();};
-    qreal getContrastStep() {return this->m_current_device->getContrastStep();};
+    qreal getContrastSpin() {return (int)(this->m_current_device->getContrast() * 100);};
+    // qreal getContrastMin() {return this->m_current_device->getContrastMin();};
+    // qreal getContrastMax() {return this->m_current_device->getContrastMax();};
+    // qreal getContrastStep() {return this->m_current_device->getContrastStep();};
     bool getContrastVisible() {return this->m_current_device->getContrastVisible();};
     qreal getSharpness() {return this->m_current_device->getSharpness();};
-    qreal getSharpnessMin() {return this->m_current_device->getSharpnessMin();};
-    qreal getSharpnessMax() {return this->m_current_device->getSharpnessMax();};
-    qreal getSharpnessStep() {return this->m_current_device->getSharpnessStep();};
+    int getSharpnessSpin() {return (int)(this->m_current_device->getSharpness() * 100);};
+    // qreal getSharpnessMin() {return this->m_current_device->getSharpnessMin();};
+    // qreal getSharpnessMax() {return this->m_current_device->getSharpnessMax();};
+    // qreal getSharpnessStep() {return this->m_current_device->getSharpnessStep();};
     bool getSharpnessVisible() {return this->m_current_device->getSharpnessVisible();};
     qreal getSaturation() {return this->m_current_device->getSaturation();};
-    qreal getSaturationMin() {return this->m_current_device->getSaturationMin();};
-    qreal getSaturationMax() {return this->m_current_device->getSaturationMax();};
-    qreal getSaturationStep() {return this->m_current_device->getSaturationStep();};
+    int getSaturationSpin() {return (int)(this->m_current_device->getSaturation() * 100);};
+    // qreal getSaturationMin() {return this->m_current_device->getSaturationMin();};
+    // qreal getSaturationMax() {return this->m_current_device->getSaturationMax();};
+    // qreal getSaturationStep() {return this->m_current_device->getSaturationStep();};
     bool getSaturationVisible() {return this->m_current_device->getSaturationVisible();};
-    qreal getAbsoluteZoom() {return this->m_current_device->getAbsoluteZoom();};
-    qreal getAbsoluteZoomMin() {return this->m_current_device->getAbsoluteZoomMin();};
-    qreal getAbsoluteZoomMax() {return this->m_current_device->getAbsoluteZoomMax();};
-    qreal getAbsoluteZoomStep() {return this->m_current_device->getAbsoluteZoomStep();};
-    bool getAbsoluteZoomVisible() {return this->m_current_device->getAbsoluteZoomVisible();};
+    qreal getOpticalZoom() {return this->m_current_device->getOpticalZoom();};
+    qreal getOpticalZoomMax() {return this->m_current_device->getOpticalZoomMax();};
+    bool getOpticalZoomVisible() {return this->m_current_device->getOpticalZoomVisible();};
+    qreal getDigitalZoom() {return this->m_current_device->getDigitalZoom();};
+    qreal getDigitalZoomPrev() {qCDebug(webcam_settings_kcm) << "QWebcamSettings::getDigitalZoomPrev" << 1+(this->m_current_device->getDigitalZoom()/10);return 1+(this->m_current_device->getDigitalZoom()/10);};
+    qreal getDigitalZoomMax() {return this->m_current_device->getDigitalZoomMax();};
+    bool getDigitalZoomVisible() {return this->m_current_device->getDigitalZoomVisible();};
     int getAutoFocus(){return this->m_current_device->getAutoFocus();};
     bool getAutoFocusVisible() {return this->m_current_device->getAutoFocusVisible();};
     qreal getFocus() {return this->m_current_device->getFocus();};
@@ -121,7 +134,8 @@ public:
 
     Q_INVOKABLE void setDeviceIndex(int);
     Q_INVOKABLE void setFormatIndex(int);
-    Q_INVOKABLE void setAbsoluteZoom(double);
+    Q_INVOKABLE void setOpticalZoom(qreal);
+    Q_INVOKABLE void setDigitalZoom(qreal);
     Q_INVOKABLE void setBrightness(double);
     Q_INVOKABLE void setContrast(double);
     Q_INVOKABLE void setSaturation(double);
@@ -133,7 +147,8 @@ public:
 Q_SIGNALS:
     void deviceIndexChanged();
     void formatIndexChanged();
-    void absoluteZoomChanged();
+    void opticalZoomChanged();
+    void digitalZoomChanged();
     void brightnessChanged();
     void contrastChanged();
     void saturationChanged();
