@@ -346,7 +346,7 @@ void VideoDevice::setZoom(qreal optical_value,qreal digital_value){
 bool VideoDevice::setOpticalZoom(qreal value){
     qCDebug(webcam_settings_kcm) << "VideoDevice::setOpticalZoom" << value;
     bool save_needed = false;
-    if (m_ctrl_zoom_optical_visible && (int)value != (int)m_ctrl_zoom_optical["value"]){
+    if (m_ctrl_zoom_optical_visible && value != m_ctrl_zoom_optical["value"]){
         save_needed = true;
         m_ctrl_zoom_optical["value"] = value;
         setZoom(value,m_ctrl_zoom_digital["value"]);
@@ -357,11 +357,13 @@ bool VideoDevice::setOpticalZoom(qreal value){
 bool VideoDevice::setDigitalZoom(qreal value){
     qCDebug(webcam_settings_kcm) << "VideoDevice::setDigitalZoom" << value;
     bool save_needed = false;
-    if (m_ctrl_zoom_digital_visible && (int)value != (int)m_ctrl_zoom_digital["value"]){
+    if (m_ctrl_zoom_digital_visible && value != m_ctrl_zoom_digital["value"]){
         save_needed = true;
+        if ((int)value != (int)m_ctrl_zoom_digital["value"]){
+            applyControlValue(false,"zoom_absolute",value,m_ctrl_saturation["max"],m_ctrl_saturation["step"]);
+        }
         m_ctrl_zoom_digital["value"] = value;
         setZoom(m_ctrl_zoom_optical["value"],value);
-        applyControlValue(false,"zoom_absolute",value,m_ctrl_saturation["max"],m_ctrl_saturation["step"]);
     }
     return save_needed;
 }

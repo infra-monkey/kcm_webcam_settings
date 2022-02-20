@@ -387,7 +387,7 @@ KCM.SimpleKCM {
                     //implicitWidth: 100
                     //implicitHeight: 33
                     id: opticalZoomSpinbox
-                    from: 1
+                    from: 0
                     value: kcm.optical_zoom
                     to: kcm.optical_zoom_max
                     //stepSize: 5
@@ -418,7 +418,7 @@ KCM.SimpleKCM {
                 Kirigami.FormData.label: i18n("Digital Zoom:")
                 Controls.Slider {
                     id: digitalZoomSlide
-                    from: 1
+                    from: 0
                     to: kcm.digital_zoom_max
                     //stepSize: 1
                     value: kcm.digital_zoom
@@ -429,7 +429,7 @@ KCM.SimpleKCM {
                     //implicitWidth: 100
                     //implicitHeight: 33
                     id: digitalZoomSpinbox
-                    from: 1
+                    from: 0
                     value: kcm.digital_zoom
                     to: kcm.digital_zoom_max
                     //stepSize: 5
