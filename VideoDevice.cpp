@@ -114,6 +114,10 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
             << "max: " << m_ctrl_saturation["max"]
             << "step: " << m_ctrl_saturation["step"];
     }
+    if (ctrl_label == "zoom_absolute") {
+        m_ctrl_zoom_absolute_supported = is_defined;
+        qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Zoom Absolute supported: " << m_ctrl_zoom_absolute_supported;
+    }
     if (ctrl_label == "zoom_optical") {
         m_ctrl_zoom_optical["value"] = 0;
         m_ctrl_zoom_optical["min"] = 0;
@@ -144,7 +148,11 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
             m_ctrl_zoom_digital_visible = false;
             return;
         } else {
-            m_ctrl_zoom_digital_visible = true;
+            if (m_ctrl_zoom_absolute_supported){
+                m_ctrl_zoom_digital_visible = true;
+            } else {
+                m_ctrl_zoom_digital_visible = false;
+            }
         }
         m_ctrl_zoom_digital["value"] = m_current_camera->focus()->digitalZoom();
         m_ctrl_zoom_digital["min"] = 0;

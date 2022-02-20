@@ -82,7 +82,7 @@ private:
     QString m_device_vendor_id;
     QString m_device_model_id;
     QString m_device_path;
-    QStringList m_ctrl_list = {"brightness","contrast","sharpness","saturation","zoom_optical", "zoom_digital","focus_automatic_continuous","focus_absolute"};
+    QStringList m_ctrl_list = {"brightness","contrast","sharpness","saturation","zoom_absolute","zoom_optical", "zoom_digital","focus_automatic_continuous","focus_absolute"};
     QMap<QString, qreal> m_ctrl_brightness;
     bool m_ctrl_brightness_visible;
     QMap<QString, double> m_ctrl_contrast;
@@ -95,6 +95,7 @@ private:
     bool m_ctrl_zoom_optical_visible;
     QMap<QString, double> m_ctrl_zoom_digital;
     bool m_ctrl_zoom_digital_visible;
+    bool m_ctrl_zoom_absolute_supported;
     QMap<QString, int> m_ctrl_auto_focus;
     bool m_ctrl_auto_focus_visible;
     QMap<QString, double> m_ctrl_focus;
