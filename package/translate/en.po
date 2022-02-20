@@ -1,0 +1,94 @@
+# Translation of kcm_webcam_settings in LANGUAGE
+# Copyright (C) 2022
+# This file is distributed under the same license as the kcm_webcam_settings package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_webcam_settings\n"
+"Report-Msgid-Bugs-To: https://github.com/infra-monkey/kcm_webcam_settings\n"
+"POT-Creation-Date: 2022-02-20 15:58+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../metadata.desktop
+msgid "Webcam Settings"
+msgstr "Webcam Settings"
+
+#: ../metadata.desktop ../contents/ui/main.qml
+msgid "Configure Webcam"
+msgstr "Configure Webcam"
+
+#: ../contents/ui/main.qml
+msgid "Device Selection"
+msgstr "Device Selection"
+
+#: ../contents/ui/main.qml
+msgid "Device Information"
+msgstr "Device Information"
+
+#: ../contents/ui/main.qml
+msgid "Device Name"
+msgstr "Name"
+
+#: ../contents/ui/main.qml
+msgid "Device Path"
+msgstr "Path"
+
+#: ../contents/ui/main.qml
+msgid "Device Vendor Id"
+msgstr "Vendor Id"
+
+#: ../contents/ui/main.qml
+msgid "Device Model Id"
+msgstr "Model Id"
+
+#: ../contents/ui/main.qml
+msgid "Preview webcam"
+msgstr "Preview"
+
+#: ../contents/ui/main.qml
+msgid "Format list:"
+msgstr "Format list:"
+
+#: ../contents/ui/main.qml
+msgid "Brightness:"
+msgstr "Brightness:"
+
+#: ../contents/ui/main.qml
+msgid "Default"
+msgstr "Default"
+
+#: ../contents/ui/main.qml
+msgid "Contrast:"
+msgstr "Contrast:"
+
+#: ../contents/ui/main.qml
+msgid "Sharpness:"
+msgstr "Sharpness:"
+
+#: ../contents/ui/main.qml
+msgid "Saturation:"
+msgstr "Saturation:"
+
+#: ../contents/ui/main.qml
+msgid "Optical Zoom:"
+msgstr "Optical Zoom:"
+
+#: ../contents/ui/main.qml
+msgid "Digital Zoom:"
+msgstr "Digital Zoom:"
+
+#: ../contents/ui/main.qml
+msgid "Auto Focus:"
+msgstr "Auto Focus:"
+
+#: ../contents/ui/main.qml
+msgid "Absolute Focus:"
+msgstr "Absolute Focus:"
