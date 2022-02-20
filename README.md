@@ -1,3 +1,14 @@
+# Description
+
+kcm_webcam_settings is quite self explanatory. It is a module for KDE Plasma System Settings that allow to adjust and apply some settings of the webcam if available. 
+
+It also defines udev rules so that whener the webcam is plugged in, the settings are automatically applied again. This allows for instance to switch cameras and have customized settings for each of them.
+
+kcm_webcam_setttings also support multiple devices.
+
+![Screenshot](/resources/screenshot_kcm_webcam_settings.png "Webcam Settings")
+
+
 # Build Dependencies
 
     cmake
