@@ -24,7 +24,6 @@ VideoDevice::VideoDevice(const QCameraInfo camerainfo,QString device_serial, QSt
     qCDebug(webcam_settings_kcm) << "VideoDevice::VideoDevice" << m_device_name << m_device_path << m_device_vendor_id << m_device_model_id;
     initializeCtrls();
     initializeFormats();
-    // m_current_format_index = 0;
 }
 VideoDevice::~VideoDevice() {}
 
@@ -38,7 +37,6 @@ void VideoDevice::initializeCtrls() {
 }
 
 void VideoDevice::initializeCtrl(const QString ctrl_label) {
-	// qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl for device " << m_device_name;
     bool is_defined;
     std::string line,cmd;
     if (m_is_dummy_device){
@@ -55,7 +53,6 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
     if (ctrl_label == "brightness") {
         m_ctrl_brightness_visible = is_defined;
         m_ctrl_brightness["value"] = 0;
-        // m_ctrl_brightness["default"] = 0;
         m_ctrl_brightness["min"] = 0;
         m_ctrl_brightness["max"] = 0;
         m_ctrl_brightness["step"] = 0;
@@ -186,7 +183,6 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
             << "max: " << m_ctrl_focus["max"]
             << "step: " << m_ctrl_focus["step"]
             << "default: " << m_ctrl_focus["default"];
-        qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Focus Absolute: value: " << m_ctrl_focus_visible;
     }
 }
 
@@ -339,7 +335,7 @@ bool VideoDevice::setSaturation(qreal value){
 }
 
 void VideoDevice::setZoom(qreal optical_value,qreal digital_value){
-    qCDebug(webcam_settings_kcm) << "VideoDevice::setAbsoluteZoom" << optical_value << digital_value;
+    qCDebug(webcam_settings_kcm) << "VideoDevice::setZoom" << optical_value << digital_value;
     m_current_camera->focus()->zoomTo(optical_value,digital_value);
 }
 
@@ -405,8 +401,10 @@ bool VideoDevice::resetCrtlToDefault(QString ctrl_name) {
     if (ctrl_name == "saturation") {
 		ret = setSaturation(0);
     }
-    if (ctrl_name == "zoom_absolute") {
+    if (ctrl_name == "zoom_optical") {
 		ret = setOpticalZoom(0);
+    }
+    if (ctrl_name == "zoom_digital") {
 		ret = setDigitalZoom(0);
     }
     if (ctrl_name == "focus_automatic_continuous") {
@@ -458,12 +456,13 @@ QString VideoDevice::getCtrlOptions(){
     return ctrl_options;
 }
 
+
+//Still needed for the focus controls. To be changed if possible
 void VideoDevice::applyControlValue(QString ctrl_name,QString value){
-    qCDebug(webcam_settings_kcm) << "VideoDevice::applyControlValue";
+    qCDebug(webcam_settings_kcm) << "VideoDevice::applyControlValue: " << "v4l2-ctl -d " + getVideoDevicePath() + " --set-ctrl " + ctrl_name + "=" + value;
 	std::string cmd;
     cmd = std::string("v4l2-ctl -d " + getVideoDevicePath().toStdString() + " --set-ctrl " + ctrl_name.toStdString() +"=" + value.toStdString());
     exec_cmd(cmd);
-    qCDebug(webcam_settings_kcm) << "VideoDevice::applyControlValue: " << "v4l2-ctl -d " + getVideoDevicePath() + " --set-ctrl " + ctrl_name + "=" + value;
 }
 
 int VideoDevice::getControlValueV4L(bool scaled,qreal value, qreal ctrl_max, qreal ctrl_step){
@@ -477,19 +476,17 @@ int VideoDevice::getControlValueV4L(bool scaled,qreal value, qreal ctrl_max, qre
 }
 void VideoDevice::applyControlValue(bool scaled,QString ctrl_name,qreal value, qreal ctrl_max, qreal ctrl_step){
     int converted_value = getControlValueV4L(scaled,value,ctrl_max,ctrl_step);
-    qCDebug(webcam_settings_kcm) << "VideoDevice::applyControlValue";
+    qCDebug(webcam_settings_kcm) << "VideoDevice::applyControlValue: " << "v4l2-ctl -d " + getVideoDevicePath() + " --set-ctrl " + ctrl_name + "=" + QString::number(converted_value);
 	std::string cmd;
     cmd = std::string("v4l2-ctl -d " + getVideoDevicePath().toStdString() + " --set-ctrl " + ctrl_name.toStdString() +"=" + std::to_string(converted_value));
     exec_cmd(cmd);
-    qCDebug(webcam_settings_kcm) << "VideoDevice::applyControlValue: " << "v4l2-ctl -d " + getVideoDevicePath() + " --set-ctrl " + ctrl_name + "=" + QString::number(converted_value);
 }
 
 void VideoDevice::applyConfiguration(){
-	qCDebug(webcam_settings_kcm) << "VideoDevice::applyConfiguration";
+    qCDebug(webcam_settings_kcm) << "VideoDevice::applyConfiguration: " << "v4l2-ctl -d " + getVideoDevicePath() + " --set-ctrl " + getCtrlOptions() + " --set-fmt-video width=" + QString::number(getCurrentFormatWidth()) + ",height=" + QString::number(getCurrentFormatHeight()) + ",pixelformat=" + getCurrentFormatName() + ",field=none";
 	std::string cmd;
     cmd = std::string("v4l2-ctl -d " + getVideoDevicePath().toStdString() + " --set-ctrl " + getCtrlOptions().toStdString() + " --set-fmt-video width=" + std::to_string(getCurrentFormatWidth()) + ",height=" + std::to_string(getCurrentFormatHeight()) + ",pixelformat=" + getCurrentFormatName().toStdString()) + ",field=none";
     exec_cmd(cmd);
-    qCDebug(webcam_settings_kcm) << "VideoDevice::applyConfiguration: " << "v4l2-ctl -d " + getVideoDevicePath() + " --set-ctrl " + getCtrlOptions() + " --set-fmt-video width=" + QString::number(getCurrentFormatWidth()) + ",height=" + QString::number(getCurrentFormatHeight()) + ",pixelformat=" + getCurrentFormatName() + ",field=none";
 }
 
 bool VideoDevice::resetToDefault(){
@@ -502,7 +499,6 @@ bool VideoDevice::resetToDefault(){
 }
 
 QString VideoDevice::getUdevRule(){
-	qCDebug(webcam_settings_kcm) << "VideoDevice::getUdevRules";
     qCDebug(webcam_settings_kcm) << "VideoDevice::getUdevRules for device" << getVideoDevicePath() << getVideoDeviceVendorId() << getVideoDeviceModelId();
     qCDebug(webcam_settings_kcm) << "VideoDevice::getUdevRules resolution" << getCurrentFormatName() ;
     QString rule = "SUBSYSTEMS==\"usb\", ATTRS{idVendor}==\"" + getVideoDeviceVendorId() + "\", ATTRS{idProduct}==\"" + getVideoDeviceModelId() + "\", PROGRAM=\"/usr/bin/v4l2-ctl --set-ctrl " + getCtrlOptions();

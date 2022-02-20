@@ -177,7 +177,6 @@ void QWebcamSettings::populateDeviceList() {
 			if (!m_config_grouplist.contains(serial)){
 				VideoDevice* new_device = new VideoDevice(cameraInfo,serial,vendorid,modelid);
 				m_device_list.append(new_device);
-				// m_device_list.append(VideoDevice(serial,cameraInfo.description(),cameraInfo.deviceName(),vendorid,modelid));
 				m_devicename_list << cameraInfo.description();
 			}
 		}
@@ -335,11 +334,11 @@ void QWebcamSettings::resetCrtlToDefault(QString ctrl_name) {
     if (ctrl_name == "saturation") {
 		if (ret) {Q_EMIT saturationChanged();}
     }
-    if (ctrl_name == "zoom_absolute") {
-		if (ret) {
-			Q_EMIT opticalZoomChanged();
-			Q_EMIT digitalZoomChanged();
-		}
+    if (ctrl_name == "zoom_optical") {
+		if (ret) {Q_EMIT opticalZoomChanged();}
+    }
+	if (ctrl_name == "zoom_digital") {
+		if (ret) {Q_EMIT digitalZoomChanged();}
     }
     if (ctrl_name == "focus_automatic_continuous") {
 		if (ret) {Q_EMIT autoFocusChanged();}

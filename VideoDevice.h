@@ -9,6 +9,7 @@
 #include <QCamera>
 #include <QCameraInfo>
 #include <QCameraImageProcessing>
+#include <QCameraFocus>
 
 class VideoDevice : public QObject {
 public:
@@ -29,31 +30,15 @@ public:
     int getFormatIndex(){return m_current_format_index;};
     bool setBrightness(qreal);
     qreal getBrightness(){return m_ctrl_brightness["value"];};
-    // double getBrightnessMin(){return m_ctrl_brightness["min"];};
-    // double getBrightnessMax(){return m_ctrl_brightness["max"];};
-    // double getBrightnessStep(){return m_ctrl_brightness["step"];};
-    // double getBrightnessDefault(){return m_ctrl_brightness["default"];};
     bool getBrightnessVisible(){return m_ctrl_brightness_visible;};
     bool setContrast(qreal);
     qreal getContrast(){return m_ctrl_contrast["value"];};
-    // double getContrastMin(){return m_ctrl_contrast["min"];};
-    // double getContrastMax(){return m_ctrl_contrast["max"];};
-    // double getContrastStep(){return m_ctrl_contrast["step"];};
-    // double getContrastDefault(){return m_ctrl_contrast["default"];};
     bool getContrastVisible(){return m_ctrl_contrast_visible;};
     bool setSharpness(qreal);
     qreal getSharpness(){return m_ctrl_sharpness["value"];};
-    // double getSharpnessMin(){return m_ctrl_sharpness["min"];};
-    // double getSharpnessMax(){return m_ctrl_sharpness["max"];};
-    // double getSharpnessStep(){return m_ctrl_sharpness["step"];};
-    // double getSharpnessDefault(){return m_ctrl_sharpness["default"];};
     bool getSharpnessVisible(){return m_ctrl_sharpness_visible;};
     bool setSaturation(qreal);
     qreal getSaturation(){return m_ctrl_saturation["value"];};
-    // double getSaturationMin(){return m_ctrl_saturation["min"];};
-    // double getSaturationMax(){return m_ctrl_saturation["max"];};
-    // double getSaturationStep(){return m_ctrl_saturation["step"];};
-    // double getSaturationDefault(){return m_ctrl_saturation["default"];};
     bool getSaturationVisible(){return m_ctrl_saturation_visible;};
     bool setOpticalZoom(qreal);
     qreal getOpticalZoom(){return m_ctrl_zoom_optical["value"];};
@@ -61,7 +46,7 @@ public:
     bool getOpticalZoomVisible(){return m_ctrl_zoom_optical_visible;};
     bool setDigitalZoom(qreal);
     qreal getDigitalZoom(){return m_ctrl_zoom_digital["value"];};
-    double getDigitalZoomMax(){qCDebug(webcam_settings_kcm) << "VideoDevice::getDigitalZoomMax" << m_ctrl_zoom_digital["max"];return m_ctrl_zoom_digital["max"];};
+    double getDigitalZoomMax(){return m_ctrl_zoom_digital["max"];};
     bool getDigitalZoomVisible(){return m_ctrl_zoom_digital_visible;};
     bool setAutoFocus(int);
     int getAutoFocus(){return m_ctrl_auto_focus["value"];};
@@ -74,7 +59,6 @@ public:
     double getFocusStep(){return m_ctrl_focus["step"];};
     double getFocusDefault(){return m_ctrl_focus["default"];};
     bool getFocusVisible(){return (!getAutoFocus() && m_ctrl_focus_visible);};
-    // double getCtrlDefaultValue(QString);
     bool resetCrtlToDefault(QString);
     QString getCtrlOptions();
     void applyConfiguration();

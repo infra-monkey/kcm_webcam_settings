@@ -153,10 +153,13 @@ KCM.SimpleKCM {
         }
         Kirigami.FormLayout {
             id: formId
+            Layout.fillWidth: true
             Controls.CheckBox {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignLeft
                 visible: true
-                implicitWidth: 217
-                implicitHeight: 45
+                //implicitWidth: 217
+                //implicitHeight: 45
                 id: previewCheckbox
                 checked: false
                 text: i18n("Preview webcam")
@@ -170,9 +173,10 @@ KCM.SimpleKCM {
             }
             Basic.Item {
                 id: previewSpace
+                
                 visible: previewCheckbox.checked
-                implicitWidth: 320
-                implicitHeight: 180
+                implicitWidth: 352
+                implicitHeight: 288
                 VideoOutput {
                     id: previewOutput
                     visible: previewSpace.visible
@@ -390,7 +394,6 @@ KCM.SimpleKCM {
                     from: 0
                     value: kcm.optical_zoom
                     to: kcm.optical_zoom_max
-                    //stepSize: 5
                     property int decimals: 2
                     validator: Basic.DoubleValidator {
                         bottom: Math.min(opticalZoomSpinbox.from, opticalZoomSpinbox.to)

@@ -20,7 +20,6 @@ ActionReply UdevHelper::applyudevrules(const QVariantMap &args)
     }
     std::string("udevadm control --reload-rules");
     exec_cmd(cmd);
-    //reply.addData("contents", args["contents"].toStringList());
     return reply;
 }
 
