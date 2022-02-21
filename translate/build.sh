@@ -6,8 +6,8 @@
 # Eg: contents/locale/fr_CA/LC_MESSAGES/plasma_applet_org.kde.plasma.eventcalendar.mo
 
 DIR=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
-plasmoidName=`kreadconfig5 --file="$DIR/../metadata.desktop" --group="Desktop Entry" --key="X-KDE-PluginInfo-Name"`
-website=`kreadconfig5 --file="$DIR/../metadata.desktop" --group="Desktop Entry" --key="X-KDE-PluginInfo-Website"`
+plasmoidName=`kreadconfig5 --file="$DIR/../package/metadata.desktop" --group="Desktop Entry" --key="X-KDE-PluginInfo-Name"`
+website=`kreadconfig5 --file="$DIR/../package/metadata.desktop" --group="Desktop Entry" --key="X-KDE-PluginInfo-Website"`
 bugAddress="$website"
 packageRoot=".." # Root of translatable sources
 projectName="plasma_applet_${plasmoidName}" # project name

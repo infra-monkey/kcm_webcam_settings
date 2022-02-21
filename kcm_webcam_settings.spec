@@ -29,7 +29,6 @@ This module for systemsettings in KDE Plasma 5.23+ allows to configure Video4Lin
 
 %prep
 {{{ git_dir_setup_macro }}}
-rm -rf %{_datadir}/kpackage/kcms/kcm_webcam_settings/locale
 
 %build
 %cmake_kf5
