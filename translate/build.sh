@@ -10,7 +10,7 @@ plasmoidName=`kreadconfig5 --file="$DIR/../package/metadata.desktop" --group="De
 website=`kreadconfig5 --file="$DIR/../package/metadata.desktop" --group="Desktop Entry" --key="X-KDE-PluginInfo-Website"`
 bugAddress="$website"
 packageRoot=".." # Root of translatable sources
-projectName="plasma_applet_${plasmoidName}" # project name
+projectName="${plasmoidName}" # project name
 
 #---
 if [ -z "$plasmoidName" ]; then

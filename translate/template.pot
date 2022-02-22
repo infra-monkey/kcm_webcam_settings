@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kcm_webcam_settings\n"
 "Report-Msgid-Bugs-To: https://github.com/infra-monkey/kcm_webcam_settings\n"
-"POT-Creation-Date: 2022-02-20 15:58+0100\n"
+"POT-Creation-Date: 2022-02-22 13:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,78 +17,93 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../metadata.desktop
+#: ../package/metadata.desktop
 msgid "Webcam Settings"
 msgstr ""
 
-#: ../metadata.desktop ../contents/ui/main.qml
+#: ../package/metadata.desktop ../package/contents/ui/main.qml
 msgid "Configure Webcam"
 msgstr ""
 
-#: ../contents/ui/main.qml
+#: ../package/contents/ui/main.qml
 msgid "Device Selection"
 msgstr ""
 
-#: ../contents/ui/main.qml
+#: ../package/contents/ui/main.qml
 msgid "Device Information"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Device Name"
+#: ../package/contents/ui/main.qml
+msgid "Name"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Device Path"
+#: ../package/contents/ui/main.qml
+msgid "Path"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Device Vendor Id"
+#: ../package/contents/ui/main.qml
+msgid "Vendor Id"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Device Model Id"
+#: ../package/contents/ui/main.qml
+msgid "Model Id"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Preview webcam"
+#: ../package/contents/ui/main.qml
+msgid "Preview"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Format list:"
+#: ../package/contents/ui/main.qml
+msgid "Format List"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Brightness:"
+#: ../package/contents/ui/main.qml
+msgid "Brightness"
 msgstr ""
 
-#: ../contents/ui/main.qml
+#: ../package/contents/ui/main.qml
 msgid "Default"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Contrast:"
+#: ../package/contents/ui/main.qml
+msgid "Contrast"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Sharpness:"
+#: ../package/contents/ui/main.qml
+msgid "Sharpness"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Saturation:"
+#: ../package/contents/ui/main.qml
+msgid "Saturation"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Optical Zoom:"
+#: ../package/contents/ui/main.qml
+msgid "Optical Zoom"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Digital Zoom:"
+#: ../package/contents/ui/main.qml
+msgid "Digital Zoom"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Auto Focus:"
+#: ../package/contents/ui/main.qml
+msgid "Auto Focus"
 msgstr ""
 
-#: ../contents/ui/main.qml
-msgid "Absolute Focus:"
+#: ../package/contents/ui/main.qml
+msgid "Absolute Focus"
+msgstr ""
+
+#: ../QWebcamSettings.cpp
+msgctxt "@title"
+msgid "Webcam"
+msgstr ""
+
+#: ../QWebcamSettings.cpp
+msgctxt "@info:credit"
+msgid "Copyright 2021 Antoine Gatineau"
+msgstr ""
+
+#: ../QWebcamSettings.cpp
+msgctxt "@info:credit"
+msgid "Antoine Gatineau"
 msgstr ""

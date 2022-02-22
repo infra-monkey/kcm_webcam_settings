@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-import QtQuick 2.15 as Basic
+import QtQuick 2.15
 import QtQuick.Controls 2.15 as Controls
 import QtMultimedia 5.8
 import QtQuick.Layouts 1.15
@@ -38,7 +38,7 @@ KCM.SimpleKCM {
                     Layout.fillWidth: true
                     visible: true
                 }
-                Basic.ListView {
+                ListView {
                     visible: true
                     property var customHighlightedTextColor
                     property var customHighlightColor
@@ -47,13 +47,13 @@ KCM.SimpleKCM {
                     model: kcm.device_list_model
                     customHighlightedTextColor: (cameraList.count > 1) ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
                     customHighlightColor: (cameraList.count > 1) ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
-                    highlight: Basic.Rectangle { color: cameraList.customHighlightColor; }
+                    highlight: Rectangle { color: cameraList.customHighlightColor; }
                     highlightFollowsCurrentItem: true
-                    delegate: Basic.Text {
+                    delegate: Text {
                         Kirigami.Theme.inherit: true
                         text: display
-                        color: Basic.ListView.isCurrentItem ? cameraList.customHighlightedTextColor : Kirigami.Theme.textColor
-                        Basic.MouseArea {
+                        color: ListView.isCurrentItem ? cameraList.customHighlightedTextColor : Kirigami.Theme.textColor
+                        MouseArea {
                             anchors.fill: parent
                             onClicked: {
                                 cameraList.currentIndex = index
@@ -85,14 +85,14 @@ KCM.SimpleKCM {
                     Kirigami.Heading {
                         Layout.fillWidth: true
                         level: 3
-                        text: i18n("Device Name")
+                        text: i18n("Name")
                         color: Kirigami.Theme.textColor
                     }
 
                     Controls.Label {
                         Layout.fillWidth: true
-                        horizontalAlignment: Basic.Text.AlignRight
-                        wrapMode: Basic.Text.WordWrap
+                        horizontalAlignment: Text.AlignRight
+                        wrapMode: Text.WordWrap
                         id: deviceInfoName
                         text: kcm.device_info_name
                         color: Kirigami.Theme.textColor
@@ -103,13 +103,13 @@ KCM.SimpleKCM {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignLeft
                         level: 3
-                        text: i18n("Device Path")
+                        text: i18n("Path")
                         color: Kirigami.Theme.textColor
                     }
                     Controls.Label {
                         Layout.fillWidth: true
-                        horizontalAlignment: Basic.Text.AlignRight
-                        wrapMode: Basic.Text.WordWrap
+                        horizontalAlignment: Text.AlignRight
+                        wrapMode: Text.WordWrap
                         id: deviceInfoPath
                         text: kcm.device_info_path
                         color: Kirigami.Theme.textColor
@@ -120,13 +120,13 @@ KCM.SimpleKCM {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignLeft
                         level: 3
-                        text: i18n("Device Vendor Id")
+                        text: i18n("Vendor Id")
                         color: Kirigami.Theme.textColor
                     }
                     Controls.Label {
                         Layout.fillWidth: true
-                        horizontalAlignment: Basic.Text.AlignRight
-                        wrapMode: Basic.Text.WordWrap
+                        horizontalAlignment: Text.AlignRight
+                        wrapMode: Text.WordWrap
                         id: deviceInfoVendorId
                         text: kcm.device_info_vendorid
                         color: Kirigami.Theme.textColor
@@ -137,13 +137,13 @@ KCM.SimpleKCM {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignLeft
                         level: 3
-                        text: i18n("Device Model Id")
+                        text: i18n("Model Id")
                         color: Kirigami.Theme.textColor
                     }
                     Controls.Label {
                         Layout.fillWidth: true
-                        horizontalAlignment: Basic.Text.AlignRight
-                        wrapMode: Basic.Text.WordWrap
+                        horizontalAlignment: Text.AlignRight
+                        wrapMode: Text.WordWrap
                         id: deviceInfoModelId
                         text: kcm.device_info_modelid
                         color: Kirigami.Theme.textColor
@@ -162,7 +162,7 @@ KCM.SimpleKCM {
                 //implicitHeight: 45
                 id: previewCheckbox
                 checked: false
-                text: i18n("Preview webcam")
+                text: i18n("Preview")
                 onToggled: {
                     if (checked) {
                         camera.start();
@@ -171,7 +171,7 @@ KCM.SimpleKCM {
                     }
                 }
             }
-            Basic.Item {
+            Item {
                 id: previewSpace
                 
                 visible: previewCheckbox.checked
@@ -186,7 +186,7 @@ KCM.SimpleKCM {
                         id: camera
                         deviceId: kcm.device_info_path
                         digitalZoom: kcm.digital_zoom_prev
-                        Basic.Component.onCompleted: {
+                        Component.onCompleted: {
                             camera.stop();
                         }
                     }
@@ -197,7 +197,7 @@ KCM.SimpleKCM {
                 id: formatList
                 Layout.fillWidth: true
                 editable: false
-                Kirigami.FormData.label: i18n("Format list:")
+                Kirigami.FormData.label: i18n("Format List")
                 model: kcm.format_list
                 currentIndex: kcm.formatIndex
                 onActivated: {
@@ -210,7 +210,7 @@ KCM.SimpleKCM {
                 id: brightnessCtrl
                 visible: kcm.brightness_visible
                 Layout.fillWidth: true
-                Kirigami.FormData.label: i18n("Brightness:")
+                Kirigami.FormData.label: i18n("Brightness")
                 Controls.Slider {
                     id: brightnessSlide
                     from: -1.0
@@ -229,7 +229,7 @@ KCM.SimpleKCM {
                     stepSize: 5
                     property int decimals: 2
                     property real realValue: value / 100
-                    validator: Basic.DoubleValidator {
+                    validator: DoubleValidator {
                         bottom: Math.min(brightnessSpinbox.from, brightnessSpinbox.to)
                         top:  Math.max(brightnessSpinbox.from, brightnessSpinbox.to)
                     }
@@ -251,7 +251,7 @@ KCM.SimpleKCM {
                 id: contrastCtrl
                 visible: kcm.contrast_visible
                 Layout.fillWidth: true
-                Kirigami.FormData.label: i18n("Contrast:")
+                Kirigami.FormData.label: i18n("Contrast")
                 Controls.Slider {
                     id: contrastSlide
                     from: -1.0
@@ -270,7 +270,7 @@ KCM.SimpleKCM {
                     stepSize: 5
                     property int decimals: 2
                     property real realValue: value / 100
-                    validator: Basic.DoubleValidator {
+                    validator: DoubleValidator {
                         bottom: Math.min(contrastSpinbox.from, contrastSpinbox.to)
                         top:  Math.max(contrastSpinbox.from, contrastSpinbox.to)
                     }
@@ -293,7 +293,7 @@ KCM.SimpleKCM {
                 visible: kcm.sharpness_visible
                 //Layout.fillWidth: true
                 //Layout.maximumWidth: Kirigami.Units.gridUnit * 16
-                Kirigami.FormData.label: i18n("Sharpness:")
+                Kirigami.FormData.label: i18n("Sharpness")
                 Controls.Slider {
                     id: sharpnessSlide
                     from: -1.0
@@ -312,7 +312,7 @@ KCM.SimpleKCM {
                     stepSize: 5
                     property int decimals: 2
                     property real realValue: value / 100
-                    validator: Basic.DoubleValidator {
+                    validator: DoubleValidator {
                         bottom: Math.min(sharpnessSpinbox.from, sharpnessSpinbox.to)
                         top:  Math.max(sharpnessSpinbox.from, sharpnessSpinbox.to)
                     }
@@ -335,7 +335,7 @@ KCM.SimpleKCM {
                 visible: kcm.saturation_visible
                 //Layout.fillWidth: true
                 //Layout.maximumWidth: Kirigami.Units.gridUnit * 16
-                Kirigami.FormData.label: i18n("Saturation:")
+                Kirigami.FormData.label: i18n("Saturation")
                 Controls.Slider {
                     id: saturationSlide
                     from: -1.0
@@ -354,7 +354,7 @@ KCM.SimpleKCM {
                     stepSize: 5
                     property int decimals: 2
                     property real realValue: value / 100
-                    validator: Basic.DoubleValidator {
+                    validator: DoubleValidator {
                         bottom: Math.min(saturationSpinbox.from, saturationSpinbox.to)
                         top:  Math.max(saturationSpinbox.from, saturationSpinbox.to)
                     }
@@ -377,7 +377,7 @@ KCM.SimpleKCM {
                 visible: kcm.optical_zoom_visible
                 //Layout.fillWidth: true
                 //Layout.maximumWidth: Kirigami.Units.gridUnit * 16
-                Kirigami.FormData.label: i18n("Optical Zoom:")
+                Kirigami.FormData.label: i18n("Optical Zoom")
                 Controls.Slider {
                     id: opticalZoomSlide
                     from: 0
@@ -395,7 +395,7 @@ KCM.SimpleKCM {
                     value: kcm.optical_zoom
                     to: kcm.optical_zoom_max
                     property int decimals: 2
-                    validator: Basic.DoubleValidator {
+                    validator: DoubleValidator {
                         bottom: Math.min(opticalZoomSpinbox.from, opticalZoomSpinbox.to)
                         top:  Math.max(opticalZoomSpinbox.from, opticalZoomSpinbox.to)
                     }
@@ -418,7 +418,7 @@ KCM.SimpleKCM {
                 visible: kcm.digital_zoom_visible
                 //Layout.fillWidth: true
                 //Layout.maximumWidth: Kirigami.Units.gridUnit * 16
-                Kirigami.FormData.label: i18n("Digital Zoom:")
+                Kirigami.FormData.label: i18n("Digital Zoom")
                 Controls.Slider {
                     id: digitalZoomSlide
                     from: 0
@@ -437,7 +437,7 @@ KCM.SimpleKCM {
                     to: kcm.digital_zoom_max
                     //stepSize: 5
                     property int decimals: 2
-                    validator: Basic.DoubleValidator {
+                    validator: DoubleValidator {
                         bottom: Math.min(digitalZoomSpinbox.from, digitalZoomSpinbox.to)
                         top:  Math.max(digitalZoomSpinbox.from, digitalZoomSpinbox.to)
                     }
@@ -460,7 +460,7 @@ KCM.SimpleKCM {
                 visible: kcm.auto_focus_visible
                 //Layout.fillWidth: true
                 //Layout.maximumWidth: Kirigami.Units.gridUnit * 16
-                Kirigami.FormData.label: i18n("Auto Focus:")
+                Kirigami.FormData.label: i18n("Auto Focus")
                 Controls.CheckBox {
                     implicitWidth: 217
                     implicitHeight: 45
@@ -468,7 +468,7 @@ KCM.SimpleKCM {
                     checked: kcm.auto_focus
                     onClicked: kcm.setAutoFocus(checked)
                 }
-                Basic.Rectangle {
+                Rectangle {
                     implicitWidth: 100
                     implicitHeight: 33
                     id: focusSpinboxFiller
@@ -486,7 +486,7 @@ KCM.SimpleKCM {
                 visible: kcm.absolute_focus_visible
                 //Layout.fillWidth: true
                 //Layout.maximumWidth: Kirigami.Units.gridUnit * 16
-                Kirigami.FormData.label: i18n("Absolute Focus:")
+                Kirigami.FormData.label: i18n("Absolute Focus")
                 Controls.Slider {
                     id: absoluteFocusSlide
                     from: kcm.absolute_focus_min
