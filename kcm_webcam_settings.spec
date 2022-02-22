@@ -52,7 +52,7 @@ This module for systemsettings in KDE Plasma 5.23+ allows to configure Video4Lin
 %{_datadir}/kpackage/kcms/kcm_webcam_settings/metadata.json
 %{_datadir}/locale/fr
 %{_datadir}/locale/fr/LC_MESSAGES
-%{_datadir}/locale/fr/LC_MESSAGES/plasma_applet_kcm_webcam_settings.mo
+%{_datadir}/locale/fr/LC_MESSAGES/kcm_webcam_settings.mo
 
 %changelog
 * Mon Feb 20 2022 Antoine Gatineau <antoine.gatineau@infra-monkey.com> - 0.0.4
