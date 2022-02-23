@@ -65,7 +65,7 @@ kcoreaddons_desktop_to_json(kcm_webcam_settings "package/metadata.desktop")
 
 install(TARGETS kcm_webcam_settings DESTINATION ${KDE_INSTALL_PLUGINDIR}/kcms)
 install(FILES package/metadata.desktop RENAME kcm_webcam_settings.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR}) # Install the desktop file
-install(DIRECTORY package/contents/locale DESTINATION ${CMAKE_INSTALL_DATADIR})
+install(DIRECTORY translate/locale DESTINATION ${CMAKE_INSTALL_DATADIR})
 
 
 kpackage_install_package(package kcm_webcam_settings kcms) # Install our QML kpackage.                                                                                               
