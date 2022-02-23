@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Webcam Settings
+Name[fr]=Configuration Webcam
 Comment=Configure Webcam
+Comment[fr]=Configurer La Webcam
 Description=Configure Webcam
 Description[fr]=Configurer La Webcam
 Encoding=UTF-8
@@ -13,6 +15,7 @@ X-Plasma-MainScript=ui/main.qml
 X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=hardware
 X-KDE-Keywords=Webcam,Camera
+X-KDE-Keywords[fr]=Webcam,Camera
 X-KDE-ParentApp=kcontrol
 X-KDE-PluginInfo-Name=kcm_webcam_settings
 X-KDE-PluginInfo-Website=https://github.com/infra-monkey/kcm_webcam_settings
