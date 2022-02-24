@@ -25,7 +25,9 @@ VideoDevice::VideoDevice(const QCameraInfo camerainfo,QString device_serial, QSt
     initializeCtrls();
     initializeFormats();
 }
-VideoDevice::~VideoDevice() {}
+VideoDevice::~VideoDevice() {
+    delete m_current_camera;
+}
 
 void VideoDevice::initializeCtrls() {
 	qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrls";
