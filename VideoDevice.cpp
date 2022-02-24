@@ -31,21 +31,24 @@ VideoDevice::~VideoDevice() {
 
 void VideoDevice::initializeCtrls() {
 	qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrls";
-    for (const QString & label: m_ctrl_list){
-        initializeCtrl(label);
+    std::string cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-ctrls");
+    QString output = QString::fromStdString(exec_cmd(cmd));
+    QStringList lines = output.split("\n");
+    for (const QString & line : lines) {
+        for (const QString & label: m_ctrl_list){
+            if (line.contains(label)){
+                qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrls debug init ctrl " << line;
+                initializeCtrl(label,line);
+            }
+        }
     }
-
-
 }
 
-void VideoDevice::initializeCtrl(const QString ctrl_label) {
+void VideoDevice::initializeCtrl(const QString ctrl_label, const QString line) {
     bool is_defined;
-    std::string line,cmd;
     if (m_is_dummy_device){
         is_defined = false;
     } else {
-        cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --list-ctrls | grep " + ctrl_label.toStdString());
-        line = exec_cmd(cmd);
         if (line.size() == 0) {
             is_defined = false;
         } else {
@@ -60,9 +63,9 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
         m_ctrl_brightness["step"] = 0;
         if (!is_defined){return;}
         m_ctrl_brightness["value"] = m_current_camera->imageProcessing()->brightness();
-        m_ctrl_brightness["min"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("min="),std::string(" "))));
-        m_ctrl_brightness["max"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("max="),std::string(" "))));
-        m_ctrl_brightness["step"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("step="),std::string(" "))));
+        m_ctrl_brightness["min"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("min="),std::string(" "))));
+        m_ctrl_brightness["max"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("max="),std::string(" "))));
+        m_ctrl_brightness["step"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("step="),std::string(" "))));
         qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Brightness: value: " << QString::number(m_ctrl_brightness["value"])
             << "min: " << m_ctrl_brightness["min"]
             << "max: " << m_ctrl_brightness["max"]
@@ -76,9 +79,9 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
         m_ctrl_contrast["step"] = 0;
         if (!is_defined){return;}
         m_ctrl_contrast["value"] = m_current_camera->imageProcessing()->contrast();
-        m_ctrl_contrast["min"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("min="),std::string(" "))));
-        m_ctrl_contrast["max"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("max="),std::string(" "))));
-        m_ctrl_contrast["step"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("step="),std::string(" "))));
+        m_ctrl_contrast["min"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("min="),std::string(" "))));
+        m_ctrl_contrast["max"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("max="),std::string(" "))));
+        m_ctrl_contrast["step"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("step="),std::string(" "))));
         qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Contrast: value: " << QString::number(m_ctrl_contrast["value"])
             << "min: " << m_ctrl_contrast["min"]
             << "max: " << m_ctrl_contrast["max"]
@@ -92,9 +95,9 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
         m_ctrl_sharpness["step"] = 0;
         if (!is_defined){return;}
         m_ctrl_sharpness["value"] = m_current_camera->imageProcessing()->sharpeningLevel();
-        m_ctrl_sharpness["min"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("min="),std::string(" "))));
-        m_ctrl_sharpness["max"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("max="),std::string(" "))));
-        m_ctrl_sharpness["step"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("step="),std::string(" "))));
+        m_ctrl_sharpness["min"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("min="),std::string(" "))));
+        m_ctrl_sharpness["max"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("max="),std::string(" "))));
+        m_ctrl_sharpness["step"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("step="),std::string(" "))));
         qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Sharpness: value: " << QString::number(m_ctrl_sharpness["value"])
             << "min: " << m_ctrl_sharpness["min"]
             << "max: " << m_ctrl_sharpness["max"]
@@ -108,9 +111,9 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
         m_ctrl_saturation["step"] = 0;
         if (!is_defined){return;}
         m_ctrl_saturation["value"] = m_current_camera->imageProcessing()->contrast();
-        m_ctrl_saturation["min"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("min="),std::string(" "))));
-        m_ctrl_saturation["max"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("max="),std::string(" "))));
-        m_ctrl_saturation["step"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("step="),std::string(" "))));
+        m_ctrl_saturation["min"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("min="),std::string(" "))));
+        m_ctrl_saturation["max"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("max="),std::string(" "))));
+        m_ctrl_saturation["step"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("step="),std::string(" "))));
         qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Saturation: value: " << QString::number(m_ctrl_saturation["value"])
             << "min: " << m_ctrl_saturation["min"]
             << "max: " << m_ctrl_saturation["max"]
@@ -170,8 +173,8 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
         m_ctrl_auto_focus["value"] = 0;
         m_ctrl_auto_focus["default"] = 0;
         if (!is_defined){return;}
-        m_ctrl_auto_focus["value"] = stoi(get_str_between_two_str(line,std::string("value="),std::string(" ")));
-        m_ctrl_auto_focus["default"] = stoi(get_str_between_two_str(line,std::string("default="),std::string(" ")));
+        m_ctrl_auto_focus["value"] = stoi(get_str_between_two_str(line.toStdString(),std::string("value="),std::string(" ")));
+        m_ctrl_auto_focus["default"] = stoi(get_str_between_two_str(line.toStdString(),std::string("default="),std::string(" ")));
         qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Auto Focus: value: " << m_ctrl_auto_focus["value"]
             << "default: " << m_ctrl_auto_focus["default"];
     }
@@ -183,11 +186,11 @@ void VideoDevice::initializeCtrl(const QString ctrl_label) {
         m_ctrl_focus["max"] = 0;
         m_ctrl_focus["step"] = 0;
         if (!is_defined){return;}
-        m_ctrl_focus["value"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("value="),std::string(" "))));
-        m_ctrl_focus["default"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("default="),std::string(" "))));
-        m_ctrl_focus["min"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("min="),std::string(" "))));
-        m_ctrl_focus["max"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("max="),std::string(" "))));
-        m_ctrl_focus["step"] = static_cast<double>(stoi(get_str_between_two_str(line,std::string("step="),std::string(" "))));
+        m_ctrl_focus["value"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("value="),std::string(" "))));
+        m_ctrl_focus["default"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("default="),std::string(" "))));
+        m_ctrl_focus["min"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("min="),std::string(" "))));
+        m_ctrl_focus["max"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("max="),std::string(" "))));
+        m_ctrl_focus["step"] = static_cast<double>(stoi(get_str_between_two_str(line.toStdString(),std::string("step="),std::string(" "))));
         qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrl Focus Absolute: value: " << QString::number(m_ctrl_focus["value"])
             << "min: " << m_ctrl_focus["min"]
             << "max: " << m_ctrl_focus["max"]

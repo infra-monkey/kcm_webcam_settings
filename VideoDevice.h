@@ -23,7 +23,7 @@ public:
     QString getVideoDeviceSerialId(){return m_device_serial;};
     QString getVideoDevicePath(){return m_device_path;};
     void initializeCtrls();
-    void initializeCtrl(const QString);
+    void initializeCtrl(const QString, const QString);
     void initializeFormats();
     QStringList getFormatList(){return m_format_list;};
     bool setFormatIndex(int);
