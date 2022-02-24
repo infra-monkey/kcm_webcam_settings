@@ -204,7 +204,7 @@ void VideoDevice::initializeCtrl(const QString ctrl_label, const QString line) {
 void VideoDevice::initializeFormats() {
 	qCDebug(webcam_settings_kcm) << "VideoDevice::initializeFormats";
     qCDebug(webcam_settings_kcm) << "Initializing pixel formats for video device with path " << m_device_path;
-    
+    std::string current_fmt,current_resolution,current_width,current_height;
     if (m_is_dummy_device){
         QStringList list = QStringList();
             list.append("UNKOWN");
@@ -218,12 +218,19 @@ void VideoDevice::initializeFormats() {
     } else {
         int i = 0;
         std::string cmd;
-        cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video | grep \"Pixel Format\"");
-        std::string current_fmt = get_str_between_two_str(exec_cmd(cmd)," \'","\' ");
-        cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video | grep \"Width/Height\"");
-        std::string current_resolution = get_str_between_two_str(exec_cmd(cmd),": ","\n");
-        std::string current_width = get_str_left_of_substr(current_resolution,"/");
-        std::string current_height = get_str_right_of_substr(current_resolution,"/");
+        cmd = std::string("v4l2-ctl -d " + m_device_path.toStdString() + " --get-fmt-video");
+        QString cmdoutput = QString::fromStdString(exec_cmd(cmd));
+        QStringList lines = cmdoutput.split("\n");
+        for (const QString & line : lines) {
+            if (line.contains("Pixel Format")) {
+                current_fmt = get_str_between_two_str(line.toStdString()," \'","\' ");
+            }
+            if (line.contains("Width/Height")) {
+                current_resolution = get_str_between_two_str(line.toStdString(),": ","\n");
+                current_width = get_str_left_of_substr(current_resolution,"/");
+                current_height = get_str_right_of_substr(current_resolution,"/");
+            }
+        }
         qCDebug(webcam_settings_kcm) << "Current format " << QString::fromStdString(current_fmt) << QString::fromStdString(current_width) << QString::fromStdString(current_height);
 
 
