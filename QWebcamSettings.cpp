@@ -29,7 +29,7 @@ QWebcamSettings::QWebcamSettings(QObject *parent, const QVariantList &args)
 	qCDebug(webcam_settings_kcm) << "QWebcamSettings::QWebcamSettings";
     KAboutData *aboutData = new KAboutData(QStringLiteral("kcm_webcam_settings"),
         i18nc("@title", "Webcam"),
-        QStringLiteral("0.0.1"),
+        QStringLiteral("0.0.4"),
         QStringLiteral(""),
         KAboutLicense::LicenseKey::GPL_V3,
         i18nc("@info:credit", "Copyright 2021 Antoine Gatineau"));
