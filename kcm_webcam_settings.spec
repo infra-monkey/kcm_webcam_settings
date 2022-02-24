@@ -1,8 +1,8 @@
 %global kf5_version 5.85.0
 %global qt5_version 5.15.2
 Name:     {{{ git_dir_name }}}
-Version:  0.0.4
-Release:  6
+Version:  0.0.5
+Release:  1
 Summary:  KDE Plasma system-settings module to configure your webcam
 License:  GPLv3+
 URL:      https://github.com/infra-monkey/kcm_webcam_settings
@@ -55,6 +55,9 @@ This module for systemsettings in KDE Plasma 5.23+ allows to configure Video4Lin
 %{_datadir}/locale/fr/LC_MESSAGES/kcm_webcam_settings.mo
 
 %changelog
+* Mon Feb 24 2022 Antoine Gatineau <antoine.gatineau@infra-monkey.com> - 0.0.5
+- Optimze code when loading the v4l2 controls
+
 * Mon Feb 20 2022 Antoine Gatineau <antoine.gatineau@infra-monkey.com> - 0.0.4
 - Enhancement: allow preview of the webcam output in the ui
 - Bug: Digital Zoom not applicable in some cases

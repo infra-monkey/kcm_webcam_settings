@@ -37,11 +37,13 @@ void VideoDevice::initializeCtrls() {
     for (const QString & line : lines) {
         for (const QString & label: m_ctrl_list){
             if (line.contains(label)){
-                qCDebug(webcam_settings_kcm) << "VideoDevice::initializeCtrls debug init ctrl " << line;
                 initializeCtrl(label,line);
             }
         }
     }
+    // initialize non-v4l2 controls
+    initializeCtrl("zoom_optical","");
+    initializeCtrl("zoom_digital","");
 }
 
 void VideoDevice::initializeCtrl(const QString ctrl_label, const QString line) {
