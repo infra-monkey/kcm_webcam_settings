@@ -21,6 +21,15 @@ VideoDevice::VideoDevice(const QCameraInfo camerainfo,QString device_serial, QSt
     m_device_vendor_id = QString(device_vendorid);
     m_device_model_id = QString(device_modelid);
     m_device_path = QString(camerainfo.deviceName());
+    m_ctrl_brightness_visible = false;
+    m_ctrl_contrast_visible = false;
+    m_ctrl_sharpness_visible = false;
+    m_ctrl_saturation_visible = false;
+    m_ctrl_zoom_absolute_supported = false;
+    m_ctrl_zoom_optical_visible = false;
+    m_ctrl_zoom_digital_visible = false;
+    m_ctrl_auto_focus_visible = false;
+    m_ctrl_focus_visible = false;
     qCDebug(webcam_settings_kcm) << "VideoDevice::VideoDevice" << m_device_name << m_device_path << m_device_vendor_id << m_device_model_id;
     initializeCtrls();
     initializeFormats();
