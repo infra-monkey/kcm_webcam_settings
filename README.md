@@ -61,6 +61,8 @@ The resolution and pixel format is defined through v4l2 but the applications don
 
 The settings are set system wide. This means that if multiple users are configured on the system and define different settings, the last one to modify the settings will define it for everyone.
 
+The Zoom Client will not use the settings defined in this module if "HD" is checked in the zoom camera settings.
+
 # Security and permissions
 
 The kcm need root permission to write the udev rules.
