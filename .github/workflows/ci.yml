@@ -12,6 +12,7 @@ on:
 
 jobs:
   make-fc34:
+    runs-on: ubuntu-latest
     container:
       image: fedora:34
     steps:
