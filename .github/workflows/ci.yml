@@ -69,4 +69,4 @@ jobs:
         uses: mikeal/publish-to-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_NAME: '$(echo ${GITHUB_REF#refs/heads/}'
+          BRANCH_NAME: ${GITHUB_HEAD_REF}
