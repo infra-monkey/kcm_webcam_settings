@@ -1,0 +1,5 @@
+src/helpers.h:11:1: error: There is an unknown macro here somewhere. Configuration is required. If Q_DECLARE_LOGGING_CATEGORY is a macro then please configure it. [unknownMacro]
+Q_DECLARE_LOGGING_CATEGORY(webcam_settings_kcm)
+^
+nofile:0:0: information: Cppcheck cannot find all the include files (use --check-config for details) [missingInclude]
+
