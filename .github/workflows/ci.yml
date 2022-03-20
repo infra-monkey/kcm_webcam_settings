@@ -11,16 +11,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  make:
-    strategy:
-      max-parallel: 2
-      matrix:
-        fedora-release:
-          - 34
-          - 35
-          - 36
+  make-fc34:
     container:
-      image: fedora:${{ fedora-release }}
+      image: fedora:34
     steps:
       - name: install dependencies
         run: |
