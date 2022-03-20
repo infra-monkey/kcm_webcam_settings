@@ -20,6 +20,10 @@ jobs:
         run: |
           dnf -y install cmake kf5-ki18n-devel kf5-kcmutils-devel kf5-kdeclarative-devel qt5-qtsvg-devel kf5-plasma-devel qt5-qtmultimedia-devel kf5-rpm-macros
       - uses: actions/checkout@v2
+      - name: cppcheck
+        uses: deep5050/cppcheck-action@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN}}
       - name: compile kcm_webcam_settiugs
         run: |
           mkdir build
