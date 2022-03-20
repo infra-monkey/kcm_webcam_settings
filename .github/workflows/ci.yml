@@ -58,7 +58,7 @@ jobs:
           make
   code-analysis:
     runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
       - name: cppcheck
@@ -69,4 +69,4 @@ jobs:
         uses: mikeal/publish-to-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_NAME: 'refs/heads/${{ github.head_ref }}'
+          BRANCH_NAME: 'main'
