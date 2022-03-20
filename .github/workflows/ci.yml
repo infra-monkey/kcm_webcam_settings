@@ -11,6 +11,20 @@ on:
   workflow_dispatch:
 
 jobs:
+  static-code-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: cppcheck
+        uses: deep5050/cppcheck-action@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN}}
+          output_file: ./cppcheck_report.txt
+      - name: publish report    
+        uses: mikeal/publish-to-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: 'main'
   make-fc34:
     runs-on: ubuntu-latest
     container:
@@ -20,15 +34,6 @@ jobs:
         run: |
           dnf -y install cmake kf5-ki18n-devel kf5-kcmutils-devel kf5-kdeclarative-devel qt5-qtsvg-devel kf5-plasma-devel qt5-qtmultimedia-devel kf5-rpm-macros
       - uses: actions/checkout@v2
-      - name: cppcheck
-        uses: deep5050/cppcheck-action@main
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN}}
-      - name: publish report    
-        uses: mikeal/publish-to-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_NAME: 'main'
       - name: compile kcm_webcam_settiugs
         run: |
           mkdir build
@@ -44,15 +49,6 @@ jobs:
         run: |
           dnf -y install cmake kf5-ki18n-devel kf5-kcmutils-devel kf5-kdeclarative-devel qt5-qtsvg-devel kf5-plasma-devel qt5-qtmultimedia-devel kf5-rpm-macros
       - uses: actions/checkout@v2
-      - name: cppcheck
-        uses: deep5050/cppcheck-action@main
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN}}
-      - name: publish report    
-        uses: mikeal/publish-to-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_NAME: 'main'
       - name: compile kcm_webcam_settiugs
         run: |
           mkdir build
@@ -68,15 +64,6 @@ jobs:
         run: |
           dnf -y install cmake kf5-ki18n-devel kf5-kcmutils-devel kf5-kdeclarative-devel qt5-qtsvg-devel kf5-plasma-devel qt5-qtmultimedia-devel kf5-rpm-macros
       - uses: actions/checkout@v2
-      - name: cppcheck
-        uses: deep5050/cppcheck-action@main
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN}}
-      - name: publish report    
-        uses: mikeal/publish-to-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_NAME: 'main'
       - name: compile kcm_webcam_settiugs
         run: |
           mkdir build
