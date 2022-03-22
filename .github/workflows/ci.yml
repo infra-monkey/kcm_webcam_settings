@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: fedora:35
-    if: github.ref == 'refs/heads/main'
+    if: github.ref != 'refs/heads/main'
     steps:
       - name: install dependencies
         run: |
@@ -70,6 +70,7 @@ jobs:
         uses: deep5050/cppcheck-action@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN}}
+          other_options: "--suppress=missingIncludeSystem"
       - name: publish report    
         uses: mikeal/publish-to-github-action@master
         env:
