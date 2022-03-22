@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: fedora:35
-    if: github.ref != 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: install dependencies
         run: |
