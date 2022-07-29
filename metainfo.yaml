@@ -1,0 +1,7 @@
+fancname: kcm_webcam_settings
+description: System Settings Module For Webcam Configuration
+irc: plasma
+maintainer: infra-monkey
+platforms:
+    - name: Linux
+group: plasma
