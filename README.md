@@ -63,6 +63,8 @@ The settings are set system wide. This means that if multiple users are configur
 
 The Zoom Client will not use the settings defined in this module if "HD" is checked in the "Zoom application" camera settings.
 
+This Plugin will crash if `v4l2loopback` is installed.
+
 # Security and permissions
 
 The kcm need root permission to write the udev rules.
