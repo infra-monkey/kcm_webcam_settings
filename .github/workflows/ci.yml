@@ -56,10 +56,25 @@ jobs:
           cd build
           cmake ..
           make
+  make-fc37:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:37
+    steps:
+      - name: install dependencies
+        run: |
+          dnf -y install cmake kf5-ki18n-devel kf5-kcmutils-devel kf5-kdeclarative-devel qt5-qtsvg-devel kf5-plasma-devel qt5-qtmultimedia-devel kf5-rpm-macros
+      - uses: actions/checkout@v2
+      - name: compile kcm_webcam_settiugs
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
   code-analysis:
     runs-on: ubuntu-latest
     container:
-      image: fedora:35
+      image: fedora:36
     if: github.ref == 'refs/heads/main'
     steps:
       - name: install dependencies
